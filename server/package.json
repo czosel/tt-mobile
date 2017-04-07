@@ -1,0 +1,21 @@
+{
+  "name": "click-tt-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.11.0",
+    "osmosis": "^1.1.4"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "mongodb": "^2.2.25"
+  }
+}

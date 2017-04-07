@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{game.home}} - {{game.guest}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <table class="list-md">
+    <thead>
+      <tr>
+        <td>{{game.home}}</td>
+        <td>{{game.guest}}</td>
+        <td>Sätze</td>
+        <td>Spiele</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item-md" *ngFor="let match of data.matches" (click)="onSelect(club)">
+        <td>{{match.player1}}</td>
+        <td>{{match.player2}}</td>
+        <td>{{match.sets}}</td>
+        <td>{{match.game}}</td>
+      </tr>
+    </tbody>
+  </table>
+</ion-content>
