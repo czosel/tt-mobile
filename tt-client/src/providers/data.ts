@@ -16,17 +16,17 @@ export class Data {
   }
 
   getLeague(url) {
-    return this.http.get(host + "/league/" + encodeURIComponent(url))
+    return this.http.get(host + "/league?url=" + encodeURIComponent(url))
       .map(this.extractData);
   }
 
   getClub(url) {
-    return this.http.get(host + "/club/" + encodeURIComponent(url))
+    return this.http.get(host + "/club?url=" + encodeURIComponent(url))
       .map(this.extractData);
   }
 
   getGame(url) {
-    return this.http.get(host + "/game/" + encodeURIComponent(url))
+    return this.http.get(host + "/game?url=" + encodeURIComponent(url))
       .map(this.extractData);
   }
 

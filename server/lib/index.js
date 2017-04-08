@@ -12,31 +12,32 @@ app.use((req, res, next) => {
 
 app.get("/assoc", async (req, res) => {
   try {
-    res.json(await scraper.getAssociation(req.params.url));
+    res.json(await scraper.getAssociation(req.query.url));
   } catch(e) {
     res.status(404).send('Not found');
   }
 });
 
-app.get("/league/:url", async (req, res) => {
+app.get("/league", async (req, res) => {
   try {
-    res.json(await scraper.getLeague(req.params.url));
+    res.json(await scraper.getLeague(req.query.url));
+  } catch(e) {
+    console.log('error', e);
+    res.status(404).send('Not found');
+  }
+});
+
+app.get("/club", async (req, res) => {
+  try {
+    res.json(await scraper.getClub(req.query.url));
   } catch(e) {
     res.status(404).send('Not found');
   }
 });
 
-app.get("/club/:url", async (req, res) => {
+app.get("/game", async (req, res) => {
   try {
-    res.json(await scraper.getClub(req.params.url));
-  } catch(e) {
-    res.status(404).send('Not found');
-  }
-});
-
-app.get("/game/:url", async (req, res) => {
-  try {
-    res.json(await scraper.getGame(req.params.url));
+    res.json(await scraper.getGame(req.query.url));
   } catch(e) {
     res.status(404).send('Not found');
   }
