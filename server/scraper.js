@@ -49,8 +49,32 @@ function getStaticData() {
   });
 }
 
-function getLeague() {
-  const url = '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=MTTV+16%2F17&group=199330'
+function getAssociation() {
+  const url = "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/leaguePage?championship=MTTV+16/17&preferredLanguage=German";
+  return new Promise((res, rej) => {
+    osmosis
+      .get(resolve(host, url))
+      .find("#content")
+      .set({
+        title: "#content-col1 h1",
+        leagues: osmosis
+          .find("table.matrix td:first-child ul li span")
+          .set({
+            name: "a",
+            href: "a@href"
+          })
+      })
+      .error(e => {
+        console.error(e);
+        rej(e);
+      })
+      .data(data => {
+        res(data);
+      });
+  });
+}
+
+function getLeague(url) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -144,7 +168,8 @@ function getGame(url) {
 
 module.exports = {
   getStaticData,
-  getClub,
+  getAssociation,
   getLeague,
+  getClub,
   getGame
 };

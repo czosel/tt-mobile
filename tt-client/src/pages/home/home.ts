@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 import { Data } from '../../providers/data'
 import { NavController } from 'ionic-angular';
-import { ClubPage } from '../club/club';
-import { GamePage } from '../game/game';
+import { LeaguePage } from '../league/league';
 
 @Component({
   selector: 'page-home',
@@ -11,36 +10,16 @@ import { GamePage } from '../game/game';
   providers: [Data]
 })
 export class HomePage {
-  league = {};
+  assoc = {};
 
   constructor(private dataService: Data, public navCtrl: NavController) {}
 
   ngOnInit() {
-    this.getLeague();
+    this.dataService.getAssoc()
+      .subscribe(assoc => this.assoc = assoc)
   }
 
-  getLeague() {
-    this.dataService.getLeague()
-      .subscribe(league => this.league = league)
+  onSelect(league) {
+    this.navCtrl.push(LeaguePage, league);
   }
-
-  onSelect(club) {
-    console.log('selected', club);
-    this.navCtrl.push(ClubPage, club);
-  }
-
-  openGame(game) {
-    this.navCtrl.push(GamePage, game);
-  }
-
-  homeWinner(game) {
-    const points = game.result.split(":");
-    return points[0] > points[1];
-  }
-
-  guestWinner(game) {
-    const points = game.result.split(":");
-    return points[0] < points[1];
-  }
-
 }

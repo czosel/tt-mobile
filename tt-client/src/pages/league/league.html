@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{league.name}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h2>Tabelle</h2>
+  <table class="list-md">
+    <thead>
+      <tr>
+        <td>Rang</td>
+        <td>Mannschaft</td>
+        <td>Beg.</td>
+        <td>Punkte</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item-md" *ngFor="let club of data.clubs" (click)="onSelect(club)">
+        <td>{{club.rank}}</td>
+        <td>{{club.name}}</td>
+        <td>{{club.nrOfGames}}</td>
+        <td>{{club.score}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Spielplan</h2>
+  <table class="list-md">
+    <thead>
+      <tr>
+        <td>Datum</td>
+        <td>Heim</td>
+        <td>Gast</td>
+        <td>Spiele</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item-md" *ngFor="let game of league.games" (click)="openGame(game)">
+        <td>{{game.date | shortDate}}</td>
+        <td [class.winner]="homeWinner(game)">{{game.home}}</td>
+        <td [class.winner]="guestWinner(game)">{{game.guest}}</td>
+        <td>{{game.result}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</ion-content>

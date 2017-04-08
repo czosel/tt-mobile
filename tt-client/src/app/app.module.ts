@@ -5,6 +5,7 @@ import { AboutPage } from '../pages/about/about';
 import { ClubPage } from '../pages/club/club';
 import { PlayerPage } from '../pages/player/player';
 import { ContactPage } from '../pages/contact/contact';
+import { LeaguePage } from '../pages/league/league';
 import { HomePage } from '../pages/home/home';
 import { GamePage } from '../pages/game/game';
 import { ShortDatePipe } from '../pipes/short-date';
@@ -21,6 +22,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     PlayerPage,
     ContactPage,
     HomePage,
+    LeaguePage,
     GamePage,
     TabsPage,
     ShortDatePipe
@@ -36,6 +38,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     PlayerPage,
     ContactPage,
     HomePage,
+    LeaguePage,
     GamePage,
     TabsPage
   ],
