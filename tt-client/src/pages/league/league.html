@@ -36,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="item-md" *ngFor="let game of league.games" (click)="openGame(game)">
+      <tr class="item-md" *ngFor="let game of data.games" (click)="openGame(game)">
         <td>{{game.date | shortDate}}</td>
         <td [class.winner]="homeWinner(game)">{{game.home}}</td>
         <td [class.winner]="guestWinner(game)">{{game.guest}}</td>
