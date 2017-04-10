@@ -1,13 +1,13 @@
 {
-  "name": "Ionic",
-  "short_name": "Ionic",
+  "name": "TT mobile",
+  "short_name": "TT mobile",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
     "src": "assets/imgs/logo.png",
-    "sizes": "512x512",
+    "sizes": "144x144",
     "type": "image/png"
   }],
-  "background_color": "#4e8ef7",
-  "theme_color": "#4e8ef7"
+  "background_color": "#cc0033",
+  "theme_color": "#cc0033"
 }
