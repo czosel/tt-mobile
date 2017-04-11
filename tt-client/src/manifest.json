@@ -1,7 +1,7 @@
 {
   "name": "TT mobile",
   "short_name": "TT mobile",
-  "start_url": "index.html",
+  "start_url": ".",
   "display": "standalone",
   "icons": [{
     "src": "assets/imgs/logo.png",

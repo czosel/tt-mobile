@@ -6,7 +6,10 @@ const db = require("./db");
 var app = express();
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8100');
+    const client = process.env.NODE_ENV === 'production'
+    	? 'https://tt.zosel.ch'
+	: 'http://localhost:8100';
+    res.setHeader('Access-Control-Allow-Origin', client);
     next();
 });
 
@@ -49,8 +52,8 @@ async function scrape() {
   console.timeEnd("scrape");
 }
 
-app.listen(3000, function() {
-  console.log("server listening on port 3000");
+app.listen(3020, function() {
+  console.log("server listening on port 3020");
 });
 //scrape();
 // test();
