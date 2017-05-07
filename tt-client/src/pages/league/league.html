@@ -2,11 +2,17 @@
   <ion-navbar>
     <ion-title>{{league.name}}</ion-title>
   </ion-navbar>
+
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="active">
+      <ion-segment-button value="table">Tabelle</ion-segment-button>
+      <ion-segment-button value="fixture">Spielplan</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Tabelle</h2>
-  <table class="list-md">
+  <table *ngIf="active == 'table'" class="list-md">
     <thead>
       <tr>
         <td>Rang</td>
@@ -25,8 +31,7 @@
     </tbody>
   </table>
 
-  <h2>Spielplan</h2>
-  <table class="list-md">
+  <table *ngIf="active == 'fixture'" class="list-md">
     <thead>
       <tr>
         <td>Datum</td>

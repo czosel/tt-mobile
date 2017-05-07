@@ -13,6 +13,7 @@ import { GamePage } from '../game/game';
 export class LeaguePage {
   league;
   data = {};
+  active = "table";
 
   constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams) {
     this.league = navParams.data;

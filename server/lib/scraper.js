@@ -166,10 +166,52 @@ function getGame(url) {
   });
 }
 
+function getPlayer(url) {
+  return new Promise((res, rej) => {
+    osmosis
+      .get(resolve(host, url))
+      .find("#content")
+      .set({
+        title: "#content-row1 h1",
+        classification: "table.result-set:first tr:nth-child(4) td:last",
+        singles: osmosis
+          .find("table.result-set:nth(3) tr:has(td:nth-child(3) a)")
+          .set({
+            opponent: "td:nth-child(3)",
+            oppenentHref: "td:nth-child(3) a@href",
+            opponentClass: "td:nth-child(4)",
+            sets: "td:nth-child(6)"
+          }),
+        doubles: osmosis
+          .find("table.result-set:last tr:has(td:nth-child(3) a)")
+          .set({
+            partner: "td:nth-child(3)",
+            partnerHref: "td:nth-child(3) a@href",
+            partnerClass: "td:nth-child(4)",
+            opponent1: "td:nth-child(5) a:first",
+            opponent1href: "td:nth-child(5) a:first@href",
+            opponent1class: "td:nth-child(6)",
+            opponent2: "td:nth-child(5) a:last",
+            opponent2href: "td:nth-child(5) a:last@href",
+            sets: "td:nth-child(8)",
+            game: "td:last-child"
+          })
+      })
+      .error(e => {
+        console.error(e);
+        rej(e);
+      })
+      .data(data => {
+        res(data);
+      });
+  });
+}
+
 module.exports = {
   getStaticData,
   getAssociation,
   getLeague,
   getClub,
-  getGame
+  getGame,
+  getPlayer
 };

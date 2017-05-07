@@ -1,18 +1,22 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Data } from '../../providers/data'
 
 @Component({
   selector: 'page-player',
-  templateUrl: 'player.html'
+  templateUrl: 'player.html',
+  providers: [Data]
 })
 export class PlayerPage {
   player;
+  data = {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams) {
     this.player = navParams.data;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PlayerPage');
+  ngOnInit() {
+    this.dataService.getPlayer(this.player.href)
+      .subscribe(data => this.data = data)
   }
 }
