@@ -178,7 +178,7 @@ function getPlayer(url) {
           .find("table.result-set:nth(3) tr:has(td:nth-child(3) a)")
           .set({
             opponent: "td:nth-child(3)",
-            oppenentHref: "td:nth-child(3) a@href",
+            opponentHref: "td:nth-child(3) a@href",
             opponentClass: "td:nth-child(4)",
             sets: "td:nth-child(6)"
           }),

@@ -1,18 +1,56 @@
-<!--
-  Generated template for the Player page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
     <ion-title>{{player.name}}</ion-title>
   </ion-navbar>
 
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="active">
+      <ion-segment-button value="overview">Übersicht</ion-segment-button>
+      <ion-segment-button value="single">Einzel</ion-segment-button>
+      <ion-segment-button value="double">Doppel</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-
 <ion-content padding>
+  <table *ngIf="active == 'overview'" class="list-md">
+    <tr>
+      <td>Klassierung</td>
+      <td>{{data.classification}}</td>
+    </tr>
+  </table>
 
+  <table *ngIf="active == 'single'" class="list-md">
+    <thead>
+      <tr>
+        <td>Gegner</td>
+        <td>Klassierung</td>
+        <td>Sätze</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item-md" *ngFor="let match of data.singles" (click)="onSelect(match)">
+        <td>{{match.opponent}}</td>
+        <td>{{match.opponentClass}}</td>
+        <td>{{match.sets}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngIf="active == 'double'" class="list-md">
+    <thead>
+      <tr>
+        <td>Partner</td>
+        <td>Gegner</td>
+        <td>Sätze</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item-md" *ngFor="let match of data.doubles" (click)="onSelect(match)">
+        <td>{{match.partner}} ({{match.partnerClass}})</td>
+        <td>{{match.opponent1}}<br>{{match.opponent2}}</td>
+        <td>{{match.sets}}</td>
+      </tr>
+    </tbody>
+  </table>
 </ion-content>
