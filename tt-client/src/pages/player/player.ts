@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Data } from '../../providers/data'
+import { LeaguePage } from '../league/league';
 
 @Component({
   selector: 'page-player',
@@ -9,8 +10,9 @@ import { Data } from '../../providers/data'
 })
 export class PlayerPage {
   player;
+  balances;
   data = {};
-  active = "single";
+  active = "overview";
 
   constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams) {
     this.player = navParams.data;
@@ -21,10 +23,14 @@ export class PlayerPage {
       .subscribe(data => this.data = data)
   }
 
-  onSelect(match) {
+  openPlayer(match) {
     this.navCtrl.push(PlayerPage, {
       name: match.opponent,
       href: match.opponentHref
     });
+  }
+
+  openLeague(league) {
+    this.navCtrl.push(LeaguePage, league);
   }
 }

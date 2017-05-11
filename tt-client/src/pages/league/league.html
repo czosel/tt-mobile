@@ -35,16 +35,17 @@
     <thead>
       <tr>
         <td>Datum</td>
-        <td>Heim</td>
-        <td>Gast</td>
+        <td>Heim / Gast</td>
         <td>Spiele</td>
       </tr>
     </thead>
     <tbody>
       <tr class="item-md" *ngFor="let game of data.games" (click)="openGame(game)">
         <td>{{game.date | shortDate}}</td>
-        <td [class.winner]="homeWinner(game)">{{game.home}}</td>
-        <td [class.winner]="guestWinner(game)">{{game.guest}}</td>
+        <td>
+          <span [class.winner]="homeWinner(game)">{{game.home}}</span><br>
+          <span [class.winner]="guestWinner(game)">{{game.guest}}</span>
+        </td>
         <td>{{game.result}}</td>
       </tr>
     </tbody>

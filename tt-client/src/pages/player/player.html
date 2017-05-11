@@ -13,23 +13,40 @@
 </ion-header>
 
 <ion-content padding>
-  <table *ngIf="active == 'overview'" class="list-md">
-    <tr>
-      <td>Klassierung</td>
-      <td>{{data.classification}}</td>
-    </tr>
-  </table>
+  <div *ngIf="active == 'overview'">
+    <table class="list-md">
+      <tr>
+        <td>Klassierung</td>
+        <td>{{data.classification}}</td>
+      </tr>
+    </table>
+
+    <h4>Mannschaftseinsätze</h4>
+    <table>
+      <tr *ngFor="let league of data.teams" (click)="openLeague(league)">
+        <td>{{league.name}}</td>
+      </tr>
+    </table>
+
+    <h4>Einzelbilanzen</h4>
+    <table>
+      <tr *ngFor="let item of data.balance">
+        <td>{{item.team}}</td>
+        <td>{{item.data}}</td>
+      </tr>
+    </table>
+  </div>
 
   <table *ngIf="active == 'single'" class="list-md">
     <thead>
       <tr>
         <td>Gegner</td>
-        <td>Klassierung</td>
+        <td>Klass.</td>
         <td>Sätze</td>
       </tr>
     </thead>
     <tbody>
-      <tr class="item-md" *ngFor="let match of data.singles" (click)="onSelect(match)">
+      <tr class="item-md" *ngFor="let match of data.singles" (click)="openPlayer(match)">
         <td>{{match.opponent}}</td>
         <td>{{match.opponentClass}}</td>
         <td>{{match.sets}}</td>

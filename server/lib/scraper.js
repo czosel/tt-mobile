@@ -5,6 +5,14 @@ const osmosis = require("osmosis");
 
 const host = "http://click-tt.ch";
 
+function unique(arr) {
+  return arr.filter(
+    (entry, index, self) => self.findIndex(t => {
+      return t.data === entry.data && t.team === entry.team;
+    }) === index
+  );
+}
+
 function getStaticData() {
   return new Promise((res, rej) => {
     osmosis
@@ -57,12 +65,10 @@ function getAssociation() {
       .find("#content")
       .set({
         title: "#content-col1 h1",
-        leagues: osmosis
-          .find("table.matrix td:first-child ul li span")
-          .set({
-            name: "a",
-            href: "a@href"
-          })
+        leagues: osmosis.find("table.matrix td:first-child ul li span").set({
+          name: "a",
+          href: "a@href"
+        })
       })
       .error(e => {
         console.error(e);
@@ -106,6 +112,12 @@ function getLeague(url) {
         rej(e);
       })
       .data(data => {
+        data.clubs = data.clubs.map(club => {
+          if (club.score.startsWith("zurückgezogen")) {
+            club.score = "-";
+          }
+          return club;
+        });
         res(data);
       });
   });
@@ -174,6 +186,10 @@ function getPlayer(url) {
       .set({
         title: "#content-row1 h1",
         classification: "table.result-set:first tr:nth-child(4) td:last",
+        teams: osmosis.find("table.result-set:nth(2) tr td a").set("name").set({
+          href: "@href"
+        }),
+        balance: "table.result-set:nth(2) tr:nth-child(3) > td:last",
         singles: osmosis
           .find("table.result-set:nth(3) tr:has(td:nth-child(3) a)")
           .set({
@@ -195,6 +211,13 @@ function getPlayer(url) {
             opponent2href: "td:nth-child(5) a:last@href",
             sets: "td:nth-child(8)",
             game: "td:last-child"
+          }),
+        elo: osmosis
+          .find("ul.content-tabs > li:first-child a")
+          .follow("@href")
+          .find("table.result-set.table-layout-fixed tbody tr")
+          .set({
+            delta: "td:last-child"
           })
       })
       .error(e => {
@@ -202,6 +225,15 @@ function getPlayer(url) {
         rej(e);
       })
       .data(data => {
+        if (!Array.isArray(data.teams)) {
+          data.teams = [data.teams];
+        }
+        data.balance = unique(
+          data.balance.split("\n").filter(str => !!str.trim()).map(str => ({
+            team: str.substr(0, str.indexOf(":")).trim(),
+            data: str.substr(str.indexOf(":") + 1).trim()
+          }))
+        );
         res(data);
       });
   });
