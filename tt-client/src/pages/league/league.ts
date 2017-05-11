@@ -1,26 +1,34 @@
 import { Component } from '@angular/core';
 
 import { Data } from '../../providers/data'
-import { NavController, NavParams } from 'ionic-angular';
+import { Loading } from '../../providers/loading'
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { ClubPage } from '../club/club';
 import { GamePage } from '../game/game';
 
 @Component({
   selector: 'page-league',
   templateUrl: 'league.html',
-  providers: [Data]
+  providers: [Data, Loading]
 })
 export class LeaguePage {
   league;
   data = {};
+  active = "table";
 
-  constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams, public loading: Loading) {
     this.league = navParams.data;
   }
 
   ngOnInit() {
+    const loading = this.loading.getInstance();
+    loading.present();
+
     this.dataService.getLeague(this.league.href)
-      .subscribe(league => this.data = league)
+      .subscribe(league => {
+        this.data = league;
+        loading.dismiss();
+      });
   }
 
   onSelect(club) {

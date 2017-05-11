@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-const host = 'http://localhost:3000';
+const host = 'http://localhost:3020';
 
 @Injectable()
 export class Data {
@@ -27,6 +27,11 @@ export class Data {
 
   getGame(url) {
     return this.http.get(host + "/game?url=" + encodeURIComponent(url))
+      .map(this.extractData);
+  }
+
+  getPlayer(url) {
+    return this.http.get(host + "/player?url=" + encodeURIComponent(url))
       .map(this.extractData);
   }
 
