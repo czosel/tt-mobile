@@ -10,7 +10,30 @@ import { LeaguePage } from '../league/league';
   providers: [Data]
 })
 export class HomePage {
+  // options
+  showXAxis = true;
+  showYAxis = true;
+
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+
   assoc = {};
+
+  single = [
+    {
+        "name": "Germany",
+        "value": 1
+      },
+    {
+        "name": "USA",
+        "value": 2
+      },
+    {
+        "name": "France",
+        "value": 3
+      }
+  ];
 
   constructor(private dataService: Data, public navCtrl: NavController) {}
 
