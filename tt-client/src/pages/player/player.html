@@ -17,9 +17,12 @@
     <table class="list-md">
       <tr>
         <td>Klassierung</td>
-        <td>{{data.classification}}</td>
+        <td>{{data.classification}}
+          ({{data.elo?.start | elo}}, {{data.elo?.start}})</td>
       </tr>
     </table>
+
+    <elo-chart [data]="elo"></elo-chart>
 
     <h4>Mannschaftseinsätze</h4>
     <table>

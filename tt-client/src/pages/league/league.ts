@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Data } from '../../providers/data'
 import { Loading } from '../../providers/loading'
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { ClubPage } from '../club/club';
 import { GamePage } from '../game/game';
 

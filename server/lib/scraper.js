@@ -215,9 +215,13 @@ function getPlayer(url) {
         elo: osmosis
           .find("ul.content-tabs > li:first-child a")
           .follow("@href")
-          .find("table.result-set.table-layout-fixed tbody tr")
           .set({
-            delta: "td:last-child"
+            start: "table tr:has(td > b:contains('Elo-Wert')):first td:last",
+            data: osmosis
+              .find("table.result-set.table-layout-fixed tbody tr")
+              .set({
+                delta: "td:last-child"
+              })
           })
       })
       .error(e => {
@@ -234,6 +238,18 @@ function getPlayer(url) {
             data: str.substr(str.indexOf(":") + 1).trim()
           }))
         );
+
+        var current = parseInt(data.elo.start);
+        data.elo.start = current;
+        var result = [];
+        data.elo.data.filter(v => !!v.delta).forEach(elo => {
+          const val = parseInt(elo.delta);
+          current = current - val;
+          result.push({
+            delta: current
+          });
+        });
+        data.elo.data = result.reverse();
         res(data);
       });
   });

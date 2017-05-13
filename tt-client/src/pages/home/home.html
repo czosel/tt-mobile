@@ -5,13 +5,6 @@
 </ion-header>
 
 <ion-content padding>
-  <ngx-charts-bar-vertical
-    [scheme]="colorScheme"
-    [results]="single"
-    [xAxis]="showXAxis"
-    [yAxis]="showYAxis">
-  </ngx-charts-bar-vertical>
-
   <ion-list>
     <button ion-item
       *ngFor="let league of assoc.leagues"
