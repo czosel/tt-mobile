@@ -2,11 +2,12 @@ import { Component } from '@angular/core'
 import { NavController, NavParams } from 'ionic-angular'
 import { Data } from '../../providers/data'
 import { LeaguePage } from '../league/league'
+import { Loading } from '../../providers/loading'
 
 @Component({
   selector: 'page-player',
   templateUrl: 'player.html',
-  providers: [Data]
+  providers: [Data, Loading]
 })
 export class PlayerPage {
   player
@@ -15,15 +16,18 @@ export class PlayerPage {
   active = "overview"
   elo
 
-  constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams, public loading: Loading) {
     this.player = navParams.data
   }
 
   ngOnInit() {
+    const loading = this.loading.getInstance();
+    loading.present();
+
     this.dataService.getPlayer(this.player.href).subscribe(data => {
       this.data = data
       this.elo = data.elo.data.map(elo => elo.delta)
-      console.log('elo', this.elo)
+      loading.dismiss()
     })
   }
 

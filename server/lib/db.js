@@ -1,20 +1,20 @@
-const mongoClient = require("mongodb").MongoClient;
+const mongoClient = require('mongodb').MongoClient
 
-let db = 0;
+let db = 0
 
-const url = "mongodb://127.0.0.1:27017/tt";
+const url = 'mongodb://127.0.0.1:27017/tt'
 
 mongoClient.connect(url, (err, _db) => {
   if (err) {
-    throw err;
+    throw err
   }
-  db = _db;
-});
+  db = _db
+})
 
 async function replace(data) {
-  const leagues = db.collection("leagues");
-  leagues.remove({});
-  await leagues.insertMany([data]);
+  const leagues = db.collection('leagues')
+  leagues.remove({})
+  await leagues.insertMany([data])
 }
 
-module.exports = { replace };
+module.exports = { replace }

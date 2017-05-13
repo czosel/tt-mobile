@@ -15,11 +15,21 @@
 
 <ion-content padding>
   <table class="list-md">
-    <tr class="item-md" *ngFor="let player of data.players" (click)="onSelect(player)">
-      <td>{{player.name}}</td>
-      <td>{{player.classification}}</td>
-      <td>{{player.appearances}}</td>
-      <td>{{player.balance}}</td>
-    </tr>
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Klass.</td>
+        <td>Eins.</td>
+        <td>Bilanz</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="item-md" *ngFor="let player of data.players" (click)="onSelect(player)">
+        <td>{{player.name}}</td>
+        <td>{{player.classification}}</td>
+        <td>{{player.appearances}}</td>
+        <td>{{player.balance}}</td>
+      </tr>
+    </tbody>
   </table>
 </ion-content>
