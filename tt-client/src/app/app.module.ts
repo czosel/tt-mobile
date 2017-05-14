@@ -34,7 +34,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     EloChartComponent
   ],
   imports: [
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      backButtonText: 'Zurück'
+    }),
     NgxChartsModule
   ],
   bootstrap: [IonicApp],
