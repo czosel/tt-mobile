@@ -1,15 +1,15 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>TT mobile</ion-title>
+    <ion-title>{{assoc.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-list>
     <button ion-item
-      *ngFor="let assoc of associations.associations"
-      (click)="onSelect(assoc)">
-      {{assoc.name}}
+      *ngFor="let league of data.leagues"
+      (click)="onSelect(league)">
+      {{league.name}}
     </button>
   </ion-list>
 </ion-content>

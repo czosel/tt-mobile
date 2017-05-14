@@ -10,8 +10,13 @@ export class Data {
 
   constructor(public http: Http) {}
 
-  getAssoc() {
-    return this.http.get(host + "/assoc")
+  getAssociations() {
+    return this.http.get(host + "/associations")
+      .map(this.extractData);
+  }
+
+  getAssoc(url) {
+    return this.http.get(host + "/assoc?url=" + encodeURIComponent(url))
       .map(this.extractData);
   }
 

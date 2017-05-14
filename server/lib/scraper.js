@@ -58,9 +58,30 @@ function getStaticData() {
   })
 }
 
-function getAssociation() {
-  const url =
-    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/leaguePage?championship=MTTV+16/17&preferredLanguage=German'
+function getAssociations() {
+  const url = 'index.htm.de'
+  return new Promise((res, rej) => {
+    osmosis
+      .get(resolve(host, url))
+      .find('#navigation > ul li:nth(2)')
+      .set({
+        title: 'strong',
+        associations: osmosis.find('ul li').set({
+          name: 'a',
+          href: 'a@href'
+        })
+      })
+      .error(e => {
+        console.error(e)
+        rej(e)
+      })
+      .data(data => {
+        res(data)
+      })
+  })
+}
+
+function getAssociation(url) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -259,6 +280,7 @@ function getPlayer(url) {
 
 module.exports = {
   getStaticData,
+  getAssociations,
   getAssociation,
   getLeague,
   getClub,

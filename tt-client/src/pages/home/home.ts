@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Data } from '../../providers/data'
 import { NavController } from 'ionic-angular';
-import { LeaguePage } from '../league/league';
+import { AssocPage } from '../assoc/assoc';
 import { Loading } from '../../providers/loading'
 
 @Component({
@@ -11,7 +11,7 @@ import { Loading } from '../../providers/loading'
   providers: [Data, Loading]
 })
 export class HomePage {
-  assoc = {};
+  associations = {};
 
   constructor(private dataService: Data, public navCtrl: NavController, public loading: Loading) {}
 
@@ -19,14 +19,14 @@ export class HomePage {
     const loading = this.loading.getInstance();
     loading.present();
 
-    this.dataService.getAssoc()
-      .subscribe(assoc => {
-        this.assoc = assoc;
+    this.dataService.getAssociations()
+      .subscribe(data => {
+        this.associations = data;
         loading.dismiss();
       })
   }
 
-  onSelect(league) {
-    this.navCtrl.push(LeaguePage, league);
+  onSelect(assoc) {
+    this.navCtrl.push(AssocPage, assoc);
   }
 }

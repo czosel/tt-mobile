@@ -7,6 +7,7 @@ import { ClubPage } from '../pages/club/club';
 import { PlayerPage } from '../pages/player/player';
 import { LeaguePage } from '../pages/league/league';
 import { HomePage } from '../pages/home/home';
+import { AssocPage } from '../pages/assoc/assoc';
 import { GamePage } from '../pages/game/game';
 import { TabsPage } from '../pages/tabs/tabs';
 import { EloChartComponent } from '../components/elo-chart/elo-chart';
@@ -24,6 +25,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ClubPage,
     PlayerPage,
     HomePage,
+    AssocPage,
     LeaguePage,
     GamePage,
     TabsPage,
@@ -42,6 +44,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ClubPage,
     PlayerPage,
     HomePage,
+    AssocPage,
     LeaguePage,
     GamePage,
     TabsPage

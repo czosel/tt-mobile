@@ -1,29 +1,5 @@
 const test = require('tape')
-
 const scraper = require('./scraper')
-
-test('player response', async t => {
-  const player = await scraper.getPlayer(
-    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
-  )
-  t.ok(isClass(player.classification), 'classification')
-  t.equal(typeof player.title, 'string', 'title')
-  t.equal(typeof player.balance[0].team, 'string', 'balance:team')
-  t.equal(typeof player.balance[0].data, 'string', 'balance:data')
-
-  t.equal(typeof player.singles[0].opponent, 'string', 'singles:opponent')
-  t.ok(isUrl(player.singles[0].opponentHref), 'singles:opponentHref')
-  t.ok(isSets(player.singles[0].sets))
-  t.ok(isClass(player.singles[0].opponentClass))
-
-  t.ok(player.teams)
-  t.ok(isUrl(player.teams[0].href))
-  t.ok(player.teams[0].name)
-
-  t.equal(typeof player.elo.data[0].delta, 'number', 'elo')
-  t.equal(typeof player.elo.start, 'number', 'elostart')
-  t.end()
-})
 
 // helpers
 function isClass(str) {
@@ -65,5 +41,36 @@ test('isUrl', t => {
   )
   t.notok(isUrl('hello'))
   t.notok(isUrl('/foo/ barasdslda'))
+  t.end()
+})
+
+test('player response', async t => {
+  const player = await scraper.getPlayer(
+    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
+  )
+  t.ok(isClass(player.classification), 'classification')
+  t.equal(typeof player.title, 'string', 'title')
+  t.equal(typeof player.balance[0].team, 'string', 'balance:team')
+  t.equal(typeof player.balance[0].data, 'string', 'balance:data')
+
+  t.equal(typeof player.singles[0].opponent, 'string', 'singles:opponent')
+  t.ok(isUrl(player.singles[0].opponentHref), 'singles:opponentHref')
+  t.ok(isSets(player.singles[0].sets))
+  t.ok(isClass(player.singles[0].opponentClass))
+
+  t.ok(player.teams)
+  t.ok(isUrl(player.teams[0].href))
+  t.ok(player.teams[0].name)
+
+  t.equal(typeof player.elo.data[0].delta, 'number', 'elo')
+  t.equal(typeof player.elo.start, 'number', 'elostart')
+  t.end()
+})
+
+test('associations', async t => {
+  const response = await scraper.getAssociations()
+  t.equal(typeof response.title, 'string')
+  t.ok(isUrl(response.associations[0].href))
+  t.equal(typeof response.associations[0].name, 'string')
   t.end()
 })

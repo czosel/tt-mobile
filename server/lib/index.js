@@ -17,6 +17,7 @@ app.use((req, res, next) => {
 })
 
 const endpoints = {
+  associations: 'getAssociations',
   assoc: 'getAssociation',
   league: 'getLeague',
   club: 'getClub',
