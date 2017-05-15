@@ -26,6 +26,9 @@ table {
     height: 4.4rem;
     border-bottom: 1px solid $primary-color-light;
   }
+  tbody tr {
+    cursor: pointer;
+  }
 
   .winner {
     font-weight: bold;
