@@ -17,9 +17,13 @@
     <table class="list-md">
       <tr>
         <td>Klassierung</td>
-        <td>{{data.classification}}
-          ({{data.elo?.start | elo}}, {{data.elo?.start}})</td>
+        <td><elo-score [score]="data.classification"></elo-score>
       </tr>
+      <tr>
+        <td>Klassierung (aktuell)</td>
+        <td>
+          <elo-score [score]="data.elo?.start | elo"></elo-score>
+          ({{data.elo?.start}})</td>
     </table>
 
     <elo-chart [data]="elo"></elo-chart>
@@ -51,7 +55,7 @@
     <tbody>
       <tr class="item-md" *ngFor="let match of data.singles" (click)="openPlayer(match)">
         <td>{{match.opponent}}</td>
-        <td>{{match.opponentClass}}</td>
+        <td><elo-score [score]="match.opponentClass"></elo-score></td>
         <td>{{match.sets}}</td>
       </tr>
     </tbody>
@@ -67,7 +71,7 @@
     </thead>
     <tbody>
       <tr class="item-md" *ngFor="let match of data.doubles" (click)="onSelect(match)">
-        <td>{{match.partner}} ({{match.partnerClass}})</td>
+        <td>{{match.partner}}</td>
         <td>{{match.opponent1}}<br>{{match.opponent2}}</td>
         <td>{{match.sets}}</td>
       </tr>

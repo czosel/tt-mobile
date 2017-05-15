@@ -37,7 +37,7 @@ $text-color: $primary-text-color;
 $colors: (
   primary:    $primary-color-text,
   secondary:  #757575,
-  danger:     #FF5252,
+  danger:     $accent-color,
   light:      #CFD8DC,
   dark:       #455A64
 );

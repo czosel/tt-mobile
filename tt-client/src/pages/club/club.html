@@ -26,7 +26,7 @@
     <tbody>
       <tr class="item-md" *ngFor="let player of data.players" (click)="onSelect(player)">
         <td>{{player.name}}</td>
-        <td>{{player.classification}}</td>
+        <td><elo-score [score]="player.classification"></elo-score></td>
         <td>{{player.appearances}}</td>
         <td>{{player.balance}}</td>
       </tr>

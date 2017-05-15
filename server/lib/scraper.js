@@ -88,7 +88,7 @@ function getAssociation(url) {
       .find('#content')
       .set({
         title: '#content-col1 h1',
-        leagues: osmosis.find('table.matrix td:first-child ul li span').set({
+        leagues: osmosis.find('table.matrix td ul li span').set({
           name: 'a',
           href: 'a@href'
         })
@@ -185,8 +185,10 @@ function getGame(url) {
           .set({
             player1: 'td:nth-child(2)',
             player1href: 'td:nth-child(2) a@href',
+            player1class: 'td:nth-child(3)',
             player2: 'td:nth-child(4)',
             player2href: 'td:nth-child(4) a@href',
+            player2class: 'td:nth-child(5)',
             sets: 'td:nth-child(11)',
             game: 'td:nth-child(12)'
           })
