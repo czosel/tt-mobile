@@ -9,17 +9,25 @@
     <thead>
       <tr>
         <td>{{game.home}} /<br> {{game.guest}}</td>
+        <td>Klass.</td>
         <td>Sätze</td>
         <td>Spiele</td>
       </tr>
     </thead>
     <tbody>
       <tr class="item-md" *ngFor="let match of data.matches" (click)="onSelect(club)">
-        <td>
-          <elo-score [score]="match.player1class"></elo-score>
+        <td *ngIf="match.player1.indexOf('\n') > -1" colspan="2">
           {{match.player1}}<br>
+          {{match.player2}}
+        </td>
+        <td *ngIf="match.player1.indexOf('\n') == -1">
+          {{match.player1}}<br>
+          {{match.player2}}
+        </td>
+        <td *ngIf="match.player1.indexOf('\n') == -1">
+          <elo-score [score]="match.player1class"></elo-score><br>
           <elo-score [score]="match.player2class"></elo-score>
-          {{match.player2}}</td>
+        </td>
         <td>{{match.sets}}</td>
         <td>{{match.game}}</td>
       </tr>
