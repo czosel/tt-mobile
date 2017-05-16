@@ -15,7 +15,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="item-md" *ngFor="let match of data.matches" (click)="onSelect(club)">
+      <tr class="item-md" *ngFor="let match of data.matches">
         <td *ngIf="match.player1.indexOf('\n') > -1" colspan="2">
           {{match.player1}}<br>
           {{match.player2}}
@@ -28,8 +28,13 @@
           <elo-score [score]="match.player1class"></elo-score><br>
           <elo-score [score]="match.player2class"></elo-score>
         </td>
-        <td>{{match.sets}}</td>
-        <td>{{match.game}}</td>
+        <td class="center">{{match.sets}}</td>
+        <td class="center">{{match.game}}</td>
+      </tr>
+      <tr class="item-md">
+        <td colspan="2"></td>
+        <td class="center">{{data.summary?.sets}}</td>
+        <td class="center"><strong>{{data.summary?.game}}</strong></td>
       </tr>
     </tbody>
   </table>

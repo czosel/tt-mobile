@@ -191,7 +191,11 @@ function getGame(url) {
             player2class: 'td:nth-child(5)',
             sets: 'td:nth-child(11)',
             game: 'td:nth-child(12)'
-          })
+          }),
+        summary: osmosis.find('table.result-set tr:last').set({
+          sets: 'td:nth(3)',
+          game: 'td:last'
+        })
       })
       .error(e => {
         console.error(e)

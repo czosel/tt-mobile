@@ -48,15 +48,15 @@
     <thead>
       <tr>
         <td>Gegner</td>
-        <td>Klass.</td>
-        <td>Sätze</td>
+        <td class="center">Klass.</td>
+        <td class="center">Sätze</td>
       </tr>
     </thead>
     <tbody>
       <tr class="item-md" *ngFor="let match of data.singles" (click)="openPlayer(match)">
         <td>{{match.opponent}}</td>
-        <td><elo-score [score]="match.opponentClass"></elo-score></td>
-        <td>{{match.sets}}</td>
+        <td class="center"><elo-score [score]="match.opponentClass"></elo-score></td>
+        <td class="center">{{match.sets}}</td>
       </tr>
     </tbody>
   </table>
@@ -66,14 +66,14 @@
       <tr>
         <td>Partner</td>
         <td>Gegner</td>
-        <td>Sätze</td>
+        <td class="center">Sätze</td>
       </tr>
     </thead>
     <tbody>
       <tr class="item-md" *ngFor="let match of data.doubles" (click)="onSelect(match)">
         <td>{{match.partner}}</td>
         <td>{{match.opponent1}}<br>{{match.opponent2}}</td>
-        <td>{{match.sets}}</td>
+        <td class="center">{{match.sets}}</td>
       </tr>
     </tbody>
   </table>

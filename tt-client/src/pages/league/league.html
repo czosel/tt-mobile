@@ -17,16 +17,16 @@
       <tr>
         <td>Rang</td>
         <td>Mannschaft</td>
-        <td>Beg.</td>
-        <td>Punkte</td>
+        <td class="center">Beg.</td>
+        <td class="center">Punkte</td>
       </tr>
     </thead>
     <tbody>
       <tr class="item-md" *ngFor="let club of data.clubs" (click)="onSelect(club)">
         <td>{{club.rank}}</td>
         <td>{{club.name}}</td>
-        <td>{{club.nrOfGames}}</td>
-        <td>{{club.score}}</td>
+        <td class="center">{{club.nrOfGames}}</td>
+        <td class="center">{{club.score}}</td>
       </tr>
     </tbody>
   </table>

@@ -74,3 +74,14 @@ test('associations', async t => {
   t.equal(typeof response.associations[0].name, 'string')
   t.end()
 })
+
+test('game', async t => {
+  // Royal Bern
+  const response = await scraper.getGame(
+    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6358643&championship=MTTV+16%2F17&group=199330'
+  )
+  t.equal(typeof response.title, 'string')
+  t.equal(typeof response.summary.game, 'string')
+  t.equal(typeof response.summary.sets, 'string')
+  t.end()
+})

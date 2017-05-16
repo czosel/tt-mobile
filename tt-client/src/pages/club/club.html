@@ -1,9 +1,3 @@
-<!--
-  Generated template for the Club page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
@@ -18,17 +12,17 @@
     <thead>
       <tr>
         <td>Name</td>
-        <td>Klass.</td>
-        <td>Eins.</td>
-        <td>Bilanz</td>
+        <td class="center">Klass.</td>
+        <td class="center">Eins.</td>
+        <td class="center">Bilanz</td>
       </tr>
     </thead>
     <tbody>
       <tr class="item-md" *ngFor="let player of data.players" (click)="onSelect(player)">
         <td>{{player.name}}</td>
-        <td><elo-score [score]="player.classification"></elo-score></td>
-        <td>{{player.appearances}}</td>
-        <td>{{player.balance}}</td>
+        <td class="center"><elo-score [score]="player.classification"></elo-score></td>
+        <td class="center">{{player.appearances}}</td>
+        <td class="center">{{player.balance}}</td>
       </tr>
     </tbody>
   </table>
