@@ -198,7 +198,7 @@ function getGame(url) {
         rej(e)
       })
       .data(data => {
-        res.matches.map(match => {
+        data.matches.map(match => {
           match.player1 = match.player1.trim()
           match.player2 = match.player2.trim()
         })
