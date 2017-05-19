@@ -16,23 +16,11 @@ app.use((req, res, next) => {
   next()
 })
 
-const endpoints = {
-  associations: 'getAssociations',
-  assoc: 'getAssociation',
-  league: 'getLeague',
-  club: 'getClub',
-  game: 'getGame',
-  player: 'getPlayer'
-}
+const endpoints = ['associations', 'assoc', 'league', 'club', 'game', 'player']
 
 Object.keys(endpoints).forEach(path => {
   app.get(`/${path}`, async (req, res) => {
-    const method = endpoints[path]
-    try {
-      res.json(await scraper[method](req.query.url))
-    } catch (e) {
-      res.status(404).send('Not found')
-    }
+    res.json(await scraper[path](req.query.url))
   })
 })
 

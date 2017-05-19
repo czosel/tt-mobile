@@ -26,6 +26,7 @@
   "dependencies": {
     "compression": "^1.6.2",
     "express": "^4.15.2",
-    "mongodb": "^2.2.25"
+    "mongodb": "^2.2.25",
+    "ramda": "^0.23.0"
   }
 }

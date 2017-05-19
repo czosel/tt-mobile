@@ -44,8 +44,14 @@ test('isUrl', t => {
   t.end()
 })
 
+test('arrayify', t => {
+  t.deepEqual(scraper.arrayify(2), [2])
+  t.deepEqual(scraper.arrayify([3]), [3])
+  t.end()
+})
+
 test('player response', async t => {
-  const player = await scraper.getPlayer(
+  const player = await scraper.player(
     '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
   )
   t.ok(isClass(player.classification), 'classification')
@@ -68,7 +74,7 @@ test('player response', async t => {
 })
 
 test('associations', async t => {
-  const response = await scraper.getAssociations()
+  const response = await scraper.associations()
   t.equal(typeof response.title, 'string')
   t.ok(isUrl(response.associations[0].href))
   t.equal(typeof response.associations[0].name, 'string')
@@ -77,7 +83,7 @@ test('associations', async t => {
 
 test('game', async t => {
   // Royal Bern
-  const response = await scraper.getGame(
+  const response = await scraper.game(
     '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6358643&championship=MTTV+16%2F17&group=199330'
   )
   t.equal(typeof response.title, 'string')

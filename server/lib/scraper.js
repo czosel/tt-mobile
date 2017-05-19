@@ -1,4 +1,5 @@
 const util = require('util')
+const R = require('ramda')
 const { resolve } = require('url')
 
 const osmosis = require('osmosis')
@@ -14,7 +15,16 @@ function unique(arr) {
   )
 }
 
-function getStaticData() {
+const logger = R.curry((level, prefix, val) => {
+  console[level](prefix, val)
+  return val
+})
+const log = logger('log')
+const error = logger('error')
+
+const arrayify = R.unless(Array.isArray, a => [a])
+
+function staticData() {
   return new Promise((res, rej) => {
     osmosis
       .get(
@@ -52,13 +62,11 @@ function getStaticData() {
         console.error(e)
         rej(e)
       })
-      .data(data => {
-        res(data)
-      })
+      .data(res)
   })
 }
 
-function getAssociations() {
+function associations() {
   const url = 'index.htm.de'
   return new Promise((res, rej) => {
     osmosis
@@ -71,17 +79,12 @@ function getAssociations() {
           href: 'a@href'
         })
       })
-      .error(e => {
-        console.error(e)
-        rej(e)
-      })
-      .data(data => {
-        res(data)
-      })
+      .error(R.pipe(error('associations'), rej))
+      .data(res)
   })
 }
 
-function getAssociation(url) {
+function assoc(url) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -93,17 +96,12 @@ function getAssociation(url) {
           href: 'a@href'
         })
       })
-      .error(e => {
-        console.error(e)
-        rej(e)
-      })
-      .data(data => {
-        res(data)
-      })
+      .error(R.pipe(error('assoc'), rej))
+      .data(res)
   })
 }
 
-function getLeague(url) {
+function league(url) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -130,10 +128,7 @@ function getLeague(url) {
             score: 'td:last-child'
           })
       })
-      .error(e => {
-        console.error(e)
-        rej(e)
-      })
+      .error(R.pipe(error('league'), rej))
       .data(data => {
         data.clubs = data.clubs.map(club => {
           if (club.score.startsWith('zurückgezogen')) {
@@ -146,7 +141,7 @@ function getLeague(url) {
   })
 }
 
-function getClub(url) {
+function club(url) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -163,17 +158,16 @@ function getClub(url) {
             balance: 'td:nth-child(8)'
           })
       })
-      .error(e => {
-        console.error(e)
-        rej(e)
-      })
-      .data(data => {
-        res(data)
-      })
+      .error(R.pipe(error('club'), rej))
+      .data(res)
   })
 }
 
-function getGame(url) {
+const player1Lens = R.lensProp('player1')
+const matchesLens = R.lensProp('matches')
+const trimPlayers = R.over(matchesLens, R.map(R.over(player1Lens, R.toUpper())))
+
+function game(url) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -197,21 +191,12 @@ function getGame(url) {
           game: 'td:last'
         })
       })
-      .error(e => {
-        console.error(e)
-        rej(e)
-      })
-      .data(data => {
-        data.matches.map(match => {
-          match.player1 = match.player1.trim()
-          match.player2 = match.player2.trim()
-        })
-        res(data)
-      })
+      .error(R.pipe(error('club'), rej))
+      .data(R.pipe(trimPlayers, res))
   })
 }
 
-function getPlayer(url) {
+function player(url) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -257,14 +242,9 @@ function getPlayer(url) {
               })
           })
       })
-      .error(e => {
-        console.error(e)
-        rej(e)
-      })
+      .error(R.pipe(error('club'), rej))
       .data(data => {
-        if (!Array.isArray(data.teams)) {
-          data.teams = [data.teams]
-        }
+        data.teams = arrayify(data.teams)
         data.balance = unique(
           data.balance.split('\n').filter(str => !!str.trim()).map(str => ({
             team: str.substr(0, str.indexOf(':')).trim(),
@@ -289,11 +269,12 @@ function getPlayer(url) {
 }
 
 module.exports = {
-  getStaticData,
-  getAssociations,
-  getAssociation,
-  getLeague,
-  getClub,
-  getGame,
-  getPlayer
+  arrayify,
+  staticData,
+  associations,
+  assoc,
+  league,
+  club,
+  game,
+  player
 }
