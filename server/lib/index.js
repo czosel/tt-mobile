@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 
 const endpoints = ['associations', 'assoc', 'league', 'club', 'game', 'player']
 
-Object.keys(endpoints).forEach(path => {
+endpoints.forEach(path => {
   app.get(`/${path}`, async (req, res) => {
     res.json(await scraper[path](req.query.url))
   })
