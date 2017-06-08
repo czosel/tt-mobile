@@ -85,6 +85,9 @@ function associations() {
 }
 
 function assoc(url) {
+  if (url.indexOf('17/18') > -1) {
+    url = url.replace('17/18', '16/17')
+  }
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
