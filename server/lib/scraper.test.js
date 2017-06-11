@@ -91,3 +91,29 @@ test('game', async t => {
   t.equal(typeof response.summary.sets, 'string')
   t.end()
 })
+
+test('typical league', async t => {
+  // Nationalliga A
+  const response = await scraper.league(
+    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=199224'
+  )
+  t.equal(typeof response.title, 'string')
+  t.equal(typeof response.clubs[0].name, 'string')
+  t.ok(isUrl(response.clubs[0].href))
+  t.equal(typeof response.games[0].home, 'string')
+  t.equal(typeof response.games[0].guest, 'string')
+  t.ok(isUrl(response.games[0].href))
+  t.end()
+})
+
+test('limited league', async t => {
+  // Nati A Playoff 1/4 Final
+  const response = await scraper.league(
+    'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=201044'
+  )
+  t.notOk(response.clubs, '')
+  t.equal(typeof response.games[0].home, 'string')
+  t.equal(typeof response.games[0].guest, 'string')
+  t.ok(isUrl(response.games[0].href))
+  t.end()
+})

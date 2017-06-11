@@ -15,6 +15,7 @@ export class LeaguePage {
   league;
   data = {};
   active = "table";
+  hasTable = true;
 
   constructor(private dataService: Data, public navCtrl: NavController, public navParams: NavParams, public loading: Loading) {
     this.league = navParams.data;
@@ -27,6 +28,8 @@ export class LeaguePage {
     this.dataService.getLeague(this.league.href)
       .subscribe(league => {
         this.data = league;
+        this.hasTable = !!league.clubs
+        this.active = this.hasTable ? 'table' : 'fixture'
         loading.dismiss();
       });
   }

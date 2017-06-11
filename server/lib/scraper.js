@@ -112,7 +112,9 @@ function league(url) {
       .set({
         title: '#content-col1 h1',
         games: osmosis
-          .find('#content-row2 table.result-set:last tr:not(:first-child)')
+          .find(
+            'h2:contains("Spielplan") ~ table.result-set:first tr:not(:first-child)'
+          )
           .set({
             date: 'td:nth-child(2)',
             time: 'td:nth-child(3)',
@@ -122,7 +124,9 @@ function league(url) {
             href: 'td:nth-child(10) a@href'
           }),
         clubs: osmosis
-          .find('#content-row2 table.result-set:first tr:not(:first-child)')
+          .find(
+            'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)'
+          )
           .set({
             rank: 'td:nth-child(2)',
             name: 'td:nth-child(3)',
@@ -133,12 +137,16 @@ function league(url) {
       })
       .error(R.pipe(error('league'), rej))
       .data(data => {
-        data.clubs = data.clubs.map(club => {
-          if (club.score.startsWith('zurückgezogen')) {
-            club.score = '-'
-          }
-          return club
-        })
+        if (Array.isArray(data.clubs)) {
+          data.clubs = data.clubs.map(club => {
+            if (club.score.startsWith('zurückgezogen')) {
+              club.score = '-'
+            }
+            return club
+          })
+        } else {
+          delete data.clubs
+        }
         res(data)
       })
   })

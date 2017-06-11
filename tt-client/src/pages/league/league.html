@@ -5,14 +5,14 @@
 
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="active">
-      <ion-segment-button value="table">Tabelle</ion-segment-button>
+      <ion-segment-button *ngIf="hasTable" value="table">Tabelle</ion-segment-button>
       <ion-segment-button value="fixture">Spielplan</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <table *ngIf="active == 'table'" class="list-md">
+  <table *ngIf="hasTable && active == 'table'" class="list-md">
     <thead>
       <tr>
         <td>Rang</td>
@@ -31,7 +31,7 @@
     </tbody>
   </table>
 
-  <table *ngIf="active == 'fixture'" class="list-md">
+  <table *ngIf="!hasTable || active == 'fixture'" class="list-md">
     <thead>
       <tr>
         <td>Datum</td>
