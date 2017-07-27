@@ -2,7 +2,6 @@ const compression = require('compression')
 const express = require('express')
 
 const scraper = require('./scraper')
-const db = require('./db')
 
 var app = express()
 
@@ -23,12 +22,6 @@ endpoints.forEach(path => {
     res.json(await scraper[path](req.query.url))
   })
 })
-
-async function scrape() {
-  console.time('scrape')
-  db.replace(await scraper.getStaticData())
-  console.timeEnd('scrape')
-}
 
 app.listen(3020, function() {
   console.log('server listening on port 3020')
