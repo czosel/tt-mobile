@@ -4,8 +4,8 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-list>
+<ion-content>
+  <ion-item-group>
     <ion-item-divider>
       Punktspiele
     </ion-item-divider>
@@ -14,6 +14,8 @@
       (click)="onSelect(assoc)">
       {{assoc.name}}
     </button>
+  </ion-item-group>
+  <ion-item-group>
     <ion-item-divider>
       Pokalspiele
     </ion-item-divider>
@@ -22,5 +24,5 @@
       (click)="onSelect(assoc)">
       {{assoc.name}}
     </button>
-  </ion-list>
+  </ion-item-group>
 </ion-content>

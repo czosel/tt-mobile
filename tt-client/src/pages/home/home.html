@@ -4,22 +4,26 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-list>
+<ion-content>
+  <ion-item-group>
     <ion-item-divider>
       Punktspiele
     </ion-item-divider>
     <button ion-item *ngFor="let assoc of associations"
       (click)="select(assoc)">{{translations[assoc] || assoc}}</button>
+  </ion-item-group>
+  <ion-item-group>
     <ion-item-divider>
       Pokalspiele
     </ion-item-divider>
     <button ion-item *ngFor="let trophy of trophies"
       (click)="select(trophy)">{{trophy}}</button>
+  </ion-item-group>
+  <ion-item-group>
     <ion-item-divider>
       Ergebnisarchiv
     </ion-item-divider>
     <button ion-item *ngFor="let season of seasons"
       (click)="openArchive(season)">Saison 20{{season.year}}</button>
-  </ion-list>
+  </ion-item-group>
 </ion-content>

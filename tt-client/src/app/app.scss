@@ -26,6 +26,9 @@ table {
     height: 4.4rem;
     border-bottom: 1px solid $primary-color-light;
   }
+  tr td:first-child {
+    padding-left: 1rem;
+  }
   tbody tr {
     cursor: pointer;
   }
@@ -37,4 +40,8 @@ table {
 
 .center {
   text-align: center;
+}
+
+h4 {
+  padding-left: 1rem;
 }
