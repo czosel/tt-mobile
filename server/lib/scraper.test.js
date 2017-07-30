@@ -51,9 +51,9 @@ test('arrayify', t => {
 })
 
 test('player response', async t => {
-  const player = await scraper.player(
-    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
-  )
+  const player = await scraper.player({
+    url: '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
+  })
   t.ok(isClass(player.classification), 'classification')
   t.equal(typeof player.title, 'string', 'title')
   t.equal(typeof player.balance[0].team, 'string', 'balance:team')
@@ -73,19 +73,11 @@ test('player response', async t => {
   t.end()
 })
 
-test('associations', async t => {
-  const response = await scraper.associations()
-  t.equal(typeof response.title, 'string')
-  t.ok(isUrl(response.associations[0].href))
-  t.equal(typeof response.associations[0].name, 'string')
-  t.end()
-})
-
 test('game', async t => {
   // Royal Bern
-  const response = await scraper.game(
-    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6358643&championship=MTTV+16%2F17&group=199330'
-  )
+  const response = await scraper.game({
+    url: '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6358643&championship=MTTV+16%2F17&group=199330'
+  })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.summary.game, 'string')
   t.equal(typeof response.summary.sets, 'string')
@@ -94,9 +86,9 @@ test('game', async t => {
 
 test('typical league', async t => {
   // Nationalliga A
-  const response = await scraper.league(
-    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=199224'
-  )
+  const response = await scraper.league({
+    url: '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=199224'
+  })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.clubs[0].name, 'string')
   t.ok(isUrl(response.clubs[0].href))
@@ -108,9 +100,9 @@ test('typical league', async t => {
 
 test('limited league', async t => {
   // Nati A Playoff 1/4 Final
-  const response = await scraper.league(
-    'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=201044'
-  )
+  const response = await scraper.league({
+    url: 'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=201044'
+  })
   t.notOk(response.clubs, '')
   t.equal(typeof response.games[0].home, 'string')
   t.equal(typeof response.games[0].guest, 'string')

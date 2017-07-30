@@ -30,7 +30,7 @@
 
     <h4>Mannschaftseinsätze</h4>
     <table>
-      <tr *ngFor="let league of data.teams" (click)="openLeague(league)">
+      <tr tappable *ngFor="let league of data.teams" (click)="openLeague(league)">
         <td>{{league.name}}</td>
       </tr>
     </table>
@@ -53,7 +53,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="item-md" *ngFor="let match of data.singles" (click)="openPlayer(match)">
+      <tr class="item-md" tappable *ngFor="let match of data.singles" (click)="openPlayer(match)">
         <td>{{match.opponent}}</td>
         <td class="center"><elo-score [score]="match.opponentClass"></elo-score></td>
         <td class="center">{{match.sets}}</td>
@@ -70,7 +70,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="item-md" *ngFor="let match of data.doubles" (click)="onSelect(match)">
+      <tr class="item-md" tappable *ngFor="let match of data.doubles">
         <td>{{match.partner}}</td>
         <td>{{match.opponent1}}<br>{{match.opponent2}}</td>
         <td class="center">{{match.sets}}</td>

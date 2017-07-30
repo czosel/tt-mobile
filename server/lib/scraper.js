@@ -24,70 +24,39 @@ const error = logger('error')
 
 const arrayify = R.unless(Array.isArray, a => [a])
 
-function staticData() {
-  return new Promise((res, rej) => {
-    osmosis
-      .get(
-        resolve(
-          host,
-          '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/leaguePage?championship=MTTV+16/17&preferredLanguage=German'
-        )
-      )
-      .find('table.matrix td:first-child ul:nth-child(2) li span a')
-      .set('league')
-      .set({
-        href: '@href'
-      })
-      .set({
-        clubs: osmosis
-          .follow('@href')
-          .find('#content-row2 table.result-set:first tr:not(:first-child)')
-          .set({
-            rank: 'td:nth-child(2)',
-            name: 'td:nth-child(3)',
-            href: 'td:nth-child(3) a@href'
-          })
-          .set({
-            players: osmosis
-              .find('td:nth-child(3) a')
-              .follow('@href')
-              .find('#content-row2 table.result-set tr:has(td:nth-child(2) a)')
-              .set({
-                name: 'td:nth-child(2)',
-                href: 'td:nth-child(2) a@href'
-              })
-          })
-      })
-      .error(e => {
-        console.error(e)
-        rej(e)
-      })
-      .data(res)
-  })
+const removeIfNotList = (obj, prop) => {
+  return !Array.isArray(obj[prop])
+    ? R.omit([prop], obj)
+    : obj;
 }
 
-function associations() {
-  const url = 'index.htm.de'
+function assocHistory({step}) {
+  const url = '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/championshipArchive?federation=STT'
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
-      .find('#navigation > ul li:nth(2)')
+      .find(`table.matrix tr:eq(${step}) td:first-child`)
       .set({
-        title: 'strong',
-        associations: osmosis.find('ul li').set({
-          name: 'a',
-          href: 'a@href'
+        regular: osmosis.find('a')
+        .set('name')
+        .set({
+          href: '@href'
         })
       })
-      .error(R.pipe(error('associations'), rej))
+      .find(`table.matrix tr:eq(${step}) td:last-child`)
+      .set({
+        trophy: osmosis.find('a')
+        .set('name')
+        .set({
+          href: '@href'
+        })
+      })
+      .error(R.pipe(error('assocHistory'), rej))
       .data(res)
   })
 }
 
-function assoc(url) {
-  if (url.indexOf('17/18') > -1) {
-    url = url.replace('17/18', '16/17')
-  }
+function assoc({url}) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -100,11 +69,13 @@ function assoc(url) {
         })
       })
       .error(R.pipe(error('assoc'), rej))
-      .data(res)
+      .data(data => {
+        res(removeIfNotList(data, 'leagues'))
+      })
   })
 }
 
-function league(url) {
+function league({url}) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -152,7 +123,7 @@ function league(url) {
   })
 }
 
-function club(url) {
+function club({url}) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -170,7 +141,9 @@ function club(url) {
           })
       })
       .error(R.pipe(error('club'), rej))
-      .data(res)
+      .data(data => {
+        res(removeIfNotList(data, 'players'))
+      })
   })
 }
 
@@ -178,7 +151,7 @@ const player1Lens = R.lensProp('player1')
 const matchesLens = R.lensProp('matches')
 const trimPlayers = R.over(matchesLens, R.map(R.over(player1Lens, R.toUpper())))
 
-function game(url) {
+function game({url}) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -207,7 +180,7 @@ function game(url) {
   })
 }
 
-function player(url) {
+function player({url}) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -281,8 +254,7 @@ function player(url) {
 
 module.exports = {
   arrayify,
-  staticData,
-  associations,
+  assocHistory,
   assoc,
   league,
   club,

@@ -22,7 +22,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="item-md" *ngFor="let club of data.clubs" (click)="onSelect(club)">
+      <tr class="item-md" tappable *ngFor="let club of data.clubs" (click)="onSelect(club)">
         <td>{{club.rank}}</td>
         <td>{{club.name}}</td>
         <td class="center">{{club.nrOfGames}}</td>

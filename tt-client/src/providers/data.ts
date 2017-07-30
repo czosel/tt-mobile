@@ -15,6 +15,11 @@ export class Data {
       .map(this.extractData);
   }
 
+  getAssocHistory(step) {
+    return this.http.get(host + "/assocHistory?step=" + step)
+      .map(this.extractData);
+  }
+
   getAssoc(url) {
     return this.http.get(host + "/assoc?url=" + encodeURIComponent(url))
       .map(this.extractData);

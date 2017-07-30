@@ -6,10 +6,20 @@
 
 <ion-content padding>
   <ion-list>
-    <button ion-item
-      *ngFor="let assoc of associations.associations"
-      (click)="onSelect(assoc)">
-      {{assoc.name}}
-    </button>
+    <ion-item-divider>
+      Punktspiele
+    </ion-item-divider>
+    <button ion-item *ngFor="let assoc of associations"
+      (click)="select(assoc)">{{translations[assoc] || assoc}}</button>
+    <ion-item-divider>
+      Pokalspiele
+    </ion-item-divider>
+    <button ion-item *ngFor="let trophy of trophies"
+      (click)="select(trophy)">{{trophy}}</button>
+    <ion-item-divider>
+      Ergebnisarchiv
+    </ion-item-divider>
+    <button ion-item *ngFor="let season of seasons"
+      (click)="openArchive(season)">Saison 20{{season.year}}</button>
   </ion-list>
 </ion-content>

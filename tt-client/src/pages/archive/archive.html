@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Saison 20{{season.year}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-divider>
+      Punktspiele
+    </ion-item-divider>
+    <button ion-item
+      *ngFor="let assoc of associations.regular"
+      (click)="onSelect(assoc)">
+      {{assoc.name}}
+    </button>
+    <ion-item-divider>
+      Pokalspiele
+    </ion-item-divider>
+    <button ion-item
+      *ngFor="let assoc of associations.trophy"
+      (click)="onSelect(assoc)">
+      {{assoc.name}}
+    </button>
+  </ion-list>
+</ion-content>
