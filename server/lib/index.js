@@ -1,19 +1,13 @@
 const compression = require('compression')
 const express = require('express')
+const cors = require('cors')
 
 const scraper = require('./scraper')
 
-var app = express()
+const app = express()
 
 app.use(compression())
-
-app.use((req, res, next) => {
-  const client = process.env.NODE_ENV === 'production'
-    ? 'https://tt.zosel.ch'
-    : 'http://localhost:8100'
-  res.setHeader('Access-Control-Allow-Origin', client)
-  next()
-})
+app.use(cors())
 
 const endpoints = ['assocHistory', 'assoc', 'league', 'club', 'game', 'player']
 

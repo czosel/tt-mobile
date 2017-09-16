@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-watch lib/index.js",
+    "start": "nodemon lib/index.js",
     "build": "babel lib -d dist",
     "test": "tape-watch -c ./**/*.test.js | tap-spec"
   },
@@ -15,8 +15,7 @@
     "babel-cli": "^6.24.1",
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
-    "babel-watch": "^2.0.6",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.12.1",
     "osmosis": "^1.1.4",
     "tap-dot": "^1.0.5",
     "tap-spec": "^4.1.1",
@@ -25,6 +24,7 @@
   },
   "dependencies": {
     "compression": "^1.6.2",
+    "cors": "^2.8.4",
     "express": "^4.15.2",
     "mongodb": "^2.2.25",
     "ramda": "^0.23.0"
