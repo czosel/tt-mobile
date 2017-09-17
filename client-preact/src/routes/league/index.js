@@ -22,6 +22,16 @@ export default class Profile extends Component {
     return (
       <div class={style.profile}>
         <h2>{title}</h2>
+        <div class="tabs">
+          <ul>
+            <li class="is-active">
+              <a>Tabelle</a>
+            </li>
+            <li>
+              <a>Spielplan</a>
+            </li>
+          </ul>
+        </div>
       </div>
     )
   }

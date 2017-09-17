@@ -20,9 +20,12 @@
     "eslint": "^4.6.0",
     "eslint-config-synacor": "^1.1.1",
     "if-env": "^1.0.0",
-    "preact-cli": "^1.4.1"
+    "node-sass": "^4.5.3",
+    "preact-cli": "^1.4.1",
+    "sass-loader": "^6.0.6"
   },
   "dependencies": {
+    "bulma": "^0.5.2",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
     "preact-router": "^2.5.7"
