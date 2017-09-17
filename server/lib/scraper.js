@@ -25,38 +25,52 @@ const error = logger('error')
 const arrayify = R.unless(Array.isArray, a => [a])
 
 const removeIfNotList = (obj, prop) => {
-  return !Array.isArray(obj[prop])
-    ? R.omit([prop], obj)
-    : obj;
+  return !Array.isArray(obj[prop]) ? R.omit([prop], obj) : obj
 }
 
-function assocHistory({step}) {
-  const url = '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/championshipArchive?federation=STT'
+const simplifyLinks = obj => {
+  return {
+    ...obj,
+    href: simplify(obj.href)
+  }
+}
+
+// strip "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/" from URL
+const simplify = href => href.substring(href.lastIndexOf('/'))
+
+const toArray = arr => (Array.isArray(arr) ? arr : [])
+
+function assocHistory({ step }) {
+  const url =
+    '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/championshipArchive?federation=STT'
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
       .find(`table.matrix tr:eq(${step}) td:first-child`)
       .set({
-        regular: osmosis.find('a')
-        .set('name')
-        .set({
-          href: '@href'
-        })
+        regular: osmosis
+          .find('a')
+          .set('name')
+          .set({
+            href: '@href'
+          })
       })
       .find(`table.matrix tr:eq(${step}) td:last-child`)
       .set({
-        trophy: osmosis.find('a')
-        .set('name')
-        .set({
-          href: '@href'
-        })
+        trophy: osmosis
+          .find('a')
+          .set('name')
+          .set({
+            href: '@href'
+          })
       })
       .error(R.pipe(error('assocHistory'), rej))
       .data(res)
   })
 }
 
-function assoc({url}) {
+function assoc({ url }) {
+  console.log('assoc', url)
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -69,13 +83,17 @@ function assoc({url}) {
         })
       })
       .error(R.pipe(error('assoc'), rej))
-      .data(data => {
-        res(removeIfNotList(data, 'leagues'))
+      .data(({ title, leagues }) => {
+        res({
+          title,
+          leagues: toArray(leagues).map(simplifyLinks)
+        })
       })
   })
 }
 
-function league({url}) {
+function league({ url }) {
+  console.log('league', url)
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -123,7 +141,7 @@ function league({url}) {
   })
 }
 
-function club({url}) {
+function club({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -151,7 +169,7 @@ const player1Lens = R.lensProp('player1')
 const matchesLens = R.lensProp('matches')
 const trimPlayers = R.over(matchesLens, R.map(R.over(player1Lens, R.toUpper())))
 
-function game({url}) {
+function game({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -180,7 +198,7 @@ function game({url}) {
   })
 }
 
-function player({url}) {
+function player({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -188,9 +206,12 @@ function player({url}) {
       .set({
         title: '#content-row1 h1',
         classification: 'table.result-set:first tr:nth-child(4) td:last',
-        teams: osmosis.find('table.result-set:nth(2) tr td a').set('name').set({
-          href: '@href'
-        }),
+        teams: osmosis
+          .find('table.result-set:nth(2) tr td a')
+          .set('name')
+          .set({
+            href: '@href'
+          }),
         balance: 'table.result-set:nth(2) tr:nth-child(3) > td:last',
         singles: osmosis
           .find('table.result-set:nth(3) tr:has(td:nth-child(3) a)')
@@ -230,10 +251,13 @@ function player({url}) {
       .data(data => {
         data.teams = arrayify(data.teams)
         data.balance = unique(
-          data.balance.split('\n').filter(str => !!str.trim()).map(str => ({
-            team: str.substr(0, str.indexOf(':')).trim(),
-            data: str.substr(str.indexOf(':') + 1).trim()
-          }))
+          data.balance
+            .split('\n')
+            .filter(str => !!str.trim())
+            .map(str => ({
+              team: str.substr(0, str.indexOf(':')).trim(),
+              data: str.substr(str.indexOf(':') + 1).trim()
+            }))
         )
 
         var current = parseInt(data.elo.start)

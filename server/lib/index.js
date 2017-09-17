@@ -1,6 +1,7 @@
 const compression = require('compression')
 const express = require('express')
 const cors = require('cors')
+const { join } = require('path')
 
 const scraper = require('./scraper')
 
@@ -13,7 +14,11 @@ const endpoints = ['assocHistory', 'assoc', 'league', 'club', 'game', 'player']
 
 endpoints.forEach(path => {
   app.get(`/${path}`, async (req, res) => {
-    res.json(await scraper[path](req.query))
+    res.json(
+      await scraper[path]({
+        url: join('/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/', req.query.url)
+      })
+    )
   })
 })
 
