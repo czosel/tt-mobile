@@ -21,12 +21,13 @@ html, body {
   height: 100%;
 }
 
-ul {
+ul.link-list {
   list-style-type: none;
   padding-left: 0;
+
+  li {
+      line-height: 3rem;
+      border-bottom: 1px solid silver;
+  }
 }
 
-ul li {
-  line-height: 3rem;
-  border-bottom: 1px solid silver;
-}

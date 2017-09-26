@@ -93,7 +93,6 @@ function assoc({ url }) {
 }
 
 function league({ url }) {
-  console.log('league', url)
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -126,17 +125,26 @@ function league({ url }) {
       })
       .error(R.pipe(error('league'), rej))
       .data(data => {
-        if (Array.isArray(data.clubs)) {
-          data.clubs = data.clubs.map(club => {
-            if (club.score.startsWith('zurückgezogen')) {
-              club.score = '-'
-            }
-            return club
-          })
-        } else {
-          delete data.clubs
-        }
-        res(data)
+        titleParts = data.title
+          ? data.title
+              .split('\n')
+              .map(i => i.trim())
+              .filter(i => !!i)
+          : []
+        res({
+          assoc: titleParts[0],
+          league: titleParts[1],
+          title: data.title,
+          games: data.games,
+          clubs: Array.isArray(data.clubs)
+            ? data.clubs.map(club => ({
+                score: club.score.startsWith('zurückgezogen')
+                  ? '-'
+                  : club.score,
+                ...club
+              }))
+            : null
+        })
       })
   })
 }

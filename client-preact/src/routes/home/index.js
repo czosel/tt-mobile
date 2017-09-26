@@ -25,7 +25,7 @@ export default class Home extends Component {
   render({}, { title, leagues }) {
     return (
       <div class={style.home}>
-        <ul>
+        <ul class="link-list">
           {leagues.map(league => (
             <li>
               <Link href={`league/${encodeURIComponent(league.href)}`}>

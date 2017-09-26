@@ -22,10 +22,12 @@ export default class App extends Component {
     return (
       <div id="app">
         <Header />
-        <Router onChange={this.handleRoute}>
-          <Home path="/" />
-          <League path="/league/:href" />
-        </Router>
+        <section class="section">
+          <Router onChange={this.handleRoute}>
+            <Home path="/" />
+            <League path="/league/:href" />
+          </Router>
+        </section>
       </div>
     )
   }

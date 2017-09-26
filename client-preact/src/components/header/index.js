@@ -5,20 +5,20 @@ import style from './style'
 export default class Header extends Component {
   render() {
     return (
-      <header class={style.header}>
-        <h1>TT mobile</h1>
-        <nav>
-          <Link activeClassName={style.active} href="/">
-            Home
+      <nav
+        class="navbar is-primary"
+        role="navigation"
+        aria-label="main navigation"
+      >
+        <div class="navbar-brand">
+          <Link class="navbar-item" activeClassName="is-active" href="/">
+            <strong>TT mobile</strong>
           </Link>
-          <Link activeClassName={style.active} href="/profile">
+          <Link class="navbar-item" activeClassName="is-active" href="/profile">
             Me
           </Link>
-          <Link activeClassName={style.active} href="/profile/test">
-            Test
-          </Link>
-        </nav>
-      </header>
+        </div>
+      </nav>
     )
   }
 }
