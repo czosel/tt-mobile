@@ -6,7 +6,7 @@ export default class Header extends Component {
   render() {
     return (
       <nav
-        class="navbar is-primary"
+        class={style.fixed + ' navbar is-primary'}
         role="navigation"
         aria-label="main navigation"
       >

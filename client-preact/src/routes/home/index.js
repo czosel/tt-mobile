@@ -22,16 +22,18 @@ export default class Home extends Component {
     this.loadItems()
   }
 
+  open(href) {
+    console.log('open', href)
+  }
+
   render({}, { title, leagues }) {
     return (
       <div class={style.home}>
         <ul class="link-list">
           {leagues.map(league => (
-            <li>
-              <Link href={`league/${encodeURIComponent(league.href)}`}>
-                {league.name}
-              </Link>
-            </li>
+            <LinkListItem href={`league/${encodeURIComponent(league.href)}`}>
+              {league.name}
+            </LinkListItem>
           ))}
         </ul>
       </div>

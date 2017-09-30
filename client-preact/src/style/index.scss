@@ -1,3 +1,7 @@
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
+
+// bulma customization
+
 @import "../../node_modules/bulma/bulma";
 
 html, body {
@@ -31,3 +35,11 @@ ul.link-list {
   }
 }
 
+// hacky styling fix for fixed header
+.section {
+  padding-top: 4rem;
+}
+
+.title {
+  font-size: 1.25rem;
+}
