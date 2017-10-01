@@ -2,13 +2,19 @@ import { h, Component } from 'preact'
 import style from './style'
 
 import Link from '../../components/link'
+import LinkListItem from '../../components/linkListItem'
 
 const API_ORIGIN = 'http://localhost:3020'
 
 const asJson = r => r.json()
 
+const test = { name: 'Test' }
+
 export default class Home extends Component {
-  state = { title: '', leagues: [] }
+  state = {
+    title: '',
+    leagues: []
+  }
 
   loadItems() {
     fetch(
@@ -20,10 +26,6 @@ export default class Home extends Component {
 
   componentDidMount() {
     this.loadItems()
-  }
-
-  open(href) {
-    console.log('open', href)
   }
 
   render({}, { title, leagues }) {

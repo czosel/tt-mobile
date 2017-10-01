@@ -6,6 +6,8 @@ import debug from 'preact/debug'
 import Header from './header'
 import Home from '../routes/home'
 import League from '../routes/league'
+import Club from '../routes/club'
+import Player from '../routes/player'
 // import Home from 'async!./home';
 // import Profile from 'async!./profile';
 
@@ -26,6 +28,8 @@ export default class App extends Component {
           <Router onChange={this.handleRoute}>
             <Home path="/" />
             <League path="/league/:href" />
+            <Club path="/club/:href" />
+            <Player path="/player/:href" />
           </Router>
         </section>
       </div>

@@ -14,9 +14,13 @@ export default class Header extends Component {
           <Link class="navbar-item" activeClassName="is-active" href="/">
             <strong>TT mobile</strong>
           </Link>
-          <Link class="navbar-item" activeClassName="is-active" href="/profile">
+          {/*<Link
+            class="navbar-item"
+            activeClassName="is-active"
+            href="/profile"
+          >
             Me
-          </Link>
+          </Link>*/}
         </div>
       </nav>
     )

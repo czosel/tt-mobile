@@ -40,6 +40,15 @@ const simplify = href => href.substring(href.lastIndexOf('/'))
 
 const toArray = arr => (Array.isArray(arr) ? arr : [])
 
+const splitTitle = title => {
+  return title
+    ? title
+        .split('\n')
+        .map(i => i.trim())
+        .filter(i => !!i)
+    : []
+}
+
 function assocHistory({ step }) {
   const url =
     '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/championshipArchive?federation=STT'
@@ -70,7 +79,6 @@ function assocHistory({ step }) {
 }
 
 function assoc({ url }) {
-  console.log('assoc', url)
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -125,25 +133,18 @@ function league({ url }) {
       })
       .error(R.pipe(error('league'), rej))
       .data(data => {
-        titleParts = data.title
-          ? data.title
-              .split('\n')
-              .map(i => i.trim())
-              .filter(i => !!i)
-          : []
+        titleParts = splitTitle(data.title)
         res({
           assoc: titleParts[0],
           league: titleParts[1],
           title: data.title,
           games: data.games,
-          clubs: Array.isArray(data.clubs)
-            ? data.clubs.map(club => ({
-                score: club.score.startsWith('zurückgezogen')
-                  ? '-'
-                  : club.score,
-                ...club
-              }))
-            : null
+          clubs: toArray(data.clubs)
+            .map(club => ({
+              score: club.score.startsWith('zurückgezogen') ? '-' : club.score,
+              ...club
+            }))
+            .map(simplifyLinks)
         })
       })
   })
@@ -168,7 +169,11 @@ function club({ url }) {
       })
       .error(R.pipe(error('club'), rej))
       .data(data => {
-        res(removeIfNotList(data, 'players'))
+        res({
+          league: splitTitle(data.title)[1],
+          name: splitTitle(data.title)[2],
+          players: toArray(data.players).map(simplifyLinks)
+        })
       })
   })
 }
@@ -274,9 +279,7 @@ function player({ url }) {
         data.elo.data.filter(v => !!v.delta).forEach(elo => {
           const val = parseInt(elo.delta)
           current = current - val
-          result.push({
-            delta: current
-          })
+          result.push(current)
         })
         data.elo.data = result.reverse()
         res(data)

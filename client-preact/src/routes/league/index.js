@@ -1,10 +1,13 @@
 import { h, Component } from 'preact'
 import style from './style'
 
+import LinkRow from '../../components/linkRow/'
+import Table from '../../components/table'
+
 const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
 
-export default class Profile extends Component {
+export default class League extends Component {
   state = { activeTab: 'table', assoc: '', league: '', clubs: [], games: [] }
 
   loadItems(href) {
@@ -58,7 +61,7 @@ export default class Profile extends Component {
 
 function LeagueTable({ clubs }) {
   return (
-    <table class="table is-fullwidth">
+    <Table>
       <thead>
         <tr>
           <th>Rang</th>
@@ -69,15 +72,15 @@ function LeagueTable({ clubs }) {
       </thead>
       <tbody>
         {clubs.map(club => (
-          <tr>
+          <LinkRow href={`/club/${encodeURIComponent(club.href)}`}>
             <td>{club.rank}</td>
             <td>{club.name}</td>
             <td>{club.nrOfGames}</td>
             <td>{club.score}</td>
-          </tr>
+          </LinkRow>
         ))}
       </tbody>
-    </table>
+    </Table>
   )
 }
 
