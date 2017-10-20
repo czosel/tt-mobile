@@ -4,6 +4,8 @@ import style from './style'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
 import EloChart from '../../components/elo-chart'
+import Tabs from '../../components/tabs'
+import Tab from '../../components/tab'
 
 const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
@@ -30,12 +32,8 @@ export default class Player extends Component {
     this.loadItems(this.props.href)
   }
 
-  setActiveTab(activeTab) {
+  handleChange = activeTab => {
     this.setState({ activeTab })
-  }
-
-  showOverview = () => {
-    this.setActiveTab('table')
   }
 
   render(
@@ -50,16 +48,10 @@ export default class Player extends Component {
       )
     return (
       <div class={style.profile}>
-        <div class="tabs is-toggle is-fullwidth">
-          <ul>
-            <li class={activeTab === 'overview' ? 'is-active' : ''}>
-              <a onClick={this.showOverview}>Übersicht</a>
-            </li>
-            <li>
-              <a>Einzel</a>
-            </li>
-          </ul>
-        </div>
+        <Tabs active={activeTab} onChange={this.handleChange}>
+          <Tab name="overview">Übersicht</Tab>
+          <Tab name="single">Einzel</Tab>
+        </Tabs>
         <h1 class="title" />
         <h2 class="subtitle" />
         {content}
