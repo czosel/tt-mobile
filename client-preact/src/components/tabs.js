@@ -1,11 +1,12 @@
-import { h, Component } from 'preact'
-import style from './style'
+import { h, Component, cloneElement } from 'preact'
 
 export default class Tabs extends Component {
-  render({ children }) {
+  render({ children, active, onChange }) {
     return (
       <div class="tabs is-toggle is-fullwidth">
-        <ul {...{ children }} />
+        <ul>
+          {children.map(child => cloneElement(child, { active, onChange }))}
+        </ul>
       </div>
     )
   }

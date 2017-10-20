@@ -1,12 +1,15 @@
 import { h, Component } from 'preact'
-import style from './style'
 
 export default class Tabs extends Component {
-  render({ children }) {
+  handleChange = () => {
+    this.props.onChange(this.props.name)
+  }
+
+  render({ children, name, active, onChange }) {
     return (
-      <div class="tabs is-toggle is-fullwidth">
-        <ul {...{ children }} />
-      </div>
+      <li class={active == name ? 'is-active' : ''}>
+        <a onClick={this.handleChange}>{children}</a>
+      </li>
     )
   }
 }

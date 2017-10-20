@@ -3,6 +3,8 @@ import style from './style'
 
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
+import Tabs from '../../components/tabs'
+import Tab from '../../components/tab'
 
 const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
@@ -20,16 +22,8 @@ export default class League extends Component {
     this.loadItems(this.props.href)
   }
 
-  setActiveTab(activeTab) {
+  handleChange = activeTab => {
     this.setState({ activeTab })
-  }
-
-  showTable = () => {
-    this.setActiveTab('table')
-  }
-
-  showSchedule = () => {
-    this.setActiveTab('schedule')
   }
 
   render({}, { activeTab, assoc, league, clubs, games }) {
@@ -41,16 +35,10 @@ export default class League extends Component {
       )
     return (
       <div class={style.profile}>
-        <div class="tabs is-toggle is-fullwidth">
-          <ul>
-            <li class={activeTab === 'table' ? 'is-active' : ''}>
-              <a onClick={this.showTable}>Tabelle</a>
-            </li>
-            <li class={activeTab === 'schedule' ? 'is-active' : ''}>
-              <a onClick={this.showSchedule}>Spielplan</a>
-            </li>
-          </ul>
-        </div>
+        <Tabs active={activeTab} onChange={this.handleChange}>
+          <Tab name="table">Tabelle</Tab>
+          <Tab name="schedule">Spielplan</Tab>
+        </Tabs>
         <h1 class="title">{assoc}</h1>
         <h2 class="subtitle">{league}</h2>
         {content}
