@@ -13,7 +13,7 @@ import {
   converge
 } from 'ramda'
 
-import elo from '../../lib/elo'
+import { eloMin, getClass, getLabel } from '../../lib/elo'
 
 const max = arr => Math.max(...arr)
 const min = arr => Math.min(...arr)
@@ -46,11 +46,6 @@ const project = curry((points, [x, y]) => [
 const dataToPoints = addIndex(map)((y, i) => [i, y])
 const asString = compose(join(','), map(join(',')))
 
-const getLabel = i => {
-  const letters = ['A', 'B', 'C', 'D'].reverse()
-  return letters[Math.floor(i / 5)] + (i + 1)
-}
-
 export default function EloChart({ data = [] }) {
   if (!data || !data.length) {
     return
@@ -63,8 +58,8 @@ export default function EloChart({ data = [] }) {
     label,
     pos: projectY(y, points)
   }))
-  let lines = elo.eloMin.map((min, i) => ({
-    label: elo.getLabel(i),
+  let lines = eloMin.map((min, i) => ({
+    label: getLabel(i),
     y: min
   }))
   lines = projectLines(lines)

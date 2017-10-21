@@ -273,7 +273,7 @@ function player({ url }) {
         res({
           ...data,
           name: splitTitle(data.title)[1],
-          teams: arrayify(data.teams),
+          teams: arrayify(data.teams).map(simplifyLinks),
           balance: unique(
             data.balance
               .split('\n')

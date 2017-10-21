@@ -14,7 +14,7 @@ const asJson = r => r.json()
 export default class Player extends Component {
   state = {
     activeTab: 'overview',
-    balance: '',
+    balance: [],
     classification: '',
     singles: [],
     doubles: [],
@@ -57,7 +57,6 @@ export default class Player extends Component {
           <Tab name="double">Doppel</Tab>
         </Tabs>
         <h1 class="title">{name}</h1>
-        <h2 class="subtitle" />
         {content}
       </div>
     )
@@ -65,7 +64,42 @@ export default class Player extends Component {
 }
 
 function Overview({ balance, classification, elo, teams }) {
-  return <EloChart data={elo.data} />
+  return (
+    <div>
+      <Table>
+        <tr>
+          <td>Klassierung</td>
+          <td>
+            <EloScore value={classification} />
+          </td>
+        </tr>
+        <tr>
+          <td>Klassierung (aktuell)</td>
+          <td>
+            <EloScore value={elo.start} /> ({elo.start})
+          </td>
+        </tr>
+      </Table>
+      <EloChart data={elo.data} />
+      <h2 class="subtitle">Mannschaftseinsätze</h2>
+      <Table>
+        {teams.map(({ name, href }) => (
+          <LinkRow href={`/league/${encodeURIComponent(href)}`}>
+            <td>{name}</td>
+          </LinkRow>
+        ))}
+      </Table>
+      <h2 class="subtitle">Einzelbilanzen</h2>
+      <Table>
+        {balance.map(({ team, data }) => (
+          <tr>
+            <td>{team}</td>
+            <td>{data}</td>
+          </tr>
+        ))}
+      </Table>
+    </div>
+  )
 }
 
 function Single({ singles }) {
