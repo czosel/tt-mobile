@@ -3,6 +3,7 @@ import style from './style'
 
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
+import EloScore from '../../components/elo-score'
 
 const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
@@ -38,7 +39,9 @@ export default class Club extends Component {
             {players.map(player => (
               <LinkRow href={`/player/${encodeURIComponent(player.href)}`}>
                 <td>{player.name}</td>
-                <td>{player.classification}</td>
+                <td>
+                  <EloScore value={player.classification} />
+                </td>
                 <td>{player.appearances}</td>
                 <td>{player.balance}</td>
               </LinkRow>

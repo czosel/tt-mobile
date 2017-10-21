@@ -2,3 +2,7 @@
   position: fixed;
   width: 100%;
 }
+
+.spread {
+  justify-content: space-between;
+}

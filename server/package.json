@@ -6,7 +6,7 @@
   "scripts": {
     "start": "babel-watch lib/index.js",
     "build": "babel lib -d dist",
-    "test": "tape-watch -c ./**/*.test.js | tap-spec"
+    "test": "tape-watch -r babel-register -c ./**/*.test.js | tap-spec"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
+    "babel-register": "^6.26.0",
     "babel-watch": "^2.0.7",
     "osmosis": "^1.1.4",
     "tap-dot": "^1.0.5",

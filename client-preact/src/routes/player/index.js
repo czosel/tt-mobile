@@ -19,7 +19,7 @@ export default class Player extends Component {
     doubles: [],
     elo: { data: [] },
     teams: [],
-    title: ''
+    name: ''
   }
 
   loadItems(href) {
@@ -38,11 +38,11 @@ export default class Player extends Component {
 
   render(
     {},
-    { activeTab, balance, classification, singles, doubles, elo, teams, title }
+    { activeTab, balance, classification, singles, doubles, elo, teams, name }
   ) {
     const content =
       activeTab === 'overview' ? (
-        <Overview {...{ balance, classification, elo, teams, title }} />
+        <Overview {...{ balance, classification, elo, teams }} />
       ) : (
         <h1>Todo!</h1>
       )
@@ -52,7 +52,7 @@ export default class Player extends Component {
           <Tab name="overview">Übersicht</Tab>
           <Tab name="single">Einzel</Tab>
         </Tabs>
-        <h1 class="title" />
+        <h1 class="title">{name}</h1>
         <h2 class="subtitle" />
         {content}
       </div>
@@ -60,7 +60,7 @@ export default class Player extends Component {
   }
 }
 
-function Overview({ balance, classification, elo, teams, title }) {
+function Overview({ balance, classification, elo, teams }) {
   console.log('elo', elo.data)
   return <EloChart data={elo.data} />
 }

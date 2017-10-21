@@ -141,8 +141,8 @@ function league({ url }) {
           games: data.games,
           clubs: toArray(data.clubs)
             .map(club => ({
-              score: club.score.startsWith('zurückgezogen') ? '-' : club.score,
-              ...club
+              ...club,
+              score: club.score.startsWith('zurückgezogen') ? '-' : club.score
             }))
             .map(simplifyLinks)
         })
@@ -262,27 +262,32 @@ function player({ url }) {
       })
       .error(R.pipe(error('club'), rej))
       .data(data => {
-        data.teams = arrayify(data.teams)
-        data.balance = unique(
-          data.balance
-            .split('\n')
-            .filter(str => !!str.trim())
-            .map(str => ({
-              team: str.substr(0, str.indexOf(':')).trim(),
-              data: str.substr(str.indexOf(':') + 1).trim()
-            }))
-        )
-
-        var current = parseInt(data.elo.start)
-        data.elo.start = current
-        var result = []
+        let current = parseInt(data.elo.start)
+        const start = current
+        let result = []
         data.elo.data.filter(v => !!v.delta).forEach(elo => {
-          const val = parseInt(elo.delta)
-          current = current - val
+          current = current - parseInt(elo.delta)
           result.push(current)
         })
-        data.elo.data = result.reverse()
-        res(data)
+
+        res({
+          ...data,
+          name: splitTitle(data.title)[1],
+          teams: arrayify(data.teams),
+          balance: unique(
+            data.balance
+              .split('\n')
+              .filter(str => !!str.trim())
+              .map(str => ({
+                team: str.substr(0, str.indexOf(':')).trim(),
+                data: str.substr(str.indexOf(':') + 1).trim()
+              }))
+          ),
+          elo: {
+            start,
+            data: result.reverse()
+          }
+        })
       })
   })
 }
