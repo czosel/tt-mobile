@@ -74,7 +74,12 @@ function assocHistory({ step }) {
           })
       })
       .error(R.pipe(error('assocHistory'), rej))
-      .data(res)
+      .data(({ regular, trophy }) => {
+        res({
+          regular: toArray(regular).map(simplifyLinks),
+          trophy: toArray(trophy).map(simplifyLinks)
+        })
+      })
   })
 }
 
@@ -138,7 +143,7 @@ function league({ url }) {
           assoc: titleParts[0],
           league: titleParts[1],
           title: data.title,
-          games: arrayify(data.games).map(simplifyLinks),
+          games: toArray(data.games).map(simplifyLinks),
           clubs: toArray(data.clubs)
             .map(club => ({
               ...club,
@@ -281,7 +286,7 @@ function player({ url }) {
         res({
           ...data,
           name: splitTitle(data.title)[1],
-          teams: arrayify(data.teams).map(simplifyLinks),
+          teams: toArray(data.teams).map(simplifyLinks),
           balance: unique(
             data.balance
               .split('\n')
@@ -295,7 +300,7 @@ function player({ url }) {
             start,
             data: result.reverse()
           },
-          singles: arrayify(data.singles).map(simplifyLinks)
+          singles: toArray(data.singles).map(simplifyLinks)
         })
       })
   })

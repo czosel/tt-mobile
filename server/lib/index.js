@@ -14,11 +14,17 @@ const endpoints = ['assocHistory', 'assoc', 'league', 'club', 'game', 'player']
 
 endpoints.forEach(path => {
   app.get(`/${path}`, async (req, res) => {
-    res.json(
-      await scraper[path]({
-        url: join('/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/', req.query.url)
-      })
-    )
+    const query = {
+      ...req.query,
+      url:
+        req.query.url &&
+        join('/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/', req.query.url)
+    }
+    try {
+      res.json(await scraper[path](query))
+    } catch (e) {
+      console.error(e)
+    }
   })
 })
 

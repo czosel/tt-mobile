@@ -7,6 +7,7 @@ import Provider from 'preact-context-provider'
 import Header from './header'
 import Home from '../routes/home'
 import Assoc from '../routes/assoc'
+import AssocHistory from '../routes/assoc-history'
 import League from '../routes/league'
 import Club from '../routes/club'
 import Player from '../routes/player'
@@ -28,6 +29,7 @@ export default class App extends Component {
             <Router>
               <Home path="/" />
               <Assoc path="/assoc/:href" />
+              <AssocHistory path="/assocHistory/:step" />
               <League path="/league/:href/:tab?" />
               <Club path="/club/:href" />
               <Player path="/player/:href/:tab?" />
