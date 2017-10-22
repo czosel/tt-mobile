@@ -14,7 +14,6 @@ export default function model() {
       player: get('player'),
       game: get('game'),
       assocHistory(step) {
-        console.log('model', step)
         return fetch(`${API_ORIGIN}/assocHistory?step=${step}`).then(asJson)
       }
     }
