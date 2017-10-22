@@ -1,5 +1,6 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
+import { route } from 'preact-router'
 import style from './style'
 
 import Loading from '../../components/loading'
@@ -13,21 +14,19 @@ const asJson = r => r.json()
 
 @wire('model', { data: ['api.league', 'href'] })
 export default class League extends Component {
-  state = { activeTab: 'table' }
-
-  handleChange = activeTab => {
-    this.setState({ activeTab })
+  handleChange = tab => {
+    route(`/league/${encodeURIComponent(this.props.href)}/${tab}`)
   }
 
-  render({ pending, data }, { activeTab }) {
+  render({ pending, data, tab }) {
     if (pending) return <Loading />
 
     const { assoc, league, clubs, games } = data
-    if (clubs.length === 0) {
-      activeTab = 'schedule'
-    }
+
+    tab = clubs.length === 0 ? 'schedule' : tab || 'table'
+
     const content =
-      activeTab === 'table' ? (
+      tab === 'table' ? (
         <LeagueTable {...{ clubs }} />
       ) : (
         <LeagueSchedule {...{ games }} />
@@ -35,7 +34,7 @@ export default class League extends Component {
     return (
       <div class={style.profile}>
         {clubs.length > 0 ? (
-          <Tabs active={activeTab} onChange={this.handleChange}>
+          <Tabs active={tab} onChange={this.handleChange}>
             <Tab name="table">Tabelle</Tab>
             <Tab name="schedule">Spielplan</Tab>
           </Tabs>
@@ -86,18 +85,38 @@ function LeagueSchedule({ games }) {
         </tr>
       </thead>
       <tbody>
-        {games.map(game => (
-          <tr>
-            <td>{game.date}</td>
-            <td>
-              {game.home}
-              <br />
-              {game.guest}
-            </td>
-            <td>{game.result}</td>
-          </tr>
-        ))}
+        {games.map(data => {
+          return data.href ? <Link {...data} /> : <Row {...data} />
+        })}
       </tbody>
     </table>
+  )
+}
+
+function Row({ date, home, guest, result }) {
+  return (
+    <tr>
+      <td>{date}</td>
+      <td>
+        {home}
+        <br />
+        {guest}
+      </td>
+      <td>{result}</td>
+    </tr>
+  )
+}
+
+function Link({ href, date, home, guest, result }) {
+  return (
+    <LinkRow href={`/game/${encodeURIComponent(href)}`}>
+      <td>{date}</td>
+      <td>
+        {home}
+        <br />
+        {guest}
+      </td>
+      <td>{result}</td>
+    </LinkRow>
   )
 }

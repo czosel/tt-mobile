@@ -1,5 +1,6 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
+import { route } from 'preact-router'
 import style from './style'
 
 import Loading from '../../components/loading'
@@ -12,19 +13,16 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.player', 'href'] })
 export default class Player extends Component {
-  state = {
-    activeTab: 'overview'
+  handleChange = tab => {
+    route(`/player/${encodeURIComponent(this.props.href)}/${tab}`)
   }
 
-  handleChange = activeTab => {
-    this.setState({ activeTab })
-  }
-
-  render({ pending, data }, { activeTab }) {
+  render({ pending, data, tab }) {
+    tab = tab || 'overview'
     if (pending)
       return (
         <div>
-          <Tabs active={activeTab} onChange={this.handleChange}>
+          <Tabs active={tab} onChange={this.handleChange}>
             <Tab name="overview">Übersicht</Tab>
             <Tab name="single">Einzel</Tab>
             <Tab name="double">Doppel</Tab>
@@ -36,9 +34,9 @@ export default class Player extends Component {
     const { balance, classification, singles, doubles, elo, teams, name } = data
 
     const content =
-      activeTab === 'overview' ? (
+      tab === 'overview' ? (
         <Overview {...{ balance, classification, elo, teams }} />
-      ) : activeTab === 'single' ? (
+      ) : tab === 'single' ? (
         <Single {...{ singles }} />
       ) : (
         <Double {...{ doubles }} />
@@ -46,7 +44,7 @@ export default class Player extends Component {
 
     return (
       <div class={style.profile}>
-        <Tabs active={activeTab} onChange={this.handleChange}>
+        <Tabs active={tab} onChange={this.handleChange}>
           <Tab name="overview">Übersicht</Tab>
           <Tab name="single">Einzel</Tab>
           <Tab name="double">Doppel</Tab>

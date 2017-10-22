@@ -31,7 +31,7 @@ const trophyNames = [
 
 const addLinks = name => ({
   name,
-  href: `leaguePage?championship=${spaceToPlus(name)}+17%2F18`
+  href: `/leaguePage?championship=${spaceToPlus(name)}+17%2F18`
 })
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
@@ -40,22 +40,35 @@ export default class Home extends Component {
   render() {
     return (
       <div class={style.home}>
-        <h2 class="subtitle">Punktspiele</h2>
-        <ul class="link-list">
-          {assocs.map(({ name, href }) => (
-            <LinkListItem href={`/assoc/${encodeURIComponent(href)}`}>
-              {translations[name] || name}
-            </LinkListItem>
-          ))}
-        </ul>
-        <h2 class="subtitle">Pokalspiele</h2>
-        <ul class="link-list">
-          {trophies.map(({ name, href }) => (
-            <LinkListItem href={`assoc/${encodeURIComponent(href)}`}>
-              {translations[name] || name}
-            </LinkListItem>
-          ))}
-        </ul>
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Punktspiele</p>
+          </header>
+          <div class="card-content">
+            <ul class="link-list">
+              {assocs.map(({ name, href }) => (
+                <LinkListItem href={`/assoc/${encodeURIComponent(href)}`}>
+                  {translations[name] || name}
+                </LinkListItem>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <br />
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">Pokalspiele</p>
+          </header>
+          <div class="card-content">
+            <ul class="link-list">
+              {trophies.map(({ name, href }) => (
+                <LinkListItem href={`/assoc/${encodeURIComponent(href)}`}>
+                  {translations[name] || name}
+                </LinkListItem>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
     )
   }

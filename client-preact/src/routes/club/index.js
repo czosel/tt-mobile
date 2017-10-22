@@ -7,9 +7,6 @@ import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
-const API_ORIGIN = 'http://localhost:3020'
-const asJson = r => r.json()
-
 @wire('model', { data: ['api.club', 'href'] })
 export default class Club extends Component {
   render({ pending, data }) {

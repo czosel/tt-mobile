@@ -20,7 +20,7 @@ export default class Header extends Component {
           <Match>
             {({ matches, path }) => {
               const clickTTPath = decodeURIComponent(
-                path.substring(path.lastIndexOf('/') + 1)
+                path.split('/').filter(s => s.includes('%2F'))[0]
               )
               return (
                 clickTTPath.length > 10 && (

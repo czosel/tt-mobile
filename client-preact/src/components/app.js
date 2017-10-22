@@ -10,6 +10,7 @@ import Assoc from '../routes/assoc'
 import League from '../routes/league'
 import Club from '../routes/club'
 import Player from '../routes/player'
+import Game from '../routes/game'
 
 import model from '../lib/model.js'
 // import Home from 'async!./home';
@@ -27,9 +28,10 @@ export default class App extends Component {
             <Router>
               <Home path="/" />
               <Assoc path="/assoc/:href" />
-              <League path="/league/:href" />
+              <League path="/league/:href/:tab?" />
               <Club path="/club/:href" />
-              <Player path="/player/:href" />
+              <Player path="/player/:href/:tab?" />
+              <Game path="/game/:href" />
             </Router>
           </section>
         </div>

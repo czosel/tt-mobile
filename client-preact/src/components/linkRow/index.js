@@ -4,7 +4,9 @@ import style from './style'
 
 export default class LinkRow extends Component {
   onOpen = () => {
-    route(this.props.href)
+    if (this.props.href) {
+      route(this.props.href)
+    }
   }
 
   render({ children }) {

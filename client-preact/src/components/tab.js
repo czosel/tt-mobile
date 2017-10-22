@@ -7,7 +7,7 @@ export default class Tabs extends Component {
 
   render({ children, name, active, onChange }) {
     return (
-      <li class={active == name ? 'is-active' : ''}>
+      <li class={active === name ? 'is-active' : ''}>
         <a onClick={this.handleChange}>{children}</a>
       </li>
     )

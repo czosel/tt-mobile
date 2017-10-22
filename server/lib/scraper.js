@@ -36,7 +36,7 @@ const simplifyLinks = obj => {
 }
 
 // strip "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/" from URL
-const simplify = href => href.substring(href.lastIndexOf('/'))
+const simplify = href => (href ? href.substring(href.lastIndexOf('/')) : '')
 
 const toArray = arr => (Array.isArray(arr) ? arr : [])
 
@@ -93,7 +93,7 @@ function assoc({ url }) {
       .error(R.pipe(error('assoc'), rej))
       .data(({ title, leagues }) => {
         res({
-          title,
+          title: splitTitle(title)[0],
           leagues: toArray(leagues).map(simplifyLinks)
         })
       })
@@ -138,7 +138,7 @@ function league({ url }) {
           assoc: titleParts[0],
           league: titleParts[1],
           title: data.title,
-          games: data.games,
+          games: arrayify(data.games).map(simplifyLinks),
           clubs: toArray(data.clubs)
             .map(club => ({
               ...club,
@@ -207,7 +207,18 @@ function game({ url }) {
         })
       })
       .error(R.pipe(error('club'), rej))
-      .data(R.pipe(trimPlayers, res))
+      .data(data => {
+        const split = splitTitle(data.title)
+        res({
+          ...data,
+          assoc: split[0],
+          league: split[1],
+          home: split[2],
+          guest: split[4].split(',')[0],
+          date: split[4].split(',')[1].trim(),
+          time: split[5]
+        })
+      })
   })
 }
 

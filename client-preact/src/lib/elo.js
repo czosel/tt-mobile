@@ -24,6 +24,9 @@ export const eloMin = [
 ]
 
 export function getClass(elo) {
+  if (typeof elo !== 'number') {
+    return elo
+  }
   const i = eloMin.length - findIndex(gte(elo), reverse(eloMin))
   return getLabel(i - 1)
 }
