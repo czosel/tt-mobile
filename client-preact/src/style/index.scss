@@ -1,6 +1,11 @@
 @import "../../node_modules/bulma/sass/utilities/initial-variables";
 
 // bulma customization
+$link: #607D8B;
+$primary: #455A64;
+
+$black: #212121;
+$white: transparent;
 
 @import "../../node_modules/bulma/bulma";
 
@@ -46,4 +51,9 @@ ul.link-list {
 
 .center {
   text-align: center !important;
+}
+
+.loading {
+  width: 60px;
+  margin: 0 auto;
 }

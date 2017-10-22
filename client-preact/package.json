@@ -25,10 +25,13 @@
     "sass-loader": "^6.0.6"
   },
   "dependencies": {
-    "bulma": "^0.5.2",
+    "bulma": "^0.6.0",
+    "halogen": "^0.2.0",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
+    "preact-context-provider": "^1.0.0",
     "preact-router": "^2.5.7",
-    "rambda": "^0.9.3"
+    "rambda": "^0.9.3",
+    "wiretie": "^1.0.3"
   }
 }

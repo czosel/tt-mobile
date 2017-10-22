@@ -230,8 +230,8 @@ function player({ url }) {
           .find('table.result-set:nth(3) tr:has(td:nth-child(3) a)')
           .set({
             opponent: 'td:nth-child(3)',
-            opponentHref: 'td:nth-child(3) a@href',
-            opponentClass: 'td:nth-child(4)',
+            href: 'td:nth-child(3) a@href',
+            classification: 'td:nth-child(4)',
             sets: 'td:nth-child(6)'
           }),
         doubles: osmosis
@@ -241,10 +241,7 @@ function player({ url }) {
             partnerHref: 'td:nth-child(3) a@href',
             partnerClass: 'td:nth-child(4)',
             opponent1: 'td:nth-child(5) a:first',
-            opponent1href: 'td:nth-child(5) a:first@href',
-            opponent1class: 'td:nth-child(6)',
             opponent2: 'td:nth-child(5) a:last',
-            opponent2href: 'td:nth-child(5) a:last@href',
             sets: 'td:nth-child(8)',
             game: 'td:last-child'
           }),
@@ -286,7 +283,8 @@ function player({ url }) {
           elo: {
             start,
             data: result.reverse()
-          }
+          },
+          singles: arrayify(data.singles).map(simplifyLinks)
         })
       })
   })

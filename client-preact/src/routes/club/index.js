@@ -1,6 +1,8 @@
 import { h, Component } from 'preact'
+import wire from 'wiretie'
 import style from './style'
 
+import Loading from '../../components/loading'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
@@ -8,20 +10,12 @@ import EloScore from '../../components/elo-score'
 const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
 
+@wire('model', { data: ['api.club', 'href'] })
 export default class Club extends Component {
-  state = { players: [], name: '', league: '' }
+  render({ pending, data }) {
+    if (pending) return <Loading />
 
-  loadItems(href) {
-    fetch(`${API_ORIGIN}/club?url=${encodeURIComponent(href)}`)
-      .then(asJson)
-      .then(data => this.setState(data))
-  }
-
-  componentDidMount() {
-    this.loadItems(this.props.href)
-  }
-
-  render({}, { players, name, league }) {
+    const { players, name, league } = data
     return (
       <div>
         <h1 class="title">{league}</h1>

@@ -1,6 +1,8 @@
 import { h, Component } from 'preact'
+import wire from 'wiretie'
 import style from './style'
 
+import Loading from '../../components/loading'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
 import Tabs from '../../components/tabs'
@@ -9,24 +11,21 @@ import Tab from '../../components/tab'
 const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
 
+@wire('model', { data: ['api.league', 'href'] })
 export default class League extends Component {
-  state = { activeTab: 'table', assoc: '', league: '', clubs: [], games: [] }
-
-  loadItems(href) {
-    fetch(`${API_ORIGIN}/league?url=${encodeURIComponent(href)}`)
-      .then(asJson)
-      .then(data => this.setState(data))
-  }
-
-  componentDidMount() {
-    this.loadItems(this.props.href)
-  }
+  state = { activeTab: 'table' }
 
   handleChange = activeTab => {
     this.setState({ activeTab })
   }
 
-  render({}, { activeTab, assoc, league, clubs, games }) {
+  render({ pending, data }, { activeTab }) {
+    if (pending) return <Loading />
+
+    const { assoc, league, clubs, games } = data
+    if (clubs.length === 0) {
+      activeTab = 'schedule'
+    }
     const content =
       activeTab === 'table' ? (
         <LeagueTable {...{ clubs }} />
@@ -35,10 +34,14 @@ export default class League extends Component {
       )
     return (
       <div class={style.profile}>
-        <Tabs active={activeTab} onChange={this.handleChange}>
-          <Tab name="table">Tabelle</Tab>
-          <Tab name="schedule">Spielplan</Tab>
-        </Tabs>
+        {clubs.length > 0 ? (
+          <Tabs active={activeTab} onChange={this.handleChange}>
+            <Tab name="table">Tabelle</Tab>
+            <Tab name="schedule">Spielplan</Tab>
+          </Tabs>
+        ) : (
+          <span />
+        )}
         <h1 class="title">{assoc}</h1>
         <h2 class="subtitle">{league}</h2>
         {content}

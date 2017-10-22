@@ -1,6 +1,8 @@
 import { h, Component } from 'preact'
+import wire from 'wiretie'
 import style from './style'
 
+import Loading from '../../components/loading'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
 import EloChart from '../../components/elo-chart'
@@ -8,39 +10,31 @@ import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
 import EloScore from '../../components/elo-score'
 
-const API_ORIGIN = 'http://localhost:3020'
-const asJson = r => r.json()
-
+@wire('model', { data: ['api.player', 'href'] })
 export default class Player extends Component {
   state = {
-    activeTab: 'overview',
-    balance: [],
-    classification: '',
-    singles: [],
-    doubles: [],
-    elo: { data: [] },
-    teams: [],
-    name: ''
-  }
-
-  loadItems(href) {
-    fetch(`${API_ORIGIN}/player?url=${encodeURIComponent(href)}`)
-      .then(asJson)
-      .then(data => this.setState(data))
-  }
-
-  componentDidMount() {
-    this.loadItems(this.props.href)
+    activeTab: 'overview'
   }
 
   handleChange = activeTab => {
     this.setState({ activeTab })
   }
 
-  render(
-    {},
-    { activeTab, balance, classification, singles, doubles, elo, teams, name }
-  ) {
+  render({ pending, data }, { activeTab }) {
+    if (pending)
+      return (
+        <div>
+          <Tabs active={activeTab} onChange={this.handleChange}>
+            <Tab name="overview">Übersicht</Tab>
+            <Tab name="single">Einzel</Tab>
+            <Tab name="double">Doppel</Tab>
+          </Tabs>
+          <Loading />
+        </div>
+      )
+
+    const { balance, classification, singles, doubles, elo, teams, name } = data
+
     const content =
       activeTab === 'overview' ? (
         <Overview {...{ balance, classification, elo, teams }} />
@@ -49,6 +43,7 @@ export default class Player extends Component {
       ) : (
         <Double {...{ doubles }} />
       )
+
     return (
       <div class={style.profile}>
         <Tabs active={activeTab} onChange={this.handleChange}>
@@ -113,11 +108,11 @@ function Single({ singles }) {
         </tr>
       </thead>
       <tbody>
-        {singles.map(({ opponent, opponentClass, opponentHref, sets }) => (
-          <LinkRow href={`/player/${encodeURIComponent(opponentHref)}`}>
+        {singles.map(({ opponent, classification, href, sets }) => (
+          <LinkRow href={`/player/${encodeURIComponent(href)}`}>
             <td>{opponent}</td>
             <td class="center">
-              <EloScore value={opponentClass} />
+              <EloScore value={classification} />
             </td>
             <td class="center">{sets}</td>
           </LinkRow>
