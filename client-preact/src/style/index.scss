@@ -7,7 +7,15 @@ $primary: #455A64;
 $black: #212121;
 $white: transparent;
 
-@import "../../node_modules/bulma/bulma";
+@import "../../node_modules/bulma/sass/utilities/_all";
+@import "../../node_modules/bulma/sass/base/_all";
+@import "../../node_modules/bulma/sass/elements/table";
+@import "../../node_modules/bulma/sass/elements/tag";
+@import "../../node_modules/bulma/sass/elements/title";
+@import "../../node_modules/bulma/sass/layout/section";
+@import "../../node_modules/bulma/sass/components/tabs";
+@import "../../node_modules/bulma/sass/components/navbar";
+@import "../../node_modules/bulma/sass/components/card";
 
 html, body {
   height: 100%;
