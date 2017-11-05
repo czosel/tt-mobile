@@ -306,7 +306,6 @@ function player({ url }) {
           current = current - parseInt(elo.delta)
           result.push(current)
         })
-        console.log('TEAMS', data.teams)
 
         res({
           ...data,

@@ -1,5 +1,6 @@
 import { h, Component } from 'preact'
 import { Router, route } from 'preact-router'
+import Helmet from 'preact-helmet'
 
 import debug from 'preact/debug'
 
@@ -32,6 +33,31 @@ export default class App extends Component {
     return (
       <Provider model={this.model}>
         <div id="app">
+          <Helmet
+            link={[
+              {
+                rel: 'apple-touch-icon',
+                href: '/assets/apple-touch-icon.png'
+              },
+              {
+                rel: 'icon',
+                href: '/assets/favicon-32x32.png',
+                sizes: '32x32'
+              },
+              {
+                rel: 'icon',
+                href: '/assets/favicon-16x16.png',
+                sizes: '16x16'
+              }
+            ]}
+            meta={[
+              {
+                name: 'msapplication-config',
+                content: '/assets/browserconfig.xml'
+              },
+              { name: 'theme-color', content: '#FF5252' }
+            ]}
+          />
           <Router onChange={this.handleRoute}>
             <Home path="/" />
             <Assoc path="/assoc/:href" />
