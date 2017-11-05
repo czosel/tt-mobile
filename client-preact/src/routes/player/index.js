@@ -3,6 +3,9 @@ import wire from 'wiretie'
 import { route } from 'preact-router'
 import style from './style'
 
+import clientHref from '../../lib/link'
+
+import Header from '../../components/header'
 import Loading from '../../components/loading'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
@@ -13,22 +16,13 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.player', 'href'] })
 export default class Player extends Component {
-  handleChange = tab => {
-    route(`/player/${encodeURIComponent(this.props.href)}/${tab}`)
-  }
-
   render({ pending, data, tab }) {
     tab = tab || 'overview'
     if (pending)
       return (
-        <div>
-          <Tabs active={tab} onChange={this.handleChange}>
-            <Tab name="overview">Übersicht</Tab>
-            <Tab name="single">Einzel</Tab>
-            <Tab name="double">Doppel</Tab>
-          </Tabs>
+        <Wrapper tab={tab} href={this.props.href}>
           <Loading />
-        </div>
+        </Wrapper>
       )
 
     const { balance, classification, singles, doubles, elo, teams, name } = data
@@ -43,17 +37,33 @@ export default class Player extends Component {
       )
 
     return (
-      <div class={style.profile}>
-        <Tabs active={tab} onChange={this.handleChange}>
+      <Wrapper tab={tab} href={this.props.href}>
+        <h1 class="title">{name}</h1>
+        {content}
+      </Wrapper>
+    )
+  }
+}
+
+function Wrapper({ tab, href, children }) {
+  const handleChange = tab => {
+    console.log('handleChange', tab)
+    route(clientHref(href, tab))
+  }
+
+  return (
+    <div>
+      <Header />
+      <section class="section">
+        <Tabs active={tab} onChange={handleChange}>
           <Tab name="overview">Übersicht</Tab>
           <Tab name="single">Einzel</Tab>
           <Tab name="double">Doppel</Tab>
         </Tabs>
-        <h1 class="title">{name}</h1>
-        {content}
-      </div>
-    )
-  }
+        {children}
+      </section>
+    </div>
+  )
 }
 
 function Overview({ balance, classification, elo, teams }) {
@@ -77,7 +87,7 @@ function Overview({ balance, classification, elo, teams }) {
       <h2 class="subtitle">Mannschaftseinsätze</h2>
       <Table>
         {teams.map(({ name, href }) => (
-          <LinkRow href={`/league/${encodeURIComponent(href)}`}>
+          <LinkRow href={clientHref(href)}>
             <td>{name}</td>
           </LinkRow>
         ))}
@@ -107,7 +117,7 @@ function Single({ singles }) {
       </thead>
       <tbody>
         {singles.map(({ opponent, classification, href, sets }) => (
-          <LinkRow href={`/player/${encodeURIComponent(href)}`}>
+          <LinkRow href={clientHref(href)}>
             <td>{opponent}</td>
             <td class="center">
               <EloScore value={classification} />

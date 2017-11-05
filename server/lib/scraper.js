@@ -105,10 +105,26 @@ function assoc({ url }) {
   })
 }
 
+const findBreadcrumbs = osmosis =>
+  osmosis
+    .find('#breadcrumb a')
+    .set('name')
+    .set({
+      href: '@href'
+    })
+
+const extractBreadcrumbs = ({ breadcrumbs }) =>
+  toArray(breadcrumbs)
+    .map(simplifyLinks)
+    .slice(2)
+
 function league({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
+      .set({
+        breadcrumbs: findBreadcrumbs(osmosis)
+      })
       .find('#content')
       .set({
         title: '#content-col1 h1',
@@ -143,6 +159,7 @@ function league({ url }) {
           assoc: titleParts[0],
           league: titleParts[1],
           title: data.title,
+          breadcrumbs: extractBreadcrumbs(data),
           games: toArray(data.games).map(simplifyLinks),
           clubs: toArray(data.clubs)
             .map(club => ({
@@ -159,6 +176,9 @@ function club({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
+      .set({
+        breadcrumbs: findBreadcrumbs(osmosis)
+      })
       .find('#content')
       .set({
         title: '#content-row1 h1',
@@ -176,6 +196,7 @@ function club({ url }) {
       .data(data => {
         res({
           league: splitTitle(data.title)[1],
+          breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],
           players: toArray(data.players).map(simplifyLinks)
         })
@@ -231,12 +252,15 @@ function player({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
+      .set({
+        breadcrumbs: findBreadcrumbs(osmosis)
+      })
       .find('#content')
       .set({
         title: '#content-row1 h1',
         classification: 'table.result-set:first tr:nth-child(4) td:last',
         teams: osmosis
-          .find('table.result-set:nth(2) tr td a')
+          .find('table.result-set:nth(2) tr:nth-child(2) td a')
           .set('name')
           .set({
             href: '@href'
@@ -282,11 +306,13 @@ function player({ url }) {
           current = current - parseInt(elo.delta)
           result.push(current)
         })
+        console.log('TEAMS', data.teams)
 
         res({
           ...data,
           name: splitTitle(data.title)[1],
-          teams: toArray(data.teams).map(simplifyLinks),
+          breadcrumbs: extractBreadcrumbs(data),
+          teams: arrayify(data.teams).map(simplifyLinks),
           balance: unique(
             data.balance
               .split('\n')

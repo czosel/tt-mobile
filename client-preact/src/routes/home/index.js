@@ -1,6 +1,9 @@
 import { h, Component } from 'preact'
 import style from './style'
 
+import clientHref from '../../lib/link'
+
+import Header from '../../components/header'
 import Link from '../../components/link'
 import Card from '../../components/card'
 import LinkListItem from '../../components/linkListItem'
@@ -41,35 +44,40 @@ export default class Home extends Component {
   render() {
     return (
       <div class={style.home}>
-        <Card name="Punktspiele">
-          <ul class="link-list">
-            {assocs.map(({ name, href }) => (
-              <LinkListItem href={`/assoc/${encodeURIComponent(href)}`}>
-                {translations[name] || name}
-              </LinkListItem>
-            ))}
-          </ul>
-        </Card>
-        <br />
-        <Card name="Pokalspiele">
-          <ul class="link-list">
-            {trophies.map(({ name, href }) => (
-              <LinkListItem href={`/assoc/${encodeURIComponent(href)}`}>
-                {translations[name] || name}
-              </LinkListItem>
-            ))}
-          </ul>
-        </Card>
-        <br />
-        <Card name="Ergebnisarchiv">
-          <ul class="link-list">
-            {seasons.map(({ step, year }) => (
-              <LinkListItem href={`/assocHistory/${encodeURIComponent(step)}`}>
-                Season 20{year}
-              </LinkListItem>
-            ))}
-          </ul>
-        </Card>
+        <Header />
+        <section class="section">
+          <Card name="Punktspiele">
+            <ul class="link-list">
+              {assocs.map(({ name, href }) => (
+                <LinkListItem href={clientHref(href)}>
+                  {translations[name] || name}
+                </LinkListItem>
+              ))}
+            </ul>
+          </Card>
+          <br />
+          <Card name="Pokalspiele">
+            <ul class="link-list">
+              {trophies.map(({ name, href }) => (
+                <LinkListItem href={clientHref(href)}>
+                  {translations[name] || name}
+                </LinkListItem>
+              ))}
+            </ul>
+          </Card>
+          <br />
+          <Card name="Ergebnisarchiv">
+            <ul class="link-list">
+              {seasons.map(({ step, year }) => (
+                <LinkListItem
+                  href={`/assocHistory/${encodeURIComponent(step)}`}
+                >
+                  Season 20{year}
+                </LinkListItem>
+              ))}
+            </ul>
+          </Card>
+        </section>
       </div>
     )
   }

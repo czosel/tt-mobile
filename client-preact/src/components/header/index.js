@@ -2,21 +2,33 @@ import { h, Component } from 'preact'
 import { Link } from 'preact-router/match'
 import style from './style'
 import Match from 'preact-router/match'
+import clientHref from '../../lib/link'
 
 const baseUrl = 'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa'
 
 export default class Header extends Component {
-  render({ clickTtUrl }) {
+  render({ breadcrumb, loading = false }) {
     return (
       <nav
         class={style.fixed + ' navbar is-primary'}
-        role="navigation"
         aria-label="main navigation"
       >
-        <div class={style.spread + ' navbar-brand'}>
-          <Link class="navbar-item" activeClassName="is-active" href="/">
-            <strong>TT mobile</strong>
-          </Link>
+        <div class={style.spread + ' navbar-brand'} id="navbar">
+          {breadcrumb ? (
+            <Link
+              class="navbar-item"
+              activeClassName="is-active"
+              href={clientHref(breadcrumb.href)}
+            >
+              <strong>{breadcrumb.name}</strong>
+            </Link>
+          ) : !loading ? (
+            <Link class="navbar-item" activeClassName="is-active" href="/">
+              <strong>TT mobile</strong>
+            </Link>
+          ) : (
+            <span />
+          )}
           <Match>
             {({ matches, path }) => {
               const clickTTPath = decodeURIComponent(
@@ -27,9 +39,13 @@ export default class Header extends Component {
                   <a
                     class="navbar-item"
                     target="_blank"
+                    rel="noopener"
                     href={baseUrl + clickTTPath}
                   >
-                    <img src="/assets/icons/external-link.svg" />
+                    <img
+                      src="/assets/icons/external-link.svg"
+                      alt="external link"
+                    />
                     &nbsp;click-tt
                   </a>
                 )

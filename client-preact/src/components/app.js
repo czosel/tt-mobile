@@ -6,7 +6,6 @@ import debug from 'preact/debug'
 import Provider from 'preact-context-provider'
 import model from '../lib/model.js'
 
-import Header from './header'
 import Home from 'async!../routes/home'
 import Assoc from 'async!../routes/assoc'
 import AssocHistory from 'async!../routes/assoc-history'
@@ -22,18 +21,15 @@ export default class App extends Component {
     return (
       <Provider model={this.model}>
         <div id="app">
-          <Header />
-          <section class="section">
-            <Router>
-              <Home path="/" />
-              <Assoc path="/assoc/:href" />
-              <AssocHistory path="/assocHistory/:step" />
-              <League path="/league/:href/:tab?" />
-              <Club path="/club/:href" />
-              <Player path="/player/:href/:tab?" />
-              <Game path="/game/:href" />
-            </Router>
-          </section>
+          <Router>
+            <Home path="/" />
+            <Assoc path="/assoc/:href" />
+            <AssocHistory path="/assocHistory/:step" />
+            <League path="/league/:href/:tab?" />
+            <Club path="/club/:href" />
+            <Player path="/player/:href/:tab?" />
+            <Game path="/game/:href" />
+          </Router>
         </div>
       </Provider>
     )

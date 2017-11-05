@@ -1,9 +1,13 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
 import { route } from 'preact-router'
+import { Link } from 'preact-router/match'
 import style from './style'
 
-import Loading from '../../components/loading'
+import clientHref from '../../lib/link'
+
+import Header from '../../components/header'
+import LoadingPage from '../../components/loading-page'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
 import Tabs from '../../components/tabs'
@@ -15,13 +19,13 @@ const asJson = r => r.json()
 @wire('model', { data: ['api.league', 'href'] })
 export default class League extends Component {
   handleChange = tab => {
-    route(`/league/${encodeURIComponent(this.props.href)}/${tab}`)
+    route(clientHref(this.props.href, tab))
   }
 
   render({ pending, data, tab }) {
-    if (pending) return <Loading />
+    if (pending) return <LoadingPage />
 
-    const { assoc, league, clubs, games } = data
+    const { assoc, league, clubs, games, breadcrumbs } = data
 
     tab = clubs.length === 0 ? 'schedule' : tab || 'table'
 
@@ -33,17 +37,19 @@ export default class League extends Component {
       )
     return (
       <div class={style.profile}>
-        {clubs.length > 0 ? (
-          <Tabs active={tab} onChange={this.handleChange}>
-            <Tab name="table">Tabelle</Tab>
-            <Tab name="schedule">Spielplan</Tab>
-          </Tabs>
-        ) : (
-          <span />
-        )}
-        <h1 class="title">{assoc}</h1>
-        <h2 class="subtitle">{league}</h2>
-        {content}
+        <Header breadcrumb={breadcrumbs[0]} />
+        <section class="section">
+          {clubs.length > 0 ? (
+            <Tabs active={tab} onChange={this.handleChange}>
+              <Tab name="table">Tabelle</Tab>
+              <Tab name="schedule">Spielplan</Tab>
+            </Tabs>
+          ) : (
+            <span />
+          )}
+          <h1 class="title">{league}</h1>
+          {content}
+        </section>
       </div>
     )
   }
@@ -62,7 +68,7 @@ function LeagueTable({ clubs }) {
       </thead>
       <tbody>
         {clubs.map(club => (
-          <LinkRow href={`/club/${encodeURIComponent(club.href)}`}>
+          <LinkRow href={clientHref(club.href)}>
             <td>{club.rank}</td>
             <td>{club.name}</td>
             <td>{club.nrOfGames}</td>
@@ -86,14 +92,14 @@ function LeagueSchedule({ games }) {
       </thead>
       <tbody>
         {games.map(data => {
-          return data.href ? <Link {...data} /> : <Row {...data} />
+          return data.href ? <AsLink {...data} /> : <AsRow {...data} />
         })}
       </tbody>
     </table>
   )
 }
 
-function Row({ date, home, guest, result }) {
+function AsRow({ date, home, guest, result }) {
   return (
     <tr>
       <td>{date}</td>
@@ -107,9 +113,9 @@ function Row({ date, home, guest, result }) {
   )
 }
 
-function Link({ href, date, home, guest, result }) {
+function AsLink({ href, date, home, guest, result }) {
   return (
-    <LinkRow href={`/game/${encodeURIComponent(href)}`}>
+    <LinkRow href={clientHref(href)}>
       <td>{date}</td>
       <td>
         {home}
