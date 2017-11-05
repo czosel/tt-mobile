@@ -1,5 +1,5 @@
 import { h, Component } from 'preact'
-import { Router } from 'preact-router'
+import { Router, route } from 'preact-router'
 
 import debug from 'preact/debug'
 
@@ -17,17 +17,28 @@ import Game from 'async!../routes/game'
 export default class App extends Component {
   model = model()
 
+  history = []
+
+  handleRoute = e => {
+    this.history.push(e.previous)
+    console.log('handled Route', e, this.history)
+  }
+
+  goBack = () => {
+    history.length ? history.back() : route('/')
+  }
+
   render() {
     return (
       <Provider model={this.model}>
         <div id="app">
-          <Router>
+          <Router onChange={this.handleRoute}>
             <Home path="/" />
             <Assoc path="/assoc/:href" />
             <AssocHistory path="/assocHistory/:step" />
             <League path="/league/:href/:tab?" />
             <Club path="/club/:href" />
-            <Player path="/player/:href/:tab?" />
+            <Player path="/player/:href/:tab?" back={this.goBack} />
             <Game path="/game/:href" />
           </Router>
         </div>

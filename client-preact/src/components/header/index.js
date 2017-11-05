@@ -7,7 +7,7 @@ import clientHref from '../../lib/link'
 const baseUrl = 'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa'
 
 export default class Header extends Component {
-  render({ breadcrumb, loading = false }) {
+  render({ breadcrumb, back, loading = false }) {
     return (
       <nav
         class={style.fixed + ' navbar is-primary'}
@@ -20,8 +20,12 @@ export default class Header extends Component {
               activeClassName="is-active"
               href={clientHref(breadcrumb.href)}
             >
-              <strong>{breadcrumb.name}</strong>
+              <strong>❮ {breadcrumb.name}</strong>
             </Link>
+          ) : back ? (
+            <a class="navbar-item" onClick={back}>
+              <strong>❮ Zurück</strong>
+            </a>
           ) : !loading ? (
             <Link class="navbar-item" activeClassName="is-active" href="/">
               <strong>TT mobile</strong>

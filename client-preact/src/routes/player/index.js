@@ -16,11 +16,11 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.player', 'href'] })
 export default class Player extends Component {
-  render({ pending, data, tab }) {
+  render({ pending, data, tab, back }) {
     tab = tab || 'overview'
     if (pending)
       return (
-        <Wrapper tab={tab} href={this.props.href}>
+        <Wrapper tab={tab} href={this.props.href} back={back}>
           <Loading />
         </Wrapper>
       )
@@ -37,7 +37,7 @@ export default class Player extends Component {
       )
 
     return (
-      <Wrapper tab={tab} href={this.props.href}>
+      <Wrapper tab={tab} href={this.props.href} back={back}>
         <h1 class="title">{name}</h1>
         {content}
       </Wrapper>
@@ -45,15 +45,14 @@ export default class Player extends Component {
   }
 }
 
-function Wrapper({ tab, href, children }) {
+function Wrapper({ tab, href, back, children }) {
   const handleChange = tab => {
-    console.log('handleChange', tab)
-    route(clientHref(href, tab))
+    route(clientHref(href, tab), true)
   }
 
   return (
     <div>
-      <Header />
+      <Header back={back} />
       <section class="section">
         <Tabs active={tab} onChange={handleChange}>
           <Tab name="overview">Übersicht</Tab>
