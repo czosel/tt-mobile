@@ -5,11 +5,12 @@ $link: #607D8B;
 $primary: #455A64;
 
 $black: #212121;
-$white: transparent;
+$navbar-background-color: $primary;
 
 @import "../../node_modules/bulma/sass/utilities/_all";
 @import "../../node_modules/bulma/sass/base/_all";
 @import "../../node_modules/bulma/sass/elements/table";
+@import "../../node_modules/bulma/sass/elements/button";
 @import "../../node_modules/bulma/sass/elements/tag";
 @import "../../node_modules/bulma/sass/elements/title";
 @import "../../node_modules/bulma/sass/layout/section";
