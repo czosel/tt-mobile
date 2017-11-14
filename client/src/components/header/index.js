@@ -3,7 +3,6 @@ import { Link } from 'preact-router/match'
 import style from './style'
 import Match from 'preact-router/match'
 import clientHref from '../../lib/link'
-import linkState from 'linkstate'
 
 const baseUrl = 'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa'
 
