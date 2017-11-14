@@ -65,13 +65,13 @@ export default class Header extends Component {
                       rel="noopener"
                       href={baseUrl + clickTTPath}
                     >
-                      In click-tt öffnen
+                      In click-TT öffnen
                     </a>
                   )
                 )
               }}
             </Match>
-            <Link class="navbar-item" href="/">
+            <Link class="navbar-item" href="/about">
               Über TT-mobile
             </Link>
           </div>
