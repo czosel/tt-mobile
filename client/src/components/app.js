@@ -14,6 +14,7 @@ import League from 'async!../routes/league'
 import Club from 'async!../routes/club'
 import Player from 'async!../routes/player'
 import Game from 'async!../routes/game'
+import About from 'async!../routes/about'
 
 export default class App extends Component {
   model = model()
@@ -66,6 +67,7 @@ export default class App extends Component {
             <Club path="/club/:href" />
             <Player path="/player/:href/:tab?" back={this.goBack} />
             <Game path="/game/:href" />
+            <About path="/about" />
           </Router>
         </div>
       </Provider>

@@ -3,23 +3,31 @@ import { Link } from 'preact-router/match'
 import style from './style'
 import Match from 'preact-router/match'
 import clientHref from '../../lib/link'
+import linkState from 'linkstate'
 
 const baseUrl = 'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa'
 
 export default class Header extends Component {
-  render({ breadcrumb, back, loading = false }) {
+  state = {
+    menuOpen: false
+  }
+
+  toggleMenu = () => {
+    this.setState({
+      menuOpen: !this.state.menuOpen
+    })
+  }
+
+  render({ breadcrumb, back, loading = false }, { menuOpen }) {
+    const active = menuOpen ? 'is-active' : ''
     return (
       <nav
         class={style.fixed + ' navbar is-primary'}
         aria-label="main navigation"
       >
-        <div class={style.spread + ' navbar-brand'} id="navbar">
+        <div class={style.truncate + ' navbar-brand'} id="navbar">
           {breadcrumb ? (
-            <Link
-              class="navbar-item"
-              activeClassName="is-active"
-              href={clientHref(breadcrumb.href)}
-            >
+            <Link class="navbar-item" href={clientHref(breadcrumb.href)}>
               <strong>❮ {breadcrumb.name}</strong>
             </Link>
           ) : back ? (
@@ -27,35 +35,46 @@ export default class Header extends Component {
               <strong>❮ Zurück</strong>
             </a>
           ) : !loading ? (
-            <Link class="navbar-item" activeClassName="is-active" href="/">
+            <Link class="navbar-item" href="/">
               <strong>TT mobile</strong>
             </Link>
           ) : (
             <span />
           )}
-          <Match>
-            {({ matches, path }) => {
-              const clickTTPath = decodeURIComponent(
-                path.split('/').filter(s => s.includes('%2F'))[0]
-              )
-              return (
-                clickTTPath.length > 10 && (
-                  <a
-                    class="navbar-item"
-                    target="_blank"
-                    rel="noopener"
-                    href={baseUrl + clickTTPath}
-                  >
-                    <img
-                      src="/assets/icons/external-link.svg"
-                      alt="external link"
-                    />
-                    &nbsp;click-tt
-                  </a>
+          <button
+            onClick={this.toggleMenu}
+            class={style.burger + ' button navbar-burger ' + active}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+        <div class={'navbar-menu ' + active}>
+          <div class="navbar-end">
+            <Match>
+              {({ matches, path }) => {
+                const clickTTPath = decodeURIComponent(
+                  path.split('/').filter(s => s.includes('%2F'))[0]
                 )
-              )
-            }}
-          </Match>
+                return (
+                  clickTTPath.length > 10 && (
+                    <a
+                      class="navbar-item"
+                      target="_blank"
+                      rel="noopener"
+                      href={baseUrl + clickTTPath}
+                    >
+                      In click-TT öffnen
+                    </a>
+                  )
+                )
+              }}
+            </Match>
+            <Link class="navbar-item" href="/about">
+              Über TT-mobile
+            </Link>
+          </div>
         </div>
       </nav>
     )
