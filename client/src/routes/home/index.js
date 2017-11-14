@@ -18,7 +18,17 @@ const seasons = [
   { step: 1, year: '12/13' }
 ]
 
-const assocNames = ['STT', 'AGTT', 'ANJTT', 'ATTT', 'AVVF', 'MTTV', 'NWTTV']
+const assocNames = [
+  'STT',
+  'AGTT',
+  'ANJTT',
+  'ATTT',
+  'AVVF',
+  'MTTV',
+  'NWTTV',
+  'OTTV',
+  'TTVI'
+]
 const translations = { STT: 'Nationalliga' }
 
 const trophyNames = [
