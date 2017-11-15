@@ -5,7 +5,7 @@ This repository includes an unofficial mobile client for [click-TT](http://click
 * a client powered by [Preact](preactjs.com)
 * a server/webscraper powered by [Osmosis](https://github.com/rchipka/node-osmosis)
 
-You can [view the app here](https://tt.zosel.ch).
+You can [view the app here](https://tt-mobile.ch).
 
 ## Development
 
