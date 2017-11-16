@@ -2,6 +2,7 @@ import { h, Component } from 'preact'
 import wire from 'wiretie'
 
 import Header from '../../components/header'
+import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
@@ -16,7 +17,7 @@ export default class Club extends Component {
     return (
       <div>
         <Header breadcrumb={breadcrumbs[1]} />
-        <section class="section">
+        <Container>
           <h1 class="title">{name}</h1>
           <Table>
             <thead>
@@ -40,7 +41,7 @@ export default class Club extends Component {
               ))}
             </tbody>
           </Table>
-        </section>
+        </Container>
       </div>
     )
   }

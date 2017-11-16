@@ -4,6 +4,7 @@ import wire from 'wiretie'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import Link from '../../components/link'
 import LinkListItem from '../../components/linkListItem'
@@ -19,7 +20,7 @@ export default class AssocHistory extends Component {
     return (
       <div>
         <Header />
-        <section class="section">
+        <Container>
           <ul class="link-list">
             {regular.map(league => (
               <LinkListItem href={clientHref(league.href)}>
@@ -27,7 +28,7 @@ export default class AssocHistory extends Component {
               </LinkListItem>
             ))}
           </ul>
-        </section>
+        </Container>
       </div>
     )
   }

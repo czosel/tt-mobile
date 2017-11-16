@@ -3,6 +3,7 @@ import wire from 'wiretie'
 import style from './style'
 
 import Header from '../../components/header'
+import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import Link from '../../components/link'
 import LinkListItem from '../../components/linkListItem'
@@ -17,7 +18,7 @@ export default class Assoc extends Component {
     return (
       <div class={style.home}>
         <Header />
-        <section class="section">
+        <Container>
           <h1 class="title">{title}</h1>
           <ul class="link-list">
             {leagues.map(league => (
@@ -26,7 +27,7 @@ export default class Assoc extends Component {
               </LinkListItem>
             ))}
           </ul>
-        </section>
+        </Container>
       </div>
     )
   }

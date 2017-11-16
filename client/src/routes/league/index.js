@@ -7,6 +7,7 @@ import style from './style'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
@@ -38,7 +39,7 @@ export default class League extends Component {
     return (
       <div class={style.profile}>
         <Header breadcrumb={breadcrumbs[0]} />
-        <section class="section">
+        <Container>
           {clubs.length > 0 ? (
             <Tabs active={tab} onChange={this.handleChange}>
               <Tab name="table">Tabelle</Tab>
@@ -49,7 +50,7 @@ export default class League extends Component {
           )}
           <h1 class="title">{league}</h1>
           {content}
-        </section>
+        </Container>
       </div>
     )
   }

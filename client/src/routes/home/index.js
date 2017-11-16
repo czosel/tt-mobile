@@ -4,6 +4,7 @@ import style from './style'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Container from '../../components/container'
 import Link from '../../components/link'
 import Card from '../../components/card'
 import LinkListItem from '../../components/linkListItem'
@@ -55,7 +56,7 @@ export default class Home extends Component {
     return (
       <div class={style.home}>
         <Header />
-        <section class="section">
+        <Container>
           <Card name="Punktspiele">
             <ul class="link-list">
               {assocs.map(({ name, href }) => (
@@ -87,7 +88,7 @@ export default class Home extends Component {
               ))}
             </ul>
           </Card>
-        </section>
+        </Container>
       </div>
     )
   }

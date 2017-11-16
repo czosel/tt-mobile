@@ -6,6 +6,7 @@ import style from './style'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Container from '../../components/container'
 import Loading from '../../components/loading'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
@@ -53,14 +54,14 @@ function Wrapper({ tab, href, back, children }) {
   return (
     <div>
       <Header back={back} />
-      <section class="section">
+      <Container>
         <Tabs active={tab} onChange={handleChange}>
           <Tab name="overview">Übersicht</Tab>
           <Tab name="single">Einzel</Tab>
           <Tab name="double">Doppel</Tab>
         </Tabs>
         {children}
-      </section>
+      </Container>
     </div>
   )
 }
