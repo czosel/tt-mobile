@@ -61,7 +61,6 @@ function LeagueTable({ clubs }) {
     <Table>
       <thead>
         <tr>
-          <th>Rang</th>
           <th>Mannschaft</th>
           <th>Beg.</th>
           <th>Punkte</th>
@@ -70,7 +69,6 @@ function LeagueTable({ clubs }) {
       <tbody>
         {clubs.map(club => (
           <LinkRow href={clientHref(club.href)}>
-            <td>{club.rank}</td>
             <td>{club.name}</td>
             <td>{club.nrOfGames}</td>
             <td>{club.score}</td>

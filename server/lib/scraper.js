@@ -212,6 +212,9 @@ function game({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
+      .set({
+        breadcrumbs: findBreadcrumbs(osmosis)
+      })
       .find('#content')
       .set({
         title: '#content-row1 h1',
@@ -237,6 +240,7 @@ function game({ url }) {
         const split = splitTitle(data.title)
         res({
           ...data,
+          breadcrumbs: extractBreadcrumbs(data),
           assoc: split[0],
           league: split[1],
           home: split[2],

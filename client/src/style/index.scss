@@ -8,6 +8,11 @@ $black: #212121;
 $white: #fafafa;
 $navbar-background-color: $primary;
 
+// responsive breakpoints
+$desktop: 960px + (2 * $gap);
+$widescreen: 960px + (2 * $gap);
+$fullhd: 960px + (2 * $gap);
+
 @import "../../node_modules/bulma/sass/utilities/_all";
 @import "../../node_modules/bulma/sass/base/_all";
 @import "../../node_modules/bulma/sass/elements/container";

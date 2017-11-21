@@ -4,7 +4,7 @@ import wire from 'wiretie'
 import Header from '../../components/header'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
-import LinkRow from '../../components/linkRow/'
+import LinkRow from '../../components/linkRow'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 

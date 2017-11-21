@@ -14,10 +14,20 @@ export default class Game extends Component {
   render({ pending, data }) {
     if (pending) return <LoadingPage />
 
-    const { matches, summary, home, guest, assoc, league, date, time } = data
+    const {
+      matches,
+      breadcrumbs,
+      summary,
+      home,
+      guest,
+      assoc,
+      league,
+      date,
+      time
+    } = data
     return (
       <div>
-        <Header />
+        <Header breadcrumb={breadcrumbs[1]} />
         <Container>
           <h1 class="title">
             {home} - {guest}

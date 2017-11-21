@@ -23,7 +23,6 @@ export default class App extends Component {
 
   handleRoute = e => {
     this.history.push(e.previous)
-    console.log('handled Route', e, this.history)
   }
 
   goBack = () => {
