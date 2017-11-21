@@ -1,9 +1,12 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
 
+import clientHref from '../../lib/link'
+
 import Header from '../../components/header'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
+import Schedule from '../../components/schedule'
 import LinkRow from '../../components/linkRow'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
@@ -13,7 +16,7 @@ export default class Club extends Component {
   render({ pending, data }) {
     if (pending) return <LoadingPage />
 
-    const { players, name, league, breadcrumbs } = data
+    const { players, name, league, games, breadcrumbs } = data
     return (
       <div>
         <Header breadcrumb={breadcrumbs[1]} />
@@ -41,6 +44,8 @@ export default class Club extends Component {
               ))}
             </tbody>
           </Table>
+          <h2 class="subtitle">Spielplan</h2>
+          <Schedule games={games} />
         </Container>
       </div>
     )

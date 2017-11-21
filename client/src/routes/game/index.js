@@ -11,7 +11,7 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.game', 'href'] })
 export default class Game extends Component {
-  render({ pending, data }) {
+  render({ pending, back, data }) {
     if (pending) return <LoadingPage />
 
     const {
@@ -27,7 +27,7 @@ export default class Game extends Component {
     } = data
     return (
       <div>
-        <Header breadcrumb={breadcrumbs[1]} />
+        <Header back={back} />
         <Container>
           <h1 class="title">
             {home} - {guest}

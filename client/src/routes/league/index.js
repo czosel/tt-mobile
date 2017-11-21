@@ -8,6 +8,7 @@ import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
 import Container from '../../components/container'
+import Schedule from '../../components/schedule'
 import LoadingPage from '../../components/loading-page'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
@@ -34,7 +35,7 @@ export default class League extends Component {
       tab === 'table' ? (
         <LeagueTable {...{ clubs }} />
       ) : (
-        <LeagueSchedule {...{ games }} />
+        <Schedule {...{ games }} />
       )
     return (
       <div class={style.profile}>
@@ -76,52 +77,5 @@ function LeagueTable({ clubs }) {
         ))}
       </tbody>
     </Table>
-  )
-}
-
-function LeagueSchedule({ games }) {
-  return (
-    <table class="table is-fullwidth">
-      <thead>
-        <tr>
-          <th>Datum</th>
-          <th>Heim / Gast</th>
-          <th>Spiele</th>
-        </tr>
-      </thead>
-      <tbody>
-        {games.map(data => {
-          return data.href ? <AsLink {...data} /> : <AsRow {...data} />
-        })}
-      </tbody>
-    </table>
-  )
-}
-
-function AsRow({ date, home, guest, result }) {
-  return (
-    <tr>
-      <td>{date}</td>
-      <td>
-        {home}
-        <br />
-        {guest}
-      </td>
-      <td>{result}</td>
-    </tr>
-  )
-}
-
-function AsLink({ href, date, home, guest, result }) {
-  return (
-    <LinkRow href={clientHref(href)}>
-      <td>{date}</td>
-      <td>
-        {home}
-        <br />
-        {guest}
-      </td>
-      <td>{result}</td>
-    </LinkRow>
   )
 }

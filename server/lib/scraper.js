@@ -190,11 +190,25 @@ function club({ url }) {
             classification: 'td:nth-child(3)',
             appearances: 'td:nth-child(5)',
             balance: 'td:nth-child(8)'
+          }),
+        games: osmosis
+          .find(
+            `#content-row2 table.result-set:nth(1) tr:not(:first-child),
+             #content-row2 table.result-set:nth(0) tr:not(:first-child)`
+          )
+          .set({
+            date: 'td:nth-child(2)',
+            time: 'td:nth-child(3)',
+            home: 'td:nth-child(6)',
+            guest: 'td:nth-child(8)',
+            result: 'td:nth-child(10)',
+            href: 'td:nth-child(10) a@href'
           })
       })
       .error(R.pipe(error('club'), rej))
       .data(data => {
         res({
+          games: toArray(data.games).map(simplifyLinks),
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],
