@@ -21,9 +21,10 @@ export default class Player extends Component {
     tab = tab || 'overview'
     if (pending)
       return (
-        <Wrapper tab={tab} href={this.props.href} back={back}>
+        <div>
           <Loading />
-        </Wrapper>
+          <Wrapper tab={tab} href={this.props.href} back={back} />
+        </div>
       )
 
     const { balance, classification, singles, doubles, elo, teams, name } = data
