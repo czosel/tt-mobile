@@ -4,13 +4,14 @@ import style from './style'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Container from '../../components/container'
 
 export default class Home extends Component {
   render() {
     return (
       <div>
         <Header />
-        <section class="section">
+        <Container>
           <img src="/assets/logo.svg" class={style.logo} />
           <h2 class="subtitle">TT-mobile</h2>
           <p>von Christian Zosel</p>
@@ -24,7 +25,7 @@ export default class Home extends Component {
               GitHub
             </a>).
           </p>
-        </section>
+        </Container>
       </div>
     )
   }
