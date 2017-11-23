@@ -4,6 +4,7 @@ import style from './style'
 
 import Header from '../../components/header'
 import LoadingPage from '../../components/loading-page'
+import ErrorPage from '../../components/error-page'
 import Container from '../../components/container'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
@@ -11,8 +12,9 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.game', 'href'] })
 export default class Game extends Component {
-  render({ pending, back, data }) {
+  render({ pending, rejected, back, data }) {
     if (pending) return <LoadingPage />
+    if (rejected) return <ErrorPage info={rejected} />
 
     const {
       matches,

@@ -5,15 +5,15 @@ import style from './style'
 import Header from '../../components/header'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
+import ErrorPage from '../../components/error-page'
 import Link from '../../components/link'
 import LinkListItem from '../../components/linkListItem'
 
 @wire('model', { data: ['api.assoc', 'href'] })
 export default class Assoc extends Component {
-  render({ pending, data }) {
-    if (pending) {
-      return <LoadingPage />
-    }
+  render({ pending, rejected, data }) {
+    if (pending) return <LoadingPage />
+    if (rejected) return <ErrorPage info={rejected} />
     const { title, leagues } = data
     return (
       <div class={style.home}>

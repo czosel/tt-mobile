@@ -17,22 +17,22 @@
     "extends": "eslint-config-synacor"
   },
   "devDependencies": {
-    "eslint": "^4.6.0",
-    "eslint-config-synacor": "^1.1.1",
+    "eslint": "^4.11.0",
+    "eslint-config-synacor": "^1.1.2",
     "if-env": "^1.0.0",
-    "node-sass": "^4.5.3",
-    "preact-cli": "^1.4.1",
+    "node-sass": "^4.7.2",
+    "preact-cli": "^2.1.0",
     "sass-loader": "^6.0.6"
   },
   "dependencies": {
-    "bulma": "^0.6.0",
+    "bulma": "^0.6.1",
     "halogen": "^0.2.0",
-    "preact": "^8.2.5",
+    "preact": "^8.2.6",
     "preact-compat": "^3.17.0",
     "preact-context-provider": "^1.0.0",
     "preact-helmet": "^4.0.0-alpha-3",
-    "preact-router": "^2.5.7",
-    "rambda": "^0.9.3",
+    "preact-router": "^2.6.0",
+    "rambda": "^0.9.8",
     "wiretie": "^1.0.3"
   }
 }

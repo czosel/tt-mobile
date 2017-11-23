@@ -6,6 +6,7 @@ import clientHref from '../../lib/link'
 import Header from '../../components/header'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
+import ErrorPage from '../../components/error-page'
 import Schedule from '../../components/schedule'
 import LinkRow from '../../components/linkRow'
 import Table from '../../components/table'
@@ -13,8 +14,9 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.club', 'href'] })
 export default class Club extends Component {
-  render({ pending, data }) {
+  render({ pending, rejected, data }) {
     if (pending) return <LoadingPage />
+    if (rejected) return <ErrorPage info={rejected} />
 
     const { players, name, league, games, breadcrumbs } = data
     return (

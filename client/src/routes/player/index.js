@@ -10,6 +10,7 @@ import Container from '../../components/container'
 import Loading from '../../components/loading'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
+import ErrorPage from '../../components/error-page'
 import EloChart from '../../components/elo-chart'
 import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
@@ -17,7 +18,7 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.player', 'href'] })
 export default class Player extends Component {
-  render({ pending, data, tab, back }) {
+  render({ pending, rejected, data, tab, back }) {
     tab = tab || 'overview'
     if (pending)
       return (
@@ -26,6 +27,7 @@ export default class Player extends Component {
           <Wrapper tab={tab} href={this.props.href} back={back} />
         </div>
       )
+    if (rejected) return <ErrorPage info={rejected} />
 
     const { balance, classification, singles, doubles, elo, teams, name } = data
 

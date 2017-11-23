@@ -10,6 +10,7 @@ import Header from '../../components/header'
 import Container from '../../components/container'
 import Schedule from '../../components/schedule'
 import LoadingPage from '../../components/loading-page'
+import ErrorPage from '../../components/error-page'
 import LinkRow from '../../components/linkRow/'
 import Table from '../../components/table'
 import Tabs from '../../components/tabs'
@@ -24,8 +25,9 @@ export default class League extends Component {
     route(clientHref(this.props.href, tab))
   }
 
-  render({ pending, data, tab }) {
+  render({ pending, rejected, data, tab }) {
     if (pending) return <LoadingPage />
+    if (rejected) return <ErrorPage info={rejected} />
 
     const { assoc, league, clubs, games, breadcrumbs } = data
 
