@@ -154,13 +154,23 @@ function league({ url }) {
       })
       .error(R.pipe(error('league'), rej))
       .data(data => {
-        titleParts = splitTitle(data.title)
+        const titleParts = splitTitle(data.title)
+        const games = toArray(data.games).map(simplifyLinks)
+        const chunks = []
+        games.forEach(g => {
+          if (g.date !== '') {
+            chunks.push({ date: g.date, games: [] })
+          }
+          chunks[chunks.length - 1].games.push(g)
+        })
+
         res({
           assoc: titleParts[0],
           league: titleParts[1],
           title: data.title,
           breadcrumbs: extractBreadcrumbs(data),
           games: toArray(data.games).map(simplifyLinks),
+          chunks,
           clubs: toArray(data.clubs)
             .map(club => ({
               ...club,
@@ -207,8 +217,15 @@ function club({ url }) {
       })
       .error(R.pipe(error('club'), rej))
       .data(data => {
+        const games = toArray(data.games)
+          .map(simplifyLinks)
+          .map(game => ({
+            ...game,
+            opponent: data.title.includes(game.guest) ? game.home : game.guest,
+            isHome: !data.title.includes(game.guest)
+          }))
         res({
-          games: toArray(data.games).map(simplifyLinks),
+          games,
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],

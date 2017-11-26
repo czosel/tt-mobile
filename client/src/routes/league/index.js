@@ -29,7 +29,7 @@ export default class League extends Component {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
 
-    const { assoc, league, clubs, games, breadcrumbs } = data
+    const { assoc, league, clubs, chunks, breadcrumbs } = data
 
     tab = clubs.length === 0 ? 'schedule' : tab || 'table'
 
@@ -37,7 +37,7 @@ export default class League extends Component {
       tab === 'table' ? (
         <LeagueTable {...{ clubs }} />
       ) : (
-        <Schedule {...{ games }} />
+        <Schedule {...{ chunks }} />
       )
     return (
       <div class={style.profile}>
@@ -74,7 +74,7 @@ function LeagueTable({ clubs }) {
           <LinkRow href={clientHref(club.href)}>
             <td>{club.name}</td>
             <td>{club.nrOfGames}</td>
-            <td>{club.score}</td>
+            <td class="result center">{club.score}</td>
           </LinkRow>
         ))}
       </tbody>

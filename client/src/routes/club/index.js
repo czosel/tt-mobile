@@ -41,13 +41,38 @@ export default class Club extends Component {
                     <EloScore value={player.classification} />
                   </td>
                   <td>{player.appearances}</td>
-                  <td>{player.balance}</td>
+                  <td class="center">{player.balance}</td>
                 </LinkRow>
               ))}
             </tbody>
           </Table>
           <h2 class="subtitle">Spielplan</h2>
-          <Schedule games={games} />
+          <Table>
+            <thead>
+              <tr>
+                <th>Gegner</th>
+                <th>Spiele</th>
+              </tr>
+            </thead>
+            <tbody>
+              {games.map(({ href, date, opponent, isHome, result }) => (
+                <LinkRow href={clientHref(href)}>
+                  <td>
+                    {opponent}
+                    <div class="tags has-addons">
+                      {isHome ? (
+                        <span class="tag is-success">Zuhause</span>
+                      ) : (
+                        <span class="tag is-warning">Auswärts</span>
+                      )}
+                      <span class="tag">{date}</span>
+                    </div>
+                  </td>
+                  <td class="result center">{result || '-:-'}</td>
+                </LinkRow>
+              ))}
+            </tbody>
+          </Table>
         </Container>
       </div>
     )

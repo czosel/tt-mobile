@@ -9,7 +9,11 @@ export default class LinkRow extends Component {
     }
   }
 
-  render({ children }) {
-    return <tr class={style.row} onClick={this.onOpen} {...{ children }} />
+  render({ children, href }) {
+    return href ? (
+      <tr class={style.row} onClick={this.onOpen} {...{ children }} />
+    ) : (
+      <tr {...{ children }} />
+    )
   }
 }

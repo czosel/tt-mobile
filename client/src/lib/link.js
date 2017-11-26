@@ -12,7 +12,9 @@ const map = {
  * -> "/club/groupPage?championship=MTTV+17%2F18&group=201630"
  */
 export default function clientHref(href, tab = '') {
-  const route =
-    map[Object.keys(map).find(key => href.includes && href.includes(key))]
+  if (!href) {
+    return undefined
+  }
+  const route = map[Object.keys(map).find(key => href.includes(key))]
   return `/${route}/${encodeURIComponent(href)}/${tab}`
 }

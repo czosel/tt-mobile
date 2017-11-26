@@ -18,7 +18,7 @@ const getStyle = value => {
 }
 
 export default function EloScore({ value }) {
-  if (value === undefined) {
+  if (value === undefined || value === '-') {
     return
   }
   return (

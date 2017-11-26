@@ -1,50 +1,28 @@
 import clientHref from '../../lib/link'
+import style from './style'
 
 import LinkRow from '../linkRow/'
 
-export default function Schedule({ games }) {
+export default function Schedule({ chunks }) {
   return (
-    <table class="table is-fullwidth">
-      <thead>
-        <tr>
-          <th>Datum</th>
-          <th>Heim / Gast</th>
-          <th>Spiele</th>
-        </tr>
-      </thead>
-      <tbody>
-        {games.map(data => {
-          return data.href ? <AsLink {...data} /> : <AsRow {...data} />
-        })}
-      </tbody>
-    </table>
-  )
-}
-
-function AsRow({ date, home, guest, result }) {
-  return (
-    <tr>
-      <td>{date}</td>
-      <td>
-        {home}
-        <br />
-        {guest}
-      </td>
-      <td>{result}</td>
-    </tr>
-  )
-}
-
-function AsLink({ href, date, home, guest, result }) {
-  return (
-    <LinkRow href={clientHref(href)}>
-      <td>{date}</td>
-      <td>
-        {home}
-        <br />
-        {guest}
-      </td>
-      <td>{result}</td>
-    </LinkRow>
+    <div>
+      {chunks.map(({ date, games }) => (
+        <div>
+          {date && <p class="is-size-7">{date}</p>}
+          <table class="table is-fullwidth">
+            {games.map(({ href, date, home, guest, result }) => (
+              <LinkRow href={clientHref(href)}>
+                <td>
+                  {home}
+                  <br />
+                  {guest}
+                </td>
+                <td class="result center">{result || '-:-'}</td>
+              </LinkRow>
+            ))}
+          </table>
+        </div>
+      ))}
+    </div>
   )
 }
