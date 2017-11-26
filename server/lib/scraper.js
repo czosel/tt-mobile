@@ -169,12 +169,11 @@ function league({ url }) {
           league: titleParts[1],
           title: data.title,
           breadcrumbs: extractBreadcrumbs(data),
-          games: toArray(data.games).map(simplifyLinks),
           chunks,
           clubs: toArray(data.clubs)
             .map(club => ({
               ...club,
-              score: club.score.startsWith('zurückgezogen') ? '-' : club.score
+              score: club.score.startsWith('zurückgezogen') ? '-:-' : club.score
             }))
             .map(simplifyLinks)
         })
