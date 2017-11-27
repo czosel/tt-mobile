@@ -224,8 +224,8 @@ function club({ url }) {
           .map(simplifyLinks)
           .map(game => ({
             ...game,
-            opponent: data.title.includes(game.guest) ? game.home : game.guest,
-            isHome: !data.title.includes(game.guest)
+            opponent: game.guest.includes(data.club) ? game.home : game.guest,
+            isHome: !game.guest.includes(data.club)
           }))
         res({
           ...data,
