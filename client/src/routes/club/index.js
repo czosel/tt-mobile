@@ -36,7 +36,7 @@ export default class Club extends Component {
               <tr>
                 <th>Name</th>
                 <th />
-                <th class="optional">Eins.</th>
+                <th class="center optional">Eins.</th>
                 <th />
                 <th />
               </tr>
