@@ -8,7 +8,7 @@ import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
 import Schedule from '../../components/schedule'
-import LinkRow from '../../components/linkRow'
+import LinkRow from '../../components/link-row'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
@@ -18,30 +18,41 @@ export default class Club extends Component {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
 
-    const { players, name, league, games, breadcrumbs } = data
+    const { players, location, name, league, games, breadcrumbs } = data
+    const link = 'https://maps.google.com/?q=' + location
     return (
       <div>
         <Header breadcrumb={breadcrumbs[1]} />
         <Container>
           <h1 class="title">{name}</h1>
+          <p>
+            <a href={link}>
+              <i class="icon-location" style="font-size:1.5em" />
+              {location}
+            </a>
+          </p>
           <Table>
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Klass.</th>
-                <th>Eins.</th>
-                <th>Bilanz</th>
+                <th />
+                <th class="optional">Eins.</th>
+                <th />
+                <th />
               </tr>
             </thead>
             <tbody>
               {players.map(player => (
                 <LinkRow href={`/player/${encodeURIComponent(player.href)}`}>
                   <td>{player.name}</td>
-                  <td>
+                  <td class="center thin">
                     <EloScore value={player.classification} />
                   </td>
-                  <td>{player.appearances}</td>
+                  <td class="center optional">{player.appearances}</td>
                   <td class="center">{player.balance}</td>
+                  <td class="thin">
+                    <i class="icon-right-open" />
+                  </td>
                 </LinkRow>
               ))}
             </tbody>
@@ -52,6 +63,7 @@ export default class Club extends Component {
               <tr>
                 <th>Gegner</th>
                 <th>Spiele</th>
+                <th />
               </tr>
             </thead>
             <tbody>
@@ -69,6 +81,9 @@ export default class Club extends Component {
                     </div>
                   </td>
                   <td class="result center">{result || '-:-'}</td>
+                  <td class="thin">
+                    {result && <i class="icon-right-open" />}
+                  </td>
                 </LinkRow>
               ))}
             </tbody>

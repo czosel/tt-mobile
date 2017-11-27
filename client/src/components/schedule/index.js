@@ -1,7 +1,8 @@
 import clientHref from '../../lib/link'
 import style from './style'
 
-import LinkRow from '../linkRow/'
+import LinkRow from '../link-row'
+import Table from '../table'
 
 export default function Schedule({ chunks }) {
   return (
@@ -9,18 +10,21 @@ export default function Schedule({ chunks }) {
       {chunks.map(({ date, games }) => (
         <div>
           {date && <p class="is-size-7">{date}</p>}
-          <table class="table is-fullwidth">
-            {games.map(({ href, date, home, guest, result }) => (
-              <LinkRow href={clientHref(href)}>
-                <td>
-                  {home}
-                  <br />
-                  {guest}
-                </td>
-                <td class="result center">{result || '-:-'}</td>
-              </LinkRow>
-            ))}
-          </table>
+          <Table>
+            <tbody>
+              {games.map(({ href, date, home, guest, result }) => (
+                <LinkRow href={clientHref(href)}>
+                  <td>
+                    {home}
+                    <br />
+                    {guest}
+                  </td>
+                  <td class="result center">{result || '-:-'}</td>
+                  <td class="thin">{href && <i class="icon-right-open" />}</td>
+                </LinkRow>
+              ))}
+            </tbody>
+          </Table>
         </div>
       ))}
     </div>

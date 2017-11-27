@@ -6,8 +6,8 @@ import Header from '../../components/header'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
-import Link from '../../components/link'
-import LinkListItem from '../../components/linkListItem'
+import Table from '../../components/table'
+import LinkRow from '../../components/link-row'
 
 @wire('model', { data: ['api.assoc', 'href'] })
 export default class Assoc extends Component {
@@ -20,13 +20,18 @@ export default class Assoc extends Component {
         <Header />
         <Container>
           <h1 class="title">{title}</h1>
-          <ul class="link-list">
-            {leagues.map(league => (
-              <LinkListItem href={`/league/${encodeURIComponent(league.href)}`}>
-                {league.name}
-              </LinkListItem>
-            ))}
-          </ul>
+          <Table>
+            <tbody>
+              {leagues.map(league => (
+                <LinkRow href={`/league/${encodeURIComponent(league.href)}`}>
+                  <td>{league.name}</td>
+                  <td class="thin">
+                    <i class="icon-right-open" />
+                  </td>
+                </LinkRow>
+              ))}
+            </tbody>
+          </Table>
         </Container>
       </div>
     )

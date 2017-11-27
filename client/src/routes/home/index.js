@@ -7,7 +7,8 @@ import Header from '../../components/header'
 import Container from '../../components/container'
 import Link from '../../components/link'
 import Card from '../../components/card'
-import LinkListItem from '../../components/linkListItem'
+import Table from '../../components/table'
+import LinkRow from '../../components/link-row'
 
 const spaceToPlus = str => str.replace(' ', '+')
 
@@ -58,35 +59,48 @@ export default class Home extends Component {
         <Header />
         <Container>
           <Card name="Punktspiele">
-            <ul class="link-list">
-              {assocs.map(({ name, href }) => (
-                <LinkListItem href={clientHref(href)}>
-                  {translations[name] || name}
-                </LinkListItem>
-              ))}
-            </ul>
+            <Table>
+              <tbody>
+                {assocs.map(({ name, href }) => (
+                  <LinkRow href={clientHref(href)}>
+                    <td>{translations[name] || name}</td>
+                    <td class="thin">
+                      <i class="icon-right-open" />
+                    </td>
+                  </LinkRow>
+                ))}
+              </tbody>
+            </Table>
           </Card>
           <br />
           <Card name="Pokalspiele">
-            <ul class="link-list">
-              {trophies.map(({ name, href }) => (
-                <LinkListItem href={clientHref(href)}>
-                  {translations[name] || name}
-                </LinkListItem>
-              ))}
-            </ul>
+            <Table>
+              <tbody>
+                {trophies.map(({ name, href }) => (
+                  <LinkRow href={clientHref(href)}>
+                    <td>{translations[name] || name}</td>
+                    <td class="thin">
+                      <i class="icon-right-open" />
+                    </td>
+                  </LinkRow>
+                ))}
+              </tbody>
+            </Table>
           </Card>
           <br />
           <Card name="Ergebnisarchiv">
-            <ul class="link-list">
-              {seasons.map(({ step, year }) => (
-                <LinkListItem
-                  href={`/assocHistory/${encodeURIComponent(step)}`}
-                >
-                  Season 20{year}
-                </LinkListItem>
-              ))}
-            </ul>
+            <Table>
+              <tbody>
+                {seasons.map(({ step, year }) => (
+                  <LinkRow href={`/assocHistory/${encodeURIComponent(step)}`}>
+                    <td>Season 20{year}</td>
+                    <td class="thin">
+                      <i class="icon-right-open" />
+                    </td>
+                  </LinkRow>
+                ))}
+              </tbody>
+            </Table>
           </Card>
         </Container>
       </div>

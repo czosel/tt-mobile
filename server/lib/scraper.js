@@ -191,6 +191,10 @@ function club({ url }) {
       .find('#content')
       .set({
         title: '#content-row1 h1',
+        club: '#content-row1 table.result-set tr:first-child td a',
+        clubHref: '#content-row1 table.result-set tr:first-child td a@href',
+        location:
+          '#content-row1 table.result-set tr:first-child td:last-child:html',
         players: osmosis
           .find('#content-row2 table.result-set tr:has(td:nth-child(2) a)')
           .set({
@@ -224,7 +228,11 @@ function club({ url }) {
             isHome: !data.title.includes(game.guest)
           }))
         res({
+          ...data,
           games,
+          location: splitTitle(data.location)
+            [3].split('<br>')
+            .join(', '),
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],

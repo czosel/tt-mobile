@@ -6,7 +6,7 @@ import Header from '../../components/header'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
 import Container from '../../components/container'
-import LinkRow from '../../components/linkRow/'
+import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
@@ -48,7 +48,7 @@ export default class Game extends Component {
             </thead>
             <tbody>
               {matches.map(match => (
-                <tr>
+                <tr class="no-hover">
                   <td>
                     {match.player1}
                     <br />
@@ -63,7 +63,7 @@ export default class Game extends Component {
                   <td class="center">{match.game}</td>
                 </tr>
               ))}
-              <tr>
+              <tr class="no-hover">
                 <td colspan="2" />
                 <td class="center">{summary.sets}</td>
                 <td class="center">

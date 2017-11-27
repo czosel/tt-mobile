@@ -13,7 +13,7 @@ export default class LinkRow extends Component {
     return href ? (
       <tr class={style.row} onClick={this.onOpen} {...{ children }} />
     ) : (
-      <tr {...{ children }} />
+      <tr class="no-hover" {...{ children }} />
     )
   }
 }

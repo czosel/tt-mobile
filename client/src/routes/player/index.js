@@ -8,7 +8,7 @@ import clientHref from '../../lib/link'
 import Header from '../../components/header'
 import Container from '../../components/container'
 import Loading from '../../components/loading'
-import LinkRow from '../../components/linkRow/'
+import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import ErrorPage from '../../components/error-page'
 import EloChart from '../../components/elo-chart'
@@ -89,11 +89,16 @@ function Overview({ balance, classification, elo, teams }) {
       <EloChart data={elo.data} />
       <h2 class="subtitle">Mannschaftseinsätze</h2>
       <Table>
-        {teams.map(({ name, href }) => (
-          <LinkRow href={clientHref(href)}>
-            <td>{name}</td>
-          </LinkRow>
-        ))}
+        <tbody>
+          {teams.map(({ name, href }) => (
+            <LinkRow href={clientHref(href)}>
+              <td>{name}</td>
+              <td class="thin">
+                <i class="icon-right-open" />
+              </td>
+            </LinkRow>
+          ))}
+        </tbody>
       </Table>
       <h2 class="subtitle">Einzelbilanzen</h2>
       <Table>
@@ -116,6 +121,7 @@ function Single({ singles }) {
           <th>Gegner</th>
           <th class="center">Klass.</th>
           <th class="center">Sätze</th>
+          <th />
         </tr>
       </thead>
       <tbody>
@@ -126,6 +132,9 @@ function Single({ singles }) {
               <EloScore value={classification} />
             </td>
             <td class="center">{sets}</td>
+            <td class="thin">
+              <i class="icon-right-open" />
+            </td>
           </LinkRow>
         ))}
       </tbody>
@@ -145,7 +154,7 @@ function Double({ doubles }) {
       </thead>
       <tbody>
         {doubles.map(({ partner, opponent1, opponent2, sets }) => (
-          <tr>
+          <tr class="no-hover">
             <td>{partner}</td>
             <td>
               {opponent1}

@@ -1,3 +1,4 @@
+@import "../assets/css/fontello.css";
 @import "../../node_modules/bulma/sass/utilities/initial-variables";
 
 // bulma customization
@@ -7,6 +8,7 @@ $primary: #455A64;
 $black: #212121;
 $white: #fafafa;
 $navbar-background-color: $primary;
+$table-row-hover-background-color: darken($white, 10%);
 
 // responsive breakpoints
 $desktop: 960px + (2 * $gap);
@@ -78,4 +80,31 @@ ul.link-list {
   width: 3rem;
   vertical-align: middle !important;
   font-weight: bold;
+}
+
+table td {
+  vertical-align: middle !important;
+}
+
+td.thin {
+  width: 1rem;
+  padding: 0.5em 0;
+}
+
+td.thin > i {
+  color: lighten($primary, 40%);
+}
+
+@media all and (max-width: 400px) {
+  .optional {
+    display: none !important;
+  }
+}
+
+td.right {
+  text-align: right;
+}
+
+tr.no-hover {
+  background-color: transparent !important;
 }

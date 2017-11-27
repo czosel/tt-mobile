@@ -11,7 +11,7 @@ import Container from '../../components/container'
 import Schedule from '../../components/schedule'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
-import LinkRow from '../../components/linkRow/'
+import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
@@ -64,17 +64,23 @@ function LeagueTable({ clubs }) {
     <Table>
       <thead>
         <tr>
+          <th />
           <th>Mannschaft</th>
-          <th>Beg.</th>
+          <th class="center optional">Beg.</th>
           <th>Punkte</th>
+          <th />
         </tr>
       </thead>
       <tbody>
         {clubs.map(club => (
           <LinkRow href={clientHref(club.href)}>
+            <td class="right thin">{club.rank}</td>
             <td>{club.name}</td>
-            <td>{club.nrOfGames}</td>
+            <td class="center optional">{club.nrOfGames}</td>
             <td class="result center">{club.score}</td>
+            <td class="thin">
+              <i class="icon-right-open" />
+            </td>
           </LinkRow>
         ))}
       </tbody>
