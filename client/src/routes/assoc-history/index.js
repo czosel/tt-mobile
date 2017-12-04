@@ -5,14 +5,15 @@ import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
 import Container from '../../components/container'
+import CardList from '../../components/card-list'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
-import Link from '../../components/link'
-import LinkListItem from '../../components/linkListItem'
+
+const hrefify = e => ({ ...e, href: clientHref(e.href) })
 
 @wire('model', { data: ['api.assocHistory', 'step'] })
 export default class AssocHistory extends Component {
-  render({ pending, rejected, data, step }) {
+  render({ pending, rejected, data }) {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
     const { regular, trophy } = data
@@ -20,13 +21,9 @@ export default class AssocHistory extends Component {
       <div>
         <Header />
         <Container>
-          <ul class="link-list">
-            {regular.map(league => (
-              <LinkListItem href={clientHref(league.href)}>
-                {league.name}
-              </LinkListItem>
-            ))}
-          </ul>
+          <CardList name="Punktspiele" content={regular.map(hrefify)} />
+          <br />
+          <CardList name="Pokalspiele" content={trophy.map(hrefify)} />
         </Container>
       </div>
     )

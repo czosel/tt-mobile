@@ -1,14 +1,11 @@
-import { h, Component } from 'preact'
+import { Component } from 'preact'
 import style from './style'
 
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
 import Container from '../../components/container'
-import Link from '../../components/link'
-import Card from '../../components/card'
-import Table from '../../components/table'
-import LinkRow from '../../components/link-row'
+import CardList from '../../components/card-list'
 
 const spaceToPlus = str => str.replace(' ', '+')
 
@@ -19,6 +16,11 @@ const seasons = [
   { step: 1, year: '13/14' },
   { step: 1, year: '12/13' }
 ]
+
+const history = seasons.map(({ step, year }) => ({
+  name: `Season 20${year}`,
+  href: `/assocHistory/${encodeURIComponent(step)}`
+}))
 
 const assocNames = [
   'STT',
@@ -47,7 +49,7 @@ const trophyNames = [
 
 const addLinks = name => ({
   name,
-  href: `/leaguePage?championship=${spaceToPlus(name)}+17%2F18`
+  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+17%2F18`)
 })
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
@@ -58,50 +60,15 @@ export default class Home extends Component {
       <div class={style.home}>
         <Header />
         <Container>
-          <Card name="Punktspiele">
-            <Table>
-              <tbody>
-                {assocs.map(({ name, href }) => (
-                  <LinkRow href={clientHref(href)}>
-                    <td>{translations[name] || name}</td>
-                    <td class="thin">
-                      <i class="icon-right-open" />
-                    </td>
-                  </LinkRow>
-                ))}
-              </tbody>
-            </Table>
-          </Card>
+          <CardList
+            name="Punktspiele"
+            content={assocs}
+            translations={translations}
+          />
           <br />
-          <Card name="Pokalspiele">
-            <Table>
-              <tbody>
-                {trophies.map(({ name, href }) => (
-                  <LinkRow href={clientHref(href)}>
-                    <td>{translations[name] || name}</td>
-                    <td class="thin">
-                      <i class="icon-right-open" />
-                    </td>
-                  </LinkRow>
-                ))}
-              </tbody>
-            </Table>
-          </Card>
+          <CardList name="Pokalspiele" content={trophies} />
           <br />
-          <Card name="Ergebnisarchiv">
-            <Table>
-              <tbody>
-                {seasons.map(({ step, year }) => (
-                  <LinkRow href={`/assocHistory/${encodeURIComponent(step)}`}>
-                    <td>Season 20{year}</td>
-                    <td class="thin">
-                      <i class="icon-right-open" />
-                    </td>
-                  </LinkRow>
-                ))}
-              </tbody>
-            </Table>
-          </Card>
+          <CardList name="Ergebnisarchive" content={history} nameAsKey={true} />
         </Container>
       </div>
     )

@@ -2,6 +2,7 @@ import { h, Component } from 'preact'
 import { Router, route } from 'preact-router'
 import Helmet from 'preact-helmet'
 
+// eslint-disable-next-line no-unused-vars
 import debug from 'preact/debug'
 
 import Provider from 'preact-context-provider'

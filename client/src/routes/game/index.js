@@ -1,12 +1,10 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
-import style from './style'
 
 import Header from '../../components/header'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
 import Container from '../../components/container'
-import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
@@ -16,17 +14,7 @@ export default class Game extends Component {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
 
-    const {
-      matches,
-      breadcrumbs,
-      summary,
-      home,
-      guest,
-      assoc,
-      league,
-      date,
-      time
-    } = data
+    const { matches, summary, home, guest, league, date, time } = data
     return (
       <div>
         <Header back={back} />
@@ -47,8 +35,8 @@ export default class Game extends Component {
               </tr>
             </thead>
             <tbody>
-              {matches.map(match => (
-                <tr class="no-hover">
+              {matches.map((match, index) => (
+                <tr key={index} class="no-hover">
                   <td>
                     {match.player1}
                     <br />
@@ -64,7 +52,7 @@ export default class Game extends Component {
                 </tr>
               ))}
               <tr class="no-hover">
-                <td colspan="2" />
+                <td colSpan="2" />
                 <td class="center">{summary.sets}</td>
                 <td class="center">
                   <strong>{summary.game}</strong>

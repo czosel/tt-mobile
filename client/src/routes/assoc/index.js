@@ -23,7 +23,10 @@ export default class Assoc extends Component {
           <Table>
             <tbody>
               {leagues.map(league => (
-                <LinkRow href={`/league/${encodeURIComponent(league.href)}`}>
+                <LinkRow
+                  key={league.href}
+                  href={`/league/${encodeURIComponent(league.href)}`}
+                >
                   <td>{league.name}</td>
                   <td class="thin">
                     <i class="icon-right-open" />

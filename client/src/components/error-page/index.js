@@ -1,8 +1,5 @@
-import { h, Component } from 'preact'
-import Loading from '../loading'
 import Header from '../header'
 import Container from '../container'
-import style from './style'
 
 const reload = () => {
   location.reload()

@@ -1,5 +1,3 @@
-import { h, Component } from 'preact'
-
 import { getClass } from '../lib/elo'
 
 const safeSplit = v => (v.split ? v.split('\n') : [v])
@@ -26,8 +24,8 @@ export default function EloScore({ value }) {
       {safeSplit(value)
         .map(safeTrim)
         .filter(v => !!v)
-        .map(val => (
-          <span class="tag" style={getStyle(val)}>
+        .map((val, index) => (
+          <span key={index} class="tag" style={getStyle(val)}>
             {getClass(val)}
           </span>
         ))}

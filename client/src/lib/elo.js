@@ -1,4 +1,4 @@
-import { findIndex, gte, reverse } from 'ramda'
+import { findIndex, reverse } from 'rambda'
 
 export const eloMin = [
   0,
@@ -27,7 +27,7 @@ export function getClass(elo) {
   if (typeof elo !== 'number') {
     return elo
   }
-  const i = eloMin.length - findIndex(gte(elo), reverse(eloMin))
+  const i = eloMin.length - findIndex(e => elo >= e, reverse(eloMin))
   return getLabel(i - 1)
 }
 

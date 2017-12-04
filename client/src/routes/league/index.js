@@ -1,7 +1,6 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
 import { route } from 'preact-router'
-import { Link } from 'preact-router/match'
 import style from './style'
 
 import clientHref from '../../lib/link'
@@ -16,9 +15,6 @@ import Table from '../../components/table'
 import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
 
-const API_ORIGIN = 'http://localhost:3020'
-const asJson = r => r.json()
-
 @wire('model', { data: ['api.league', 'href'] })
 export default class League extends Component {
   handleChange = tab => {
@@ -29,7 +25,7 @@ export default class League extends Component {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
 
-    const { assoc, league, clubs, chunks, breadcrumbs } = data
+    const { league, clubs, chunks, breadcrumbs } = data
 
     tab = clubs.length === 0 ? 'schedule' : tab || 'table'
 
@@ -73,7 +69,7 @@ function LeagueTable({ clubs }) {
       </thead>
       <tbody>
         {clubs.map(club => (
-          <LinkRow href={clientHref(club.href)}>
+          <LinkRow key={club.href} href={clientHref(club.href)}>
             <td class="right thin">{club.rank}</td>
             <td>{club.name}</td>
             <td class="center optional">{club.nrOfGames}</td>

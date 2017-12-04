@@ -1,8 +1,6 @@
 import { h, Component } from 'preact'
 import style from './style'
 
-import clientHref from '../../lib/link'
-
 import Header from '../../components/header'
 import Container from '../../components/container'
 

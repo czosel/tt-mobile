@@ -1,4 +1,3 @@
-import { h, Component } from 'preact'
 import Loader from 'halogen/MoonLoader'
 import style from './style'
 

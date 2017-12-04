@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { h } from 'preact'
 import {
   multiply,
   pipe,
@@ -9,11 +9,10 @@ import {
   compose,
   curry,
   addIndex,
-  join,
-  converge
-} from 'ramda'
+  join
+} from 'rambda'
 
-import { eloMin, getClass, getLabel } from '../../lib/elo'
+import { eloMin, getLabel } from '../../lib/elo'
 
 const max = arr => Math.max(...arr)
 const min = arr => Math.min(...arr)
@@ -25,8 +24,8 @@ const x1 = pipe(map(head), min)
 const x2 = pipe(map(head), max)
 const y1 = pipe(map(last), min, shrink)
 const y2 = pipe(map(last), max, grow)
-const dx = converge(subtract, [x2, x1])
-const dy = converge(subtract, [y2, y1])
+const dx = p => subtract(x2(p), x1(p))
+const dy = p => subtract(y2(p), y1(p))
 
 const [vx1, vx2, vy1, vy2] = [30, 300, 0, 200]
 const vdy = vy2 - vy1
@@ -65,22 +64,23 @@ export default function EloChart({ data = [] }) {
   lines = projectLines(lines)
   return (
     <svg width="100%" height="200px" viewBox="0 0 300 200" class="chart">
-      {lines.map(line => (
-        <text x="0" y={line.pos + 4} font-size="12" fill="grey">
-          {line.label}
+      {lines.map(({ pos, label }) => (
+        <text key={pos} x="0" y={pos + 4} fontSize="12" fill="grey">
+          {label}
         </text>
       ))}
-      {lines.map(line => (
+      {lines.map(({ pos }) => (
         <line
+          key={pos}
           x1="25"
-          y1={line.pos}
+          y1={pos}
           x2="300"
-          y2={line.pos}
+          y2={pos}
           strokeWidth="1"
           stroke="#757575"
         />
       ))}
-      <polyline fill="none" stroke="#FF5252" stroke-width="3" points={view} />
+      <polyline fill="none" stroke="#FF5252" strokeWidth="3" points={view} />
     </svg>
   )
 }

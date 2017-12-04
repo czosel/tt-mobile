@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { Component } from 'preact'
 import { Link } from 'preact-router/match'
 import style from './style'
 import Match from 'preact-router/match'
@@ -55,7 +55,7 @@ export default class Header extends Component {
           <div class={'navbar-menu ' + active}>
             <div class="navbar-end">
               <Match>
-                {({ matches, path }) => {
+                {({ path }) => {
                   const clickTTPath = decodeURIComponent(
                     path.split('/').filter(s => s.includes('%2F'))[0]
                   )

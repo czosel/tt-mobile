@@ -7,7 +7,6 @@ import Header from '../../components/header'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
-import Schedule from '../../components/schedule'
 import LinkRow from '../../components/link-row'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
@@ -18,7 +17,7 @@ export default class Club extends Component {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
 
-    const { players, location, name, league, games, breadcrumbs } = data
+    const { players, location, name, games, breadcrumbs } = data
     const link = 'https://maps.google.com/?q=' + location
     return (
       <div>
@@ -43,7 +42,10 @@ export default class Club extends Component {
             </thead>
             <tbody>
               {players.map(player => (
-                <LinkRow href={`/player/${encodeURIComponent(player.href)}`}>
+                <LinkRow
+                  key={player.href}
+                  href={`/player/${encodeURIComponent(player.href)}`}
+                >
                   <td>{player.name}</td>
                   <td class="center thin">
                     <EloScore value={player.classification} />
@@ -68,7 +70,7 @@ export default class Club extends Component {
             </thead>
             <tbody>
               {games.map(({ href, date, opponent, isHome, result }) => (
-                <LinkRow href={clientHref(href)}>
+                <LinkRow key={href} href={clientHref(href)}>
                   <td>
                     {opponent}
                     <div class="tags has-addons">

@@ -1,7 +1,6 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
 import { route } from 'preact-router'
-import style from './style'
 
 import clientHref from '../../lib/link'
 
@@ -91,7 +90,7 @@ function Overview({ balance, classification, elo, teams }) {
       <Table>
         <tbody>
           {teams.map(({ name, href }) => (
-            <LinkRow href={clientHref(href)}>
+            <LinkRow key={href} href={clientHref(href)}>
               <td>{name}</td>
               <td class="thin">
                 <i class="icon-right-open" />
@@ -103,7 +102,7 @@ function Overview({ balance, classification, elo, teams }) {
       <h2 class="subtitle">Einzelbilanzen</h2>
       <Table>
         {balance.map(({ team, data }) => (
-          <tr>
+          <tr key={team}>
             <td>{team}</td>
             <td>{data}</td>
           </tr>
@@ -126,7 +125,7 @@ function Single({ singles }) {
       </thead>
       <tbody>
         {singles.map(({ opponent, classification, href, sets }) => (
-          <LinkRow href={clientHref(href)}>
+          <LinkRow key={href} href={clientHref(href)}>
             <td>{opponent}</td>
             <td class="center">
               <EloScore value={classification} />
@@ -153,8 +152,8 @@ function Double({ doubles }) {
         </tr>
       </thead>
       <tbody>
-        {doubles.map(({ partner, opponent1, opponent2, sets }) => (
-          <tr class="no-hover">
+        {doubles.map(({ partner, opponent1, opponent2, sets }, index) => (
+          <tr key={index} class="no-hover">
             <td>{partner}</td>
             <td>
               {opponent1}

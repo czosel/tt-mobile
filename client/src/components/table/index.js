@@ -1,4 +1,3 @@
-import { h, Component } from 'preact'
 import style from './style'
 
 export default function Table({ children }) {

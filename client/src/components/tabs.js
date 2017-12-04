@@ -1,4 +1,4 @@
-import { h, Component, cloneElement } from 'preact'
+import { Component, cloneElement } from 'preact'
 
 export default class Tabs extends Component {
   render({ children, active, onChange }) {

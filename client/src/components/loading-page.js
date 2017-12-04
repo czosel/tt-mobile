@@ -1,4 +1,3 @@
-import { h, Component } from 'preact'
 import Loading from './loading'
 import Header from './header'
 
