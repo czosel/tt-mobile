@@ -62,16 +62,16 @@ export default function EloChart({ data = [] }) {
     y: min
   }))
   lines = projectLines(lines)
+  /* eslint-disable react/jsx-key */
   return (
     <svg width="100%" height="200px" viewBox="0 0 300 200" class="chart">
       {lines.map(({ pos, label }) => (
-        <text key={pos} x="0" y={pos + 4} fontSize="12" fill="grey">
+        <text x="0" y={pos + 4} fontSize="12" fill="grey">
           {label}
         </text>
       ))}
       {lines.map(({ pos }) => (
         <line
-          key={pos}
           x1="25"
           y1={pos}
           x2="300"
