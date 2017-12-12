@@ -42,13 +42,13 @@ const project = curry((points, [x, y]) => [
   projectY(y, points)
 ])
 
-const dataToPoints = addIndex(map)((y, i) => [i, y])
 const asString = compose(join(','), map(join(',')))
 
 export default function EloChart({ data = [] }) {
   if (!data || !data.length) {
     return
   }
+  const dataToPoints = addIndex(map)((y, i) => [i, y])
   const points = dataToPoints(data)
   const process = map(project(points))
 
