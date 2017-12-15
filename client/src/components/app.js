@@ -12,7 +12,7 @@ import Home from 'async!../routes/home'
 import Assoc from 'async!../routes/assoc'
 import AssocHistory from 'async!../routes/assoc-history'
 import League from 'async!../routes/league'
-import Club from 'async!../routes/club'
+import Team from 'async!../routes/team'
 import Player from 'async!../routes/player'
 import Game from 'async!../routes/game'
 import About from 'async!../routes/about'
@@ -64,7 +64,7 @@ export default class App extends Component {
             <Assoc path="/assoc/:href" />
             <AssocHistory path="/assocHistory/:step" />
             <League path="/league/:href/:tab?" />
-            <Club path="/club/:href" />
+            <Team path="/team/:href" />
             <Player path="/player/:href/:tab?" back={this.goBack} />
             <Game path="/game/:href?" back={this.goBack} />
             <About path="/about" />

@@ -1,7 +1,7 @@
 const map = {
   groupPage: 'league',
   leaguePage: 'assoc',
-  teamPortrait: 'club',
+  teamPortrait: 'team',
   playerPortrait: 'player',
   groupMeetingReport: 'game'
 }
@@ -15,6 +15,11 @@ export default function clientHref(href, tab = '') {
   if (!href) {
     return undefined
   }
-  const route = map[Object.keys(map).find(key => href.includes(key))]
-  return `/${route}/${encodeURIComponent(href)}/${tab}`
+  if (typeof href === 'string') {
+    const route = map[Object.keys(map).find(key => href.includes(key))]
+    return `/${route}/${encodeURIComponent(href)}/${tab}`
+  }
+  if (href.clubId) {
+    return `/club/${href.clubId}/${tab}`
+  }
 }

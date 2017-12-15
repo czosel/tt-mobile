@@ -1,3 +1,4 @@
+const { parse } = require('url')
 const util = require('util')
 const R = require('ramda')
 const { resolve } = require('url')
@@ -181,7 +182,7 @@ function league({ url }) {
   })
 }
 
-function club({ url }) {
+function team({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -236,6 +237,7 @@ function club({ url }) {
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],
+          clubId: Number(parse(data.clubHref, true).query.club),
           players: toArray(data.players).map(simplifyLinks)
         })
       })
@@ -378,7 +380,7 @@ module.exports = {
   assocHistory,
   assoc,
   league,
-  club,
+  team,
   game,
   player
 }

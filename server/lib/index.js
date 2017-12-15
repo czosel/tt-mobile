@@ -10,7 +10,7 @@ const app = express()
 app.use(compression())
 app.use(cors())
 
-const endpoints = ['assocHistory', 'assoc', 'league', 'club', 'game', 'player']
+const endpoints = ['assocHistory', 'assoc', 'league', 'team', 'game', 'player']
 
 endpoints.forEach(path => {
   app.get(`/${path}`, async (req, res) => {

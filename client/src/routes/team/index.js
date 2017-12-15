@@ -11,19 +11,29 @@ import LinkRow from '../../components/link-row'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
-@wire('model', { data: ['api.club', 'href'] })
-export default class Club extends Component {
+@wire('model', { data: ['api.team', 'href'] })
+export default class Team extends Component {
   render({ pending, rejected, data }) {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
 
-    const { players, location, name, games, breadcrumbs } = data
+    const { club, clubId, players, location, name, games, breadcrumbs } = data
     const link = 'https://maps.google.com/?q=' + location
     return (
       <div>
         <Header breadcrumb={breadcrumbs[1]} />
         <Container>
           <h1 class="title">{name}</h1>
+          <Table>
+            <tbody>
+              <LinkRow href={clientHref({ clubId })}>
+                <td>{club}</td>
+                <td class="thin">
+                  <i class="icon-right-open" />
+                </td>
+              </LinkRow>
+            </tbody>
+          </Table>
           <p>
             <a href={link}>
               <i class="icon-location" style="font-size:1.5em" />

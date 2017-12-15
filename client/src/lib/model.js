@@ -10,7 +10,7 @@ export default function model() {
     api: {
       assoc: get('assoc'),
       league: get('league'),
-      club: get('club'),
+      team: get('team'),
       player: get('player'),
       game: get('game'),
       assocHistory(step) {
