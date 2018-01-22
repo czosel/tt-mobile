@@ -13,6 +13,7 @@ import Assoc from 'async!../routes/assoc'
 import AssocHistory from 'async!../routes/assoc-history'
 import League from 'async!../routes/league'
 import Team from 'async!../routes/team'
+import Club from 'async!../routes/club'
 import Player from 'async!../routes/player'
 import Game from 'async!../routes/game'
 import About from 'async!../routes/about'
@@ -61,10 +62,11 @@ export default class App extends Component {
           />
           <Router onChange={this.handleRoute}>
             <Home path="/" />
-            <Assoc path="/assoc/:href" />
+            <Assoc path="/assoc/:href" back={this.goBack} />
             <AssocHistory path="/assocHistory/:step" />
-            <League path="/league/:href/:tab?" />
-            <Team path="/team/:href" />
+            <League path="/league/:href/:tab?" back={this.goBack} />
+            <Team path="/team/:href" back={this.goBack} />
+            <Club path="/club/:id" back={this.goBack} />
             <Player path="/player/:href/:tab?" back={this.goBack} />
             <Game path="/game/:href?" back={this.goBack} />
             <About path="/about" />

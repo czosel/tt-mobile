@@ -3,7 +3,8 @@ const map = {
   leaguePage: 'assoc',
   teamPortrait: 'team',
   playerPortrait: 'player',
-  groupMeetingReport: 'game'
+  groupMeetingReport: 'game',
+  clubMeetingReport: 'game'
 }
 
 /**

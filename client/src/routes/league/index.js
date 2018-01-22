@@ -21,8 +21,8 @@ export default class League extends Component {
     route(clientHref(this.props.href, tab))
   }
 
-  render({ pending, rejected, data, tab }) {
-    if (pending) return <LoadingPage />
+  render({ pending, rejected, back, data, tab }) {
+    if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
 
     const { league, clubs, chunks, breadcrumbs } = data
@@ -37,7 +37,7 @@ export default class League extends Component {
       )
     return (
       <div class={style.profile}>
-        <Header breadcrumb={breadcrumbs[0]} />
+        <Header back={back} breadcrumb={breadcrumbs[0]} />
         <Container>
           {clubs.length > 0 ? (
             <Tabs active={tab} onChange={this.handleChange}>
@@ -48,6 +48,9 @@ export default class League extends Component {
             <span />
           )}
           <h1 class="title">{league}</h1>
+          <h2 class="subtitle">
+            <a href={clientHref(breadcrumbs[0].href)}>{breadcrumbs[0].name}</a>
+          </h2>
           {content}
         </Container>
       </div>

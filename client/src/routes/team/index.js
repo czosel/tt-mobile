@@ -13,27 +13,20 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.team', 'href'] })
 export default class Team extends Component {
-  render({ pending, rejected, data }) {
-    if (pending) return <LoadingPage />
+  render({ pending, rejected, back, data }) {
+    if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
 
     const { club, clubId, players, location, name, games, breadcrumbs } = data
     const link = 'https://maps.google.com/?q=' + location
     return (
       <div>
-        <Header breadcrumb={breadcrumbs[1]} />
+        <Header breadcrumb={breadcrumbs[1]} back={back} />
         <Container>
           <h1 class="title">{name}</h1>
-          <Table>
-            <tbody>
-              <LinkRow href={clientHref({ clubId })}>
-                <td>{club}</td>
-                <td class="thin">
-                  <i class="icon-right-open" />
-                </td>
-              </LinkRow>
-            </tbody>
-          </Table>
+          <h2 class="subtitle">
+            <a href={clientHref(breadcrumbs[1].href)}>{breadcrumbs[1].name}</a>
+          </h2>
           <p>
             <a href={link}>
               <i class="icon-location" style="font-size:1.5em" />
@@ -67,6 +60,16 @@ export default class Team extends Component {
                   </td>
                 </LinkRow>
               ))}
+            </tbody>
+          </Table>
+          <Table>
+            <tbody>
+              <LinkRow href={clientHref({ clubId })}>
+                <td>Weitere Mannschaften von {club}</td>
+                <td class="thin">
+                  <i class="icon-right-open" />
+                </td>
+              </LinkRow>
             </tbody>
           </Table>
           <h2 class="subtitle">Spielplan</h2>

@@ -15,6 +15,12 @@ export default function model() {
       game: get('game'),
       assocHistory(step) {
         return fetch(`${API_ORIGIN}/assocHistory?step=${step}`).then(asJson)
+      },
+      club(id) {
+        return fetch(`${API_ORIGIN}/club/${id}`).then(asJson)
+      },
+      clubTeams(id) {
+        return fetch(`${API_ORIGIN}/club-teams/${id}`).then(asJson)
       }
     }
   }

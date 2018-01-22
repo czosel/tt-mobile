@@ -6,6 +6,13 @@ import clientHref from '../../lib/link'
 
 const baseUrl = 'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa'
 
+const getClickTTPath = path => {
+  if (path.indexOf('/club/') > -1) {
+    return path.replace('/club/', '/clubInfoDisplay?club=')
+  }
+  return decodeURIComponent(path.split('/').filter(s => s.includes('%2F'))[0])
+}
+
 export default class Header extends Component {
   state = {
     menuOpen: false
@@ -26,14 +33,14 @@ export default class Header extends Component {
       >
         <div class="container">
           <div class={style.truncate + ' navbar-brand'} id="navbar">
-            {breadcrumb ? (
-              <Link class="navbar-item" href={clientHref(breadcrumb.href)}>
-                <strong>❮ {breadcrumb.name}</strong>
-              </Link>
-            ) : back ? (
+            {back ? (
               <a class="navbar-item" onClick={back}>
                 <strong>❮ Zurück</strong>
               </a>
+            ) : breadcrumb ? (
+              <Link class="navbar-item" href={clientHref(breadcrumb.href)}>
+                <strong>❮ {breadcrumb.name}</strong>
+              </Link>
             ) : !loading ? (
               <Link class="navbar-item" href="/">
                 <strong>
@@ -56,9 +63,7 @@ export default class Header extends Component {
             <div class="navbar-end">
               <Match>
                 {({ path }) => {
-                  const clickTTPath = decodeURIComponent(
-                    path.split('/').filter(s => s.includes('%2F'))[0]
-                  )
+                  const clickTTPath = getClickTTPath(path)
                   return (
                     clickTTPath.length > 10 && (
                       <a
