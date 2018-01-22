@@ -11,15 +11,18 @@ import LinkRow from '../../components/link-row'
 
 @wire('model', { data: ['api.assoc', 'href'] })
 export default class Assoc extends Component {
-  render({ pending, rejected, data }) {
-    if (pending) return <LoadingPage />
+  render({ pending, rejected, back, data }) {
+    if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
     const { title, leagues } = data
     return (
       <div class={style.home}>
-        <Header />
+        <Header back={back} />
         <Container>
           <h1 class="title">{title}</h1>
+          <h2 class="subtitle">
+            <a href="/">TT-mobile</a>
+          </h2>
           <Table>
             <tbody>
               {leagues.map(league => (

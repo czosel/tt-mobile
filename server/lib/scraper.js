@@ -1,3 +1,4 @@
+const { parse } = require('url')
 const util = require('util')
 const R = require('ramda')
 const { resolve } = require('url')
@@ -47,6 +48,17 @@ const splitTitle = title => {
         .map(i => i.trim())
         .filter(i => !!i)
     : []
+}
+
+const asChunks = games => {
+  const chunks = []
+  games.forEach(g => {
+    if (g.date !== '') {
+      chunks.push({ date: g.date, games: [] })
+    }
+    chunks[chunks.length - 1].games.push(g)
+  })
+  return chunks
 }
 
 function assocHistory({ step }) {
@@ -156,20 +168,13 @@ function league({ url }) {
       .data(data => {
         const titleParts = splitTitle(data.title)
         const games = toArray(data.games).map(simplifyLinks)
-        const chunks = []
-        games.forEach(g => {
-          if (g.date !== '') {
-            chunks.push({ date: g.date, games: [] })
-          }
-          chunks[chunks.length - 1].games.push(g)
-        })
 
         res({
           assoc: titleParts[0],
           league: titleParts[1],
           title: data.title,
           breadcrumbs: extractBreadcrumbs(data),
-          chunks,
+          chunks: asChunks(games),
           clubs: toArray(data.clubs)
             .map(club => ({
               ...club,
@@ -181,7 +186,70 @@ function league({ url }) {
   })
 }
 
-function club({ url }) {
+function club(id) {
+  return new Promise((res, rej) => {
+    osmosis
+      .get(
+        resolve(
+          host,
+          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/clubInfoDisplay?club=${id}`
+        )
+      )
+      .find('#content')
+      .set({
+        matches: osmosis
+          .find('#content-row1 table.result-set tr:has(td:nth-child(11) a)')
+          .set({
+            date: 'td:nth-child(2)',
+            home: 'td:nth-child(7)',
+            guest: 'td:nth-child(9)',
+            href: 'td:nth-child(11) a@href',
+            result: 'td:nth-child(11)'
+          })
+      })
+      .error(R.pipe(error('club'), rej))
+      .data(data => {
+        res({
+          chunks: asChunks(toArray(data.matches).map(simplifyLinks))
+        })
+      })
+  })
+}
+
+function clubTeams(id) {
+  return new Promise((res, rej) => {
+    osmosis
+      .get(
+        resolve(
+          host,
+          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/clubTeams?club=${id}`
+        )
+      )
+      .find('#content')
+      .set({
+        title: '#content-row1 h1',
+        teams: osmosis
+          .find('#content-row1 table.result-set tr:has(td:nth-child(2) a)')
+          .set({
+            name: 'td:nth-child(1)',
+            league: 'td:nth-child(2)',
+            href: 'td:nth-child(2) a@href',
+            captain: 'td:nth-child(3)',
+            rank: 'td:nth-child(4)',
+            points: 'td:nth-child(5)'
+          })
+      })
+      .error(R.pipe(error('clubTeams'), rej))
+      .data(data => {
+        res({
+          name: splitTitle(data.title)[0],
+          teams: toArray(data.teams).map(simplifyLinks)
+        })
+      })
+  })
+}
+
+function team({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -236,6 +304,7 @@ function club({ url }) {
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],
+          clubId: Number(parse(data.clubHref, true).query.club),
           players: toArray(data.players).map(simplifyLinks)
         })
       })
@@ -378,7 +447,9 @@ module.exports = {
   assocHistory,
   assoc,
   league,
+  team,
   club,
+  clubTeams,
   game,
   player
 }

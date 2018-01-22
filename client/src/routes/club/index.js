@@ -6,92 +6,71 @@ import clientHref from '../../lib/link'
 import Header from '../../components/header'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
+import Loading from '../../components/loading'
 import ErrorPage from '../../components/error-page'
-import LinkRow from '../../components/link-row'
+import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
-import EloScore from '../../components/elo-score'
+import Schedule from '../../components/schedule'
 
-@wire('model', { data: ['api.club', 'href'] })
+@wire('model', {
+  club: ['api.club', 'id'],
+  clubTeams: ['api.clubTeams', 'id']
+})
 export default class Club extends Component {
-  render({ pending, rejected, data }) {
-    if (pending) return <LoadingPage />
-    if (rejected) return <ErrorPage info={rejected} />
+  render({ pending, rejected, back, club, clubTeams }) {
+    if (pending && Object.keys(pending).length >= 2)
+      return <LoadingPage back={back} />
+    if (rejected && Object.keys(rejected).length > 0)
+      return <ErrorPage info={rejected} />
 
-    const { players, location, name, games, breadcrumbs } = data
-    const link = 'https://maps.google.com/?q=' + location
     return (
       <div>
-        <Header breadcrumb={breadcrumbs[1]} />
+        <Header back={back} />
         <Container>
-          <h1 class="title">{name}</h1>
-          <p>
-            <a href={link}>
-              <i class="icon-location" style="font-size:1.5em" />
-              {location}
-            </a>
-          </p>
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th />
-                <th class="center optional">Eins.</th>
-                <th />
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {players.map(player => (
-                <LinkRow
-                  key={player.href}
-                  href={`/player/${encodeURIComponent(player.href)}`}
-                >
-                  <td>{player.name}</td>
-                  <td class="center thin">
-                    <EloScore value={player.classification} />
-                  </td>
-                  <td class="center optional">{player.appearances}</td>
-                  <td class="center">{player.balance}</td>
-                  <td class="thin">
-                    <i class="icon-right-open" />
-                  </td>
-                </LinkRow>
-              ))}
-            </tbody>
-          </Table>
-          <h2 class="subtitle">Spielplan</h2>
-          <Table>
-            <thead>
-              <tr>
-                <th>Gegner</th>
-                <th>Spiele</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {games.map(({ href, date, opponent, isHome, result }) => (
-                <LinkRow key={href} href={clientHref(href)}>
-                  <td>
-                    {opponent}
-                    <div class="tags has-addons">
-                      {isHome ? (
-                        <span class="tag is-success">Zuhause</span>
-                      ) : (
-                        <span class="tag is-warning">Auswärts</span>
-                      )}
-                      <span class="tag">{date}</span>
-                    </div>
-                  </td>
-                  <td class="result center">{result || '-:-'}</td>
-                  <td class="thin">
-                    {result && <i class="icon-right-open" />}
-                  </td>
-                </LinkRow>
-              ))}
-            </tbody>
-          </Table>
+          {pending && pending.clubTeams ? (
+            <Loading />
+          ) : (
+            <Teams {...clubTeams} />
+          )}
+          {pending && pending.club ? (
+            <Loading />
+          ) : (
+            <div>
+              <h2>Spielplan (Auszug)</h2>
+              <Schedule {...club} />
+            </div>
+          )}
         </Container>
       </div>
     )
   }
 }
+
+const Teams = ({ name, teams }) => (
+  <div>
+    <h1 class="title">{name}</h1>
+    <h2 class="subtitle">Mannschaften</h2>
+    <Table>
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Liga</th>
+          <th class="center optional">Rang</th>
+          <th />
+        </tr>
+      </thead>
+      <tbody>
+        {teams.map(team => (
+          <LinkRow key={team.href} href={clientHref(team.href)}>
+            <td>{team.name}</td>
+            <td>{team.league}</td>
+            <td class="center optional">{team.rank}</td>
+            <td class="thin">
+              <i class="icon-right-open" />
+            </td>
+          </LinkRow>
+        ))}
+      </tbody>
+    </Table>
+  </div>
+)

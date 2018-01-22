@@ -10,7 +10,15 @@ const app = express()
 app.use(compression())
 app.use(cors())
 
-const endpoints = ['assocHistory', 'assoc', 'league', 'club', 'game', 'player']
+const endpoints = [
+  'assocHistory',
+  'assoc',
+  'league',
+  'team',
+  'club',
+  'game',
+  'player'
+]
 
 endpoints.forEach(path => {
   app.get(`/${path}`, async (req, res) => {
@@ -26,6 +34,22 @@ endpoints.forEach(path => {
       console.error(e)
     }
   })
+})
+
+app.get('/club/:id', async ({ params }, res) => {
+  try {
+    res.json(await scraper.club(params.id))
+  } catch (e) {
+    console.error(e)
+  }
+})
+
+app.get('/club-teams/:id', async ({ params }, res) => {
+  try {
+    res.json(await scraper.clubTeams(params.id))
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 app.listen(3020, function() {

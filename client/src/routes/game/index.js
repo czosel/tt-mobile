@@ -11,7 +11,7 @@ import EloScore from '../../components/elo-score'
 @wire('model', { data: ['api.game', 'href'] })
 export default class Game extends Component {
   render({ pending, rejected, back, data }) {
-    if (pending) return <LoadingPage />
+    if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
 
     const { matches, summary, home, guest, league, date, time } = data

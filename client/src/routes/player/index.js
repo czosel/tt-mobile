@@ -22,7 +22,7 @@ export default class Player extends Component {
     if (pending)
       return (
         <div>
-          <Loading />
+          <Loading center={true} />
           <Wrapper tab={tab} href={this.props.href} back={back} />
         </div>
       )
