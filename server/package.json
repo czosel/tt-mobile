@@ -6,7 +6,8 @@
   "scripts": {
     "start": "babel-watch lib/index.js",
     "build": "babel lib -d dist",
-    "test": "tape-watch -r babel-register -c ./**/*.test.js | tap-spec"
+    "watch": "tape-watch -r babel-register -c ./**/*.test.js | tap-spec",
+    "test": "node ./**/*.test.js"
   },
   "keywords": [],
   "author": "",

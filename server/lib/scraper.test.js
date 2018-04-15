@@ -107,9 +107,9 @@ test('limited league', async t => {
     url:
       'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=201044'
   })
-  t.notOk(response.clubs, '')
-  t.equal(typeof response.games[0].home, 'string')
-  t.equal(typeof response.games[0].guest, 'string')
-  t.ok(isUrl(response.games[0].href))
+  t.deepEqual(response.clubs, [])
+  t.equal(typeof response.chunks[0].games[0].home, 'string')
+  t.equal(typeof response.chunks[0].games[0].guest, 'string')
+  t.ok(isUrl(response.chunks[0].games[0].href))
   t.end()
 })
