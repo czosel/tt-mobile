@@ -147,10 +147,10 @@ function league({ url }) {
           .set({
             date: 'td:nth-child(2)',
             time: 'td:nth-child(3)',
-            home: 'td:nth-child(6)',
-            guest: 'td:nth-child(8)',
-            result: 'td:nth-child(10)',
-            href: 'td:nth-child(10) a@href'
+            home: 'td[nowrap]:nth(4)',
+            guest: 'td[nowrap]:nth(5)',
+            result: 'td[nowrap]:nth(6)',
+            href: 'td[nowrap]:nth(6) a@href'
           }),
         clubs: osmosis
           .find(
@@ -298,8 +298,8 @@ function team({ url }) {
         res({
           ...data,
           games,
-          location: splitTitle(data.location)
-            [3].split('<br>')
+          location: splitTitle(data.location)[3]
+            .split('<br>')
             .join(', '),
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
@@ -369,16 +369,23 @@ function player({ url }) {
       .find('#content')
       .set({
         title: '#content-row1 h1',
-        classification: 'table.result-set:first tr:nth-child(4) td:last',
+        classification:
+          '#content-row1 > table.result-set:first tr:nth-child(4) td:last',
         teams: osmosis
-          .find('table.result-set:nth(2) tr:nth-child(2) td a')
+          .find('table.result-set table.result-set tr:nth-child(2) > td a')
           .set('name')
           .set({
             href: '@href'
           }),
-        balance: 'table.result-set:nth(2) tr:nth-child(3) > td:last',
+        balances: osmosis
+          .find(
+            'table.result-set table.result-set tr:last-child > td:last-child'
+          )
+          .set('balance'),
         singles: osmosis
-          .find('table.result-set:nth(3) tr:has(td:nth-child(3) a)')
+          .find(
+            '#content-row1 > table.result-set:nth(2) tr:has(td:nth-child(3) a)'
+          )
           .set({
             opponent: 'td:nth-child(3)',
             href: 'td:nth-child(3) a@href',
@@ -386,7 +393,9 @@ function player({ url }) {
             sets: 'td:nth-child(6)'
           }),
         doubles: osmosis
-          .find('table.result-set:last tr:has(td:nth-child(3) a)')
+          .find(
+            '#content-row1 > table.result-set:last tr:has(td:nth-child(3) a)'
+          )
           .set({
             partner: 'td:nth-child(3)',
             partnerHref: 'td:nth-child(3) a@href',
@@ -424,7 +433,9 @@ function player({ url }) {
           breadcrumbs: extractBreadcrumbs(data),
           teams: arrayify(data.teams).map(simplifyLinks),
           balance: unique(
-            data.balance
+            arrayify(data.balances)
+              .map(b => b.balance)
+              .join('\n')
               .split('\n')
               .filter(str => !!str.trim())
               .map(str => ({
