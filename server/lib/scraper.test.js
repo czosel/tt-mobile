@@ -101,7 +101,7 @@ test('typical league', async t => {
   t.end()
 })
 
-test('limited league', async t => {
+test.skip('limited league', async t => {
   // Nati A Playoff 1/4 Final
   const response = await scraper.league({
     url:

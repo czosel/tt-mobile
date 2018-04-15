@@ -147,10 +147,10 @@ function league({ url }) {
           .set({
             date: 'td:nth-child(2)',
             time: 'td:nth-child(3)',
-            home: 'td[nowrap]:nth(4)',
-            guest: 'td[nowrap]:nth(5)',
-            result: 'td[nowrap]:nth(6)',
-            href: 'td[nowrap]:nth(6) a@href'
+            home: 'td:nth-child(6)',
+            guest: 'td:nth-child(8)',
+            result: 'td:nth-child(10)',
+            href: 'td:nth-child(10) a@href'
           }),
         clubs: osmosis
           .find(
