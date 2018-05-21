@@ -47,6 +47,7 @@ const splitTitle = title => {
         .split('\n')
         .map(i => i.trim())
         .filter(i => !!i)
+        .filter(i => i != '-')
     : []
 }
 
@@ -324,7 +325,7 @@ function game({ url }) {
       })
       .find('#content')
       .set({
-        title: '#content-row1 h1',
+        title: '#content-row1 h1:html',
         matches: osmosis
           .find('table.result-set tr:has(td:nth-child(2) a)')
           .set({
@@ -344,16 +345,17 @@ function game({ url }) {
       })
       .error(R.pipe(error('club'), rej))
       .data(data => {
-        const split = splitTitle(data.title)
+        const split = data.title.split('<br>').map(i => i.trim())
+        const lastParts = splitTitle(split[2])
         res({
           ...data,
           breadcrumbs: extractBreadcrumbs(data),
           assoc: split[0],
           league: split[1],
-          home: split[2],
-          guest: split[4].split(',')[0],
-          date: split[4].split(',')[1].trim(),
-          time: split[5]
+          home: lastParts[0],
+          guest: lastParts[1],
+          date: lastParts[2].split(',')[1],
+          time: lastParts[3]
         })
       })
   })
