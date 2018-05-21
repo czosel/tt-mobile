@@ -14,26 +14,26 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-eslint": "^8.0.3",
-    "eslint": "^4.12.1",
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "eslint-plugin-react": "^7.5.1",
-    "if-env": "^1.0.0",
-    "node-sass": "^4.7.2",
-    "preact-cli": "^2.1.0",
-    "prettier": "^1.8.2",
-    "sass-loader": "^6.0.6"
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.8.2",
+    "if-env": "^1.0.4",
+    "node-sass": "^4.9.0",
+    "preact-cli": "^2.2.1",
+    "prettier": "^1.12.1",
+    "sass-loader": "^6.0.7"
   },
   "dependencies": {
-    "bulma": "^0.6.1",
+    "bulma": "^0.6.2",
     "halogen": "^0.2.0",
-    "preact": "^8.2.6",
-    "preact-compat": "^3.17.0",
-    "preact-context-provider": "^1.0.0",
+    "preact": "^8.2.9",
+    "preact-compat": "^3.18.0",
+    "preact-context-provider": "^1.1.1",
     "preact-helmet": "^4.0.0-alpha-3",
     "preact-router": "^2.6.0",
-    "rambda": "^1.0.5",
+    "rambda": "^1.1.1",
     "wiretie": "^1.0.3"
   }
 }
