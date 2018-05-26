@@ -10,29 +10,60 @@ import Loading from '../../components/loading'
 import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import ErrorPage from '../../components/error-page'
-import EloChart from '../../components/elo-chart'
 import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
 import EloScore from '../../components/elo-score'
+import PlayerOverview from '../../components/player-overview'
 
-@wire('model', { data: ['api.player', 'href'] })
+@wire('model', { data: ['api.player', 'href'], me: ['me'] })
 export default class Player extends Component {
-  render({ pending, rejected, data, tab, back }) {
+  setMe = () => {
+    localStorage.setItem('me', this.props.href)
+    route('/')
+  }
+
+  render({ href, pending, rejected, data, me, tab, back, embedded }) {
     tab = tab || 'overview'
     if (pending)
       return (
         <div>
           <Loading center={true} />
-          <Wrapper tab={tab} href={this.props.href} back={back} />
+          <Wrapper
+            tab={tab}
+            href={this.props.href}
+            back={back}
+            embedded={embedded}
+          />
         </div>
       )
     if (rejected) return <ErrorPage info={rejected} />
 
-    const { balance, classification, singles, doubles, elo, teams, name } = data
+    const {
+      balance,
+      classification,
+      singles,
+      doubles,
+      elo,
+      club,
+      clubId,
+      teams,
+      name
+    } = data
 
     const content =
       tab === 'overview' ? (
-        <Overview {...{ balance, classification, elo, teams }} />
+        <PlayerOverview
+          {...{
+            balance,
+            classification,
+            elo,
+            club,
+            clubId,
+            teams,
+            me,
+            href
+          }}
+        />
       ) : tab === 'single' ? (
         <Single {...{ singles }} />
       ) : (
@@ -40,22 +71,28 @@ export default class Player extends Component {
       )
 
     return (
-      <Wrapper tab={tab} href={this.props.href} back={back}>
+      <Wrapper tab={tab} href={this.props.href} back={back} embedded={embedded}>
+        {!me && (
+          <button class="button is-pulled-right" onClick={this.setMe}>
+            Das bin ich!
+          </button>
+        )}
         <h1 class="title">{name}</h1>
+
         {content}
       </Wrapper>
     )
   }
 }
 
-function Wrapper({ tab, href, back, children }) {
+function Wrapper({ tab, href, back, children, embedded }) {
   const handleChange = tab => {
     route(clientHref(href, tab), true)
   }
 
   return (
     <div>
-      <Header back={back} />
+      {!embedded && <Header back={back} />}
       <Container>
         <Tabs active={tab} onChange={handleChange}>
           <Tab name="overview">Übersicht</Tab>
@@ -64,50 +101,6 @@ function Wrapper({ tab, href, back, children }) {
         </Tabs>
         {children}
       </Container>
-    </div>
-  )
-}
-
-function Overview({ balance, classification, elo, teams }) {
-  return (
-    <div>
-      <Table>
-        <tr>
-          <td>Klassierung</td>
-          <td>
-            <EloScore value={classification} />
-          </td>
-        </tr>
-        <tr>
-          <td>Klassierung (aktuell)</td>
-          <td>
-            <EloScore value={elo.start} /> ({elo.start})
-          </td>
-        </tr>
-      </Table>
-      <EloChart data={elo.data} />
-      <h2 class="subtitle">Mannschaftseinsätze</h2>
-      <Table>
-        <tbody>
-          {teams.map(({ name, href }) => (
-            <LinkRow key={href} href={clientHref(href)}>
-              <td>{name}</td>
-              <td class="thin">
-                <i class="icon-right-open" />
-              </td>
-            </LinkRow>
-          ))}
-        </tbody>
-      </Table>
-      <h2 class="subtitle">Einzelbilanzen</h2>
-      <Table>
-        {balance.map(({ team, data }) => (
-          <tr key={team}>
-            <td>{team}</td>
-            <td>{data}</td>
-          </tr>
-        ))}
-      </Table>
     </div>
   )
 }

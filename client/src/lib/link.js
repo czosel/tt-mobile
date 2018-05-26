@@ -4,6 +4,7 @@ const map = {
   teamPortrait: 'team',
   playerPortrait: 'player',
   groupMeetingReport: 'game',
+  clubInfoDisplay: 'club',
   clubMeetingReport: 'game'
 }
 
