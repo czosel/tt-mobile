@@ -82,7 +82,13 @@ export default class Home extends Component {
           ) : (
             <Card name="Neu: TT-mobile personalisieren">
               Um die App zu personalisieren, öffne deine Spieler-Seite und wähle
-              &quot;Das bin ich!&quot;
+              &quot;Das bin ich!&quot;<br />
+              <br />
+              <span class="is-size-7">
+                Hinweis zum Datenschutz: Die Personalisierung wird
+                ausschliesslich auf deinem Gerät gespeichert und nicht zum
+                Server gesendet.
+              </span>
             </Card>
           )}
           <br />
