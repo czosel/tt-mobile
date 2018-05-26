@@ -61,6 +61,8 @@ const asChunks = games => {
   return chunks
 }
 
+const getClubId = clubHref => Number(parse(clubHref, true).query.club)
+
 function assocHistory({ step }) {
   const url =
     '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/championshipArchive?federation=STT'
@@ -304,7 +306,7 @@ function team({ url }) {
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],
-          clubId: Number(parse(data.clubHref, true).query.club),
+          clubId: getClubId(data.clubHref),
           players: toArray(data.players).map(simplifyLinks)
         })
       })
@@ -369,6 +371,9 @@ function player({ url }) {
       .find('#content')
       .set({
         title: '#content-row1 h1',
+        club: '#content-row1 > table.result-set:first tr:first-child td:last a',
+        clubHref:
+          '#content-row1 > table.result-set:first tr:first-child td:last a@href',
         classification:
           '#content-row1 > table.result-set:first tr:nth-child(4) td:last',
         teams: osmosis
@@ -430,6 +435,7 @@ function player({ url }) {
         res({
           ...data,
           name: splitTitle(data.title)[1],
+          clubId: getClubId(data.clubHref),
           breadcrumbs: extractBreadcrumbs(data),
           teams: arrayify(data.teams).map(simplifyLinks),
           balance: unique(

@@ -5,13 +5,21 @@ const get = endpoint => href =>
   fetch(`${API_ORIGIN}/${endpoint}?url=${encodeURIComponent(href)}`).then(
     asJson
   )
+
 export default function model() {
   return {
+    me() {
+      return localStorage.getItem('me')
+    },
     api: {
       assoc: get('assoc'),
       league: get('league'),
       team: get('team'),
       player: get('player'),
+      me: () => {
+        const href = localStorage.getItem('me')
+        return href ? get('player')(href) : null
+      },
       game: get('game'),
       assocHistory(step) {
         return fetch(`${API_ORIGIN}/assocHistory?step=${step}`).then(asJson)

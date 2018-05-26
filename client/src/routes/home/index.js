@@ -1,4 +1,5 @@
 import { Component } from 'preact'
+import wire from 'wiretie'
 import style from './style'
 
 import clientHref from '../../lib/link'
@@ -6,6 +7,10 @@ import clientHref from '../../lib/link'
 import Header from '../../components/header'
 import Container from '../../components/container'
 import CardList from '../../components/card-list'
+import Card from '../../components/card'
+import PlayerOverview from '../../components/player-overview'
+import LoadingPage from '../../components/loading-page'
+import ErrorPage from '../../components/error-page'
 
 const spaceToPlus = str => str.replace(' ', '+')
 
@@ -54,12 +59,33 @@ const addLinks = name => ({
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
 
+@wire('model', { data: ['api.me'] })
 export default class Home extends Component {
-  render() {
+  onClose = () => {
+    localStorage.removeItem('me')
+    this.setState({
+      closed: true
+    })
+  }
+
+  render({ pending, rejected, data }, { closed }) {
+    if (pending) return <LoadingPage />
+    if (rejected) return <ErrorPage info={rejected} />
     return (
       <div class={style.home}>
         <Header />
         <Container>
+          {data && !closed ? (
+            <Card name={data.name} closeable="true" onClose={this.onClose}>
+              <PlayerOverview {...data} hidePersonal="true" />
+            </Card>
+          ) : (
+            <Card name="Neu: TT-mobile personalisieren">
+              Um die App zu personalisieren, öffne deine Spieler-Seite und wähle
+              &quot;Das bin ich!&quot;
+            </Card>
+          )}
+          <br />
           <CardList
             name="Punktspiele"
             content={assocs}
