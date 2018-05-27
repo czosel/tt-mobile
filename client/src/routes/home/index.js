@@ -8,9 +8,10 @@ import Header from '../../components/header'
 import Container from '../../components/container'
 import CardList from '../../components/card-list'
 import Card from '../../components/card'
-import PlayerOverview from '../../components/player-overview'
+import LinkRow from '../../components/link-row/'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
+import Table from '../../components/table'
 
 const spaceToPlus = str => str.replace(' ', '+')
 
@@ -59,7 +60,7 @@ const addLinks = name => ({
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
 
-@wire('model', { data: ['api.me'] })
+@wire('model', { data: ['api.me'], me: ['me'] })
 export default class Home extends Component {
   onClose = () => {
     localStorage.removeItem('me')
@@ -68,16 +69,39 @@ export default class Home extends Component {
     })
   }
 
-  render({ pending, rejected, data }, { closed }) {
+  render({ pending, rejected, data, me }, { closed }) {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />
+
+    const { club, clubId, teams } = data
     return (
       <div class={style.home}>
         <Header />
         <Container>
           {data && !closed ? (
             <Card name={data.name} closeable="true" onClose={this.onClose}>
-              <PlayerOverview {...data} hidePersonal="true" />
+              <Table>
+                <LinkRow href={clientHref(me)}>
+                  <td>Spielerprofil</td>
+                  <td class="thin">
+                    <i class="icon-right-open" />
+                  </td>
+                </LinkRow>
+                <LinkRow href={clientHref({ clubId })}>
+                  <td>{club}</td>
+                  <td class="thin">
+                    <i class="icon-right-open" />
+                  </td>
+                </LinkRow>
+                {teams.map(({ name, href }) => (
+                  <LinkRow key={href} href={clientHref(href)}>
+                    <td>{name}</td>
+                    <td class="thin">
+                      <i class="icon-right-open" />
+                    </td>
+                  </LinkRow>
+                ))}
+              </Table>
             </Card>
           ) : (
             <Card name="Neu: TT-mobile personalisieren">

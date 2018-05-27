@@ -18,7 +18,7 @@ export default function model() {
       player: get('player'),
       me: () => {
         const href = localStorage.getItem('me')
-        return href ? get('player')(href) : null
+        return href ? get('me')(href) : null
       },
       game: get('game'),
       assocHistory(step) {

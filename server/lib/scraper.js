@@ -88,7 +88,12 @@ function assocHistory({ step }) {
             href: '@href'
           })
       })
-      .error(R.pipe(error('assocHistory'), rej))
+      .error(
+        R.pipe(
+          error('assocHistory'),
+          rej
+        )
+      )
       .data(({ regular, trophy }) => {
         res({
           regular: toArray(regular).map(simplifyLinks),
@@ -110,7 +115,12 @@ function assoc({ url }) {
           href: 'a@href'
         })
       })
-      .error(R.pipe(error('assoc'), rej))
+      .error(
+        R.pipe(
+          error('assoc'),
+          rej
+        )
+      )
       .data(({ title, leagues }) => {
         res({
           title: splitTitle(title)[0],
@@ -167,7 +177,12 @@ function league({ url }) {
             score: 'td:last-child'
           })
       })
-      .error(R.pipe(error('league'), rej))
+      .error(
+        R.pipe(
+          error('league'),
+          rej
+        )
+      )
       .data(data => {
         const titleParts = splitTitle(data.title)
         const games = toArray(data.games).map(simplifyLinks)
@@ -210,7 +225,12 @@ function club(id) {
             result: 'td:nth-child(11)'
           })
       })
-      .error(R.pipe(error('club'), rej))
+      .error(
+        R.pipe(
+          error('club'),
+          rej
+        )
+      )
       .data(data => {
         res({
           chunks: asChunks(toArray(data.matches).map(simplifyLinks))
@@ -242,7 +262,12 @@ function clubTeams(id) {
             points: 'td:nth-child(5)'
           })
       })
-      .error(R.pipe(error('clubTeams'), rej))
+      .error(
+        R.pipe(
+          error('clubTeams'),
+          rej
+        )
+      )
       .data(data => {
         res({
           name: splitTitle(data.title)[0],
@@ -289,7 +314,12 @@ function team({ url }) {
             href: 'td:nth-child(10) a@href'
           })
       })
-      .error(R.pipe(error('club'), rej))
+      .error(
+        R.pipe(
+          error('club'),
+          rej
+        )
+      )
       .data(data => {
         const games = toArray(data.games)
           .map(simplifyLinks)
@@ -345,7 +375,12 @@ function game({ url }) {
           game: 'td:last'
         })
       })
-      .error(R.pipe(error('club'), rej))
+      .error(
+        R.pipe(
+          error('club'),
+          rej
+        )
+      )
       .data(data => {
         const split = data.title.split('<br>').map(i => i.trim())
         const lastParts = splitTitle(split[2])
@@ -424,7 +459,12 @@ function player({ url }) {
               })
           })
       })
-      .error(R.pipe(error('club'), rej))
+      .error(
+        R.pipe(
+          error('club'),
+          rej
+        )
+      )
       .data(data => {
         let current = parseInt(data.elo.start)
         const start = current
@@ -461,6 +501,62 @@ function player({ url }) {
   })
 }
 
+function me({ url }) {
+  return new Promise((res, rej) => {
+    osmosis
+      .get(resolve(host, url))
+      .set({
+        breadcrumbs: findBreadcrumbs(osmosis)
+      })
+      .find('#content')
+      .set({
+        title: '#content-row1 h1',
+        club: '#content-row1 > table.result-set:first tr:first-child td:last a',
+        clubHref:
+          '#content-row1 > table.result-set:first tr:first-child td:last a@href',
+        classification:
+          '#content-row1 > table.result-set:first tr:nth-child(4) td:last',
+        teams: osmosis
+          .find('table.result-set table.result-set tr:nth-child(2) > td a')
+          .set('name')
+          .set({
+            href: '@href'
+          }),
+        balances: osmosis
+          .find(
+            'table.result-set table.result-set tr:last-child > td:last-child'
+          )
+          .set('balance')
+      })
+      .error(
+        R.pipe(
+          error('club'),
+          rej
+        )
+      )
+      .data(data => {
+        res({
+          ...data,
+          name: splitTitle(data.title)[1],
+          clubId: getClubId(data.clubHref),
+          breadcrumbs: extractBreadcrumbs(data),
+          teams: arrayify(data.teams).map(simplifyLinks),
+          balance: unique(
+            arrayify(data.balances)
+              .map(b => b.balance)
+              .join('\n')
+              .split('\n')
+              .filter(str => !!str.trim())
+              .map(str => ({
+                team: str.substr(0, str.indexOf(':')).trim(),
+                data: str.substr(str.indexOf(':') + 1).trim()
+              }))
+          )
+        })
+      })
+  })
+}
+
 module.exports = {
   arrayify,
   assocHistory,
@@ -470,5 +566,6 @@ module.exports = {
   club,
   clubTeams,
   game,
-  player
+  player,
+  me
 }
