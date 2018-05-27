@@ -74,6 +74,23 @@ test('player response', async t => {
   t.end()
 })
 
+test('short player response', async t => {
+  const player = await scraper.me({
+    url:
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
+  })
+  t.ok(isClass(player.classification), 'classification')
+  t.equal(typeof player.title, 'string', 'title')
+  t.equal(typeof player.balance[0].team, 'string', 'balance:team')
+  t.equal(typeof player.balance[0].data, 'string', 'balance:data')
+
+  t.ok(player.teams)
+  t.ok(isUrl(player.teams[0].href))
+  t.ok(player.teams[0].name)
+
+  t.end()
+})
+
 test('game', async t => {
   // Royal Bern
   const response = await scraper.game({

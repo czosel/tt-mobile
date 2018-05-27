@@ -17,7 +17,8 @@ const endpoints = [
   'team',
   'club',
   'game',
-  'player'
+  'player',
+  'me'
 ]
 
 endpoints.forEach(path => {
