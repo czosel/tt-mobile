@@ -285,41 +285,42 @@ function team({ url }) {
         breadcrumbs: findBreadcrumbs(osmosis)
       })
       .find('#content')
-      .set({
-        title: '#content-row1 h1',
-        club: '#content-row1 table.result-set tr:first-child td a',
-        clubHref: '#content-row1 table.result-set tr:first-child td a@href',
-        location:
-          '#content-row1 table.result-set tr:first-child td:last-child:html',
-        players: osmosis
-          .find('#content-row2 table.result-set tr:has(td:nth-child(2) a)')
-          .set({
-            name: 'td:nth-child(2)',
-            href: 'td:nth-child(2) a@href',
-            classification: 'td:nth-child(3)',
-            appearances: 'td:nth-child(5)',
-            balance: 'td:nth-child(8)'
-          }),
-        games: osmosis
-          .find(
-            `#content-row2 table.result-set:nth(1) tr:not(:first-child),
+      .do(
+        osmosis.set({
+          title: '#content-row1 h1',
+          club: '#content-row1 table.result-set tr:first-child td a',
+          clubHref: '#content-row1 table.result-set tr:first-child td a@href',
+          location:
+            '#content-row1 table.result-set tr:first-child td:last-child:html'
+        }),
+        osmosis.set({
+          players: osmosis
+            .find('#content-row2 table.result-set tr:has(td:nth-child(2) a)')
+            .set({
+              name: 'td:nth-child(2)',
+              href: 'td:nth-child(2) a@href',
+              classification: 'td:nth-child(3)',
+              appearances: 'td:nth-child(5)',
+              balance: 'td:nth-child(8)'
+            })
+        }),
+        osmosis.set({
+          games: osmosis
+            .find(
+              `#content-row2 table.result-set:nth(1) tr:not(:first-child),
              #content-row2 table.result-set:nth(0) tr:not(:first-child)`
-          )
-          .set({
-            date: 'td:nth-child(2)',
-            time: 'td:nth-child(3)',
-            home: 'td:nth-child(6)',
-            guest: 'td:nth-child(8)',
-            result: 'td:nth-child(10)',
-            href: 'td:nth-child(10) a@href'
-          })
-      })
-      .error(
-        R.pipe(
-          error('club'),
-          rej
-        )
+            )
+            .set({
+              date: 'td:nth-child(2)',
+              time: 'td:nth-child(3)',
+              home: 'td:nth-child(6)',
+              guest: 'td:nth-child(8)',
+              result: 'td:nth-child(10)',
+              href: 'td:nth-child(10) a@href'
+            })
+        })
       )
+      .error(error('club'))
       .data(data => {
         const games = toArray(data.games)
           .map(simplifyLinks)
