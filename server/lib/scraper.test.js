@@ -53,7 +53,7 @@ test('arrayify', t => {
 test('player response', async t => {
   const player = await scraper.player({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2017%2F18&person=1714709&club=33123'
   })
   t.ok(isClass(player.classification), 'classification')
   t.equal(typeof player.title, 'string', 'title')
@@ -77,7 +77,7 @@ test('player response', async t => {
 test('short player response', async t => {
   const player = await scraper.me({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2017%2F18&person=1714709&club=33123'
   })
   t.ok(isClass(player.classification), 'classification')
   t.equal(typeof player.title, 'string', 'title')
@@ -95,7 +95,7 @@ test('game', async t => {
   // Royal Bern
   const response = await scraper.game({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6358643&championship=MTTV+16%2F17&group=199330'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6371295&championship=MTTV+17%2F18&group=201630'
   })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.summary.game, 'string')
@@ -107,7 +107,7 @@ test('typical league', async t => {
   // Nationalliga A
   const response = await scraper.league({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=199224'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+17%2F18&group=201744'
   })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.clubs[0].name, 'string')

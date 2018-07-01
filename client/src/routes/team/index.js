@@ -33,35 +33,37 @@ export default class Team extends Component {
               {location}
             </a>
           </p>
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th />
-                <th class="center optional">Eins.</th>
-                <th />
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {players.map(player => (
-                <LinkRow
-                  key={player.href}
-                  href={`/player/${encodeURIComponent(player.href)}`}
-                >
-                  <td>{player.name}</td>
-                  <td class="center thin">
-                    <EloScore value={player.classification} />
-                  </td>
-                  <td class="center optional">{player.appearances}</td>
-                  <td class="center">{player.balance}</td>
-                  <td class="thin">
-                    <i class="icon-right-open" />
-                  </td>
-                </LinkRow>
-              ))}
-            </tbody>
-          </Table>
+          {players.length > 0 && (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th />
+                  <th class="center optional">Eins.</th>
+                  <th />
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {players.map(player => (
+                  <LinkRow
+                    key={player.href}
+                    href={`/player/${encodeURIComponent(player.href)}`}
+                  >
+                    <td>{player.name}</td>
+                    <td class="center thin">
+                      <EloScore value={player.classification} />
+                    </td>
+                    <td class="center optional">{player.appearances}</td>
+                    <td class="center">{player.balance}</td>
+                    <td class="thin">
+                      <i class="icon-right-open" />
+                    </td>
+                  </LinkRow>
+                ))}
+              </tbody>
+            </Table>
+          )}
           <Table>
             <tbody>
               <LinkRow href={clientHref({ clubId })}>
