@@ -2,6 +2,8 @@ const { parse } = require('url')
 const util = require('util')
 const R = require('ramda')
 const { resolve } = require('url')
+const ical = require('ical-generator')
+const moment = require('moment')
 
 const osmosis = require('osmosis')
 
@@ -277,7 +279,7 @@ function clubTeams(id) {
   })
 }
 
-function team({ url }) {
+function team({ url, format }, expressRes) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -322,6 +324,28 @@ function team({ url }) {
       )
       .error(error('club'))
       .data(data => {
+        if (format === 'ics') {
+          const cal = ical({ domain: 'tt-mobile.ch', name: data.club })
+          cal.events(
+            toArray(data.games)
+              .map(simplifyLinks)
+              .map(game => {
+                const start = moment(
+                  `${game.date} ${game.time}`,
+                  'DD.MM.YYYY H:m'
+                )
+                return {
+                  start: start.toDate(),
+                  end: start.add(3, 'h').toDate(),
+                  summary: `${game.home} - ${game.guest}`,
+                  description: game.isHome ? 'Heimspiel' : 'Auswärtsspiel'
+                }
+              })
+          )
+
+          return cal.serve(expressRes)
+        }
+
         const games = toArray(data.games)
           .map(simplifyLinks)
           .map(game => ({
