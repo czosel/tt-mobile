@@ -2,10 +2,26 @@ const compression = require('compression')
 const express = require('express')
 const cors = require('cors')
 const { join } = require('path')
+const ical = require('ical-generator')
 
 const scraper = require('./scraper')
 
+const cal = ical({ domain: 'tt-mobile.ch', name: 'my first iCal' })
+
+cal.createEvent({
+  start: new Date(),
+  end: new Date(new Date().getTime() + 3600000),
+  summary: 'Example Event',
+  description: 'It works ;)',
+  location: 'Bern',
+  url: 'http://tt-mobile.ch/'
+})
+
 const app = express()
+
+app.get('/cal', (req, res) => {
+  cal.serve(res)
+})
 
 app.use(compression())
 app.use(cors())
