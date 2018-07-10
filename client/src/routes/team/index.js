@@ -2,6 +2,7 @@ import { h, Component } from 'preact'
 import wire from 'wiretie'
 
 import clientHref from '../../lib/link'
+import { icalHref } from '../../lib/model'
 
 import Header from '../../components/header'
 import Container from '../../components/container'
@@ -13,7 +14,7 @@ import EloScore from '../../components/elo-score'
 
 @wire('model', { data: ['api.team', 'href'] })
 export default class Team extends Component {
-  render({ pending, rejected, back, data }) {
+  render({ pending, rejected, back, data, href }) {
     if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
 
@@ -74,6 +75,13 @@ export default class Team extends Component {
               </LinkRow>
             </tbody>
           </Table>
+          <a
+            href={icalHref(href)}
+            target="_blank"
+            class="button is-small is-pulled-right"
+          >
+            Zum Kalender hinzufügen
+          </a>
           <h2 class="subtitle">Spielplan</h2>
           <Table>
             <thead>

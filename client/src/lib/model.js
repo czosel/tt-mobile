@@ -6,6 +6,9 @@ const get = endpoint => href =>
     asJson
   )
 
+export const icalHref = href =>
+  `${API_ORIGIN}/team?format=ics&url=${encodeURIComponent(href)}`
+
 export default function model() {
   return {
     me() {
