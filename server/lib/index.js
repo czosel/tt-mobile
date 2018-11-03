@@ -18,6 +18,7 @@ const endpoints = [
   'club',
   'game',
   'player',
+  'elo',
   'me'
 ]
 

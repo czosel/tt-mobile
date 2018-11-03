@@ -1,5 +1,4 @@
 import { h, Component } from 'preact'
-import wire from 'wiretie'
 import { route } from 'preact-router'
 
 import clientHref from '../../lib/link'
@@ -14,26 +13,42 @@ import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
 import EloScore from '../../components/elo-score'
 import PlayerOverview from '../../components/player-overview'
+import { get } from '../../lib/model'
 
-@wire('model', { data: ['api.player', 'href'], me: ['me'] })
 export default class Player extends Component {
   setMe = () => {
     localStorage.setItem('me', this.props.href)
     route('/')
   }
 
-  render({ href, pending, rejected, data, me, tab, back, embedded }) {
+  update(href) {
+    this.setState({ pending: true })
+    get('player')(href)
+      .then(data => {
+        this.setState({ data, pending: false, rejected: false })
+        return get('elo')(data.eloHref)
+      })
+      .then(elo => {
+        this.setState({ elo })
+      })
+  }
+
+  componentDidMount() {
+    this.setState({ me: localStorage.getItem('me') })
+    this.update(this.props.href)
+  }
+
+  componentDidReceiveProps({ href }) {
+    if (href !== this.props.href) this.update(href)
+  }
+
+  render({ href, tab, back }, { pending = true, rejected, data, elo, me }) {
     tab = tab || 'overview'
     if (pending)
       return (
         <div>
           <Loading center={true} />
-          <Wrapper
-            tab={tab}
-            href={this.props.href}
-            back={back}
-            embedded={embedded}
-          />
+          <Wrapper tab={tab} href={href} back={back} />
         </div>
       )
     if (rejected) return <ErrorPage info={rejected} />
@@ -43,7 +58,6 @@ export default class Player extends Component {
       classification,
       singles,
       doubles,
-      elo,
       club,
       clubId,
       teams,
@@ -56,12 +70,12 @@ export default class Player extends Component {
           {...{
             balance,
             classification,
-            elo,
             club,
             clubId,
             teams,
             me,
-            href
+            href,
+            elo
           }}
         />
       ) : tab === 'single' ? (
@@ -71,7 +85,7 @@ export default class Player extends Component {
       )
 
     return (
-      <Wrapper tab={tab} href={this.props.href} back={back} embedded={embedded}>
+      <Wrapper tab={tab} href={this.props.href} back={back}>
         {!me && (
           <button class="button is-pulled-right" onClick={this.setMe}>
             Das bin ich!
@@ -85,14 +99,14 @@ export default class Player extends Component {
   }
 }
 
-function Wrapper({ tab, href, back, children, embedded }) {
+function Wrapper({ tab, href, back, children }) {
   const handleChange = tab => {
     route(clientHref(href, tab), true)
   }
 
   return (
     <div>
-      {!embedded && <Header back={back} />}
+      <Header back={back} />
       <Container>
         <Tabs active={tab} onChange={handleChange}>
           <Tab name="overview">Übersicht</Tab>

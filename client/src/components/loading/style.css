@@ -1,8 +1,12 @@
-.center {
-  position: absolute;
-  height: 100vh;
+.base {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 160px;
+}
+
+.center {
+  position: absolute;
+  height: 100vh;
 }

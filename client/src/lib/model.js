@@ -1,7 +1,7 @@
 const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
 
-const get = endpoint => href =>
+export const get = endpoint => href =>
   fetch(`${API_ORIGIN}/${endpoint}?url=${encodeURIComponent(href)}`).then(
     asJson
   )
@@ -19,6 +19,7 @@ export default function model() {
       league: get('league'),
       team: get('team'),
       player: get('player'),
+      elo: get('elo'),
       me: () => {
         const href = localStorage.getItem('me')
         return href ? get('me')(href) : null
