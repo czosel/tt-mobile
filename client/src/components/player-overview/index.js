@@ -2,6 +2,7 @@ import { h } from 'preact'
 
 import clientHref from '../../lib/link'
 
+import Loading from '../../components/loading'
 import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import EloChart from '../../components/elo-chart'
@@ -10,10 +11,10 @@ import EloScore from '../../components/elo-score'
 export default function PlayerOverview({
   balance,
   classification,
-  elo,
   club,
   clubId,
-  teams
+  teams,
+  elo
 }) {
   return (
     <div>
@@ -33,12 +34,16 @@ export default function PlayerOverview({
         </tr>
         <tr>
           <td>Klassierung (aktuell)</td>
-          <td>
-            <EloScore value={elo.start} /> ({elo.start})
-          </td>
+          {elo ? (
+            <td>
+              <EloScore value={elo.start} /> ({elo.start})
+            </td>
+          ) : (
+            <td>lädt...</td>
+          )}
         </tr>
       </Table>
-      <EloChart data={elo.data} />
+      {elo ? <EloChart data={elo.data} /> : <Loading />}
       <h2 class="subtitle">Mannschaftseinsätze</h2>
       <Table>
         <tbody>

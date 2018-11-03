@@ -472,17 +472,7 @@ function player({ url }) {
             sets: 'td:nth-child(8)',
             game: 'td:last-child'
           }),
-        elo: osmosis
-          .find('ul.content-tabs > li:first-child a')
-          .follow('@href')
-          .set({
-            start: "table tr:has(td > b:contains('Elo-Wert')):first td:last",
-            data: osmosis
-              .find('table.result-set.table-layout-fixed tbody tr')
-              .set({
-                delta: 'td:last-child'
-              })
-          })
+        eloHref: 'ul.content-tabs > li:first-child a@href'
       })
       .error(
         R.pipe(
@@ -491,14 +481,6 @@ function player({ url }) {
         )
       )
       .data(data => {
-        let current = parseInt(data.elo.start)
-        const start = current
-        let result = []
-        data.elo.data.filter(v => !!v.delta).forEach(elo => {
-          current = current - parseInt(elo.delta)
-          result.push(current)
-        })
-
         res({
           ...data,
           name: splitTitle(data.title)[1],
@@ -516,11 +498,42 @@ function player({ url }) {
                 data: str.substr(str.indexOf(':') + 1).trim()
               }))
           ),
-          elo: {
-            start,
-            data: result.reverse()
-          },
-          singles: toArray(data.singles).map(simplifyLinks)
+          singles: toArray(data.singles).map(simplifyLinks),
+          eloHref: simplify(data.eloHref)
+        })
+      })
+  })
+}
+
+function elo({ url }) {
+  return new Promise((res, rej) => {
+    osmosis
+      .get(resolve(host, url))
+      .find('#content')
+      .set({
+        start: "table tr:has(td > b:contains('Elo-Wert')):first td:last",
+        data: osmosis.find('table.result-set.table-layout-fixed tbody tr').set({
+          delta: 'td:last-child'
+        })
+      })
+      .error(
+        R.pipe(
+          error('elo'),
+          rej
+        )
+      )
+      .data(data => {
+        let current = parseInt(data.start)
+        const start = current
+        let result = []
+        data.data.filter(v => !!v.delta).forEach(elo => {
+          current = current - parseInt(elo.delta)
+          result.push(current)
+        })
+
+        res({
+          start,
+          data: result.reverse()
         })
       })
   })
@@ -592,5 +605,6 @@ module.exports = {
   clubTeams,
   game,
   player,
+  elo,
   me
 }

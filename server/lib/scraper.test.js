@@ -69,8 +69,23 @@ test('player response', async t => {
   t.ok(isUrl(player.teams[0].href))
   t.ok(player.teams[0].name)
 
-  t.equal(typeof player.elo.data[0], 'number', 'elo')
-  t.equal(typeof player.elo.start, 'number', 'elostart')
+  t.equal(
+    player.eloHref,
+    '/eloFilter?federation=STT&rankingDate=03.11.2018&ranking=354107824',
+    'elo'
+  )
+  t.end()
+})
+
+test('elo response', async t => {
+  const start = Date.now()
+  const elo = await scraper.elo({
+    url:
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter?federation=STT&rankingDate=03.11.2018&ranking=354107824'
+  })
+  console.log('elo request ', Date.now() - start)
+  t.equal(typeof elo.data[0], 'number', 'elo')
+  t.equal(typeof elo.start, 'number', 'elostart')
   t.end()
 })
 
