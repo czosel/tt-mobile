@@ -1,6 +1,7 @@
 const compression = require('compression')
 const express = require('express')
 const cors = require('cors')
+const apicache = require('apicache')
 const { join } = require('path')
 
 const scraper = require('./scraper')
@@ -9,6 +10,7 @@ const app = express()
 
 app.use(compression())
 app.use(cors())
+app.use(apicache.middleware('10 minutes'))
 
 const endpoints = [
   'assocHistory',

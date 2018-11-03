@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "8": "0.0.1",
+    "apicache": "^1.2.3",
     "compression": "^1.6.2",
     "cors": "^2.8.4",
     "express": "^4.15.2",
