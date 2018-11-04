@@ -1,4 +1,5 @@
 const test = require('tape')
+const moment = require('moment')
 const scraper = require('./scraper')
 
 // helpers
@@ -14,6 +15,10 @@ function isUrl(str) {
   return (
     str && str.indexOf('/') === 0 && str.length > 10 && str.indexOf(' ') === -1
   )
+}
+
+function isDate(str) {
+  return moment(str, 'DD.MM.YYYY').isValid()
 }
 
 test('class regex works', t => {
@@ -85,6 +90,8 @@ test('elo response', async t => {
   console.log('elo request ', Date.now() - start)
   t.equal(typeof elo.data[0], 'number', 'elo')
   t.equal(typeof elo.start, 'number', 'elostart')
+  t.equal(isDate(elo.startDate), true, 'startDate')
+  t.equal(isDate(elo.endDate), true, 'endDate')
   t.end()
 })
 

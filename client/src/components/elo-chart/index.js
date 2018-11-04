@@ -44,7 +44,7 @@ const project = curry((points, [x, y]) => [
 
 const asString = compose(join(','), map(join(',')))
 
-export default function EloChart({ data = [] }) {
+export default function EloChart({ data = [], startDate, endDate }) {
   if (!data || !data.length) {
     return
   }
@@ -81,6 +81,12 @@ export default function EloChart({ data = [] }) {
         />
       ))}
       <polyline fill="none" stroke="#FF5252" strokeWidth="3" points={view} />
+      <text x="25" y="180" fontSize="12" fill="grey">
+        {startDate}
+      </text>
+      <text textAnchor="end" x="300" y="180" fontSize="12" fill="grey">
+        {endDate}
+      </text>
     </svg>
   )
 }
