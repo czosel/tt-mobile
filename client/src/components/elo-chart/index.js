@@ -64,7 +64,7 @@ export default function EloChart({ data = [], startDate, endDate }) {
   lines = projectLines(lines)
   /* eslint-disable react/jsx-key */
   return (
-    <svg width="100%" height="200px" viewBox="0 0 300 200" class="chart">
+    <svg width="100%" height="215px" viewBox="0 0 300 215" class="chart">
       {lines.map(({ pos, label }) => (
         <text x="0" y={pos + 4} fontSize="12" fill="grey">
           {label}
@@ -81,10 +81,10 @@ export default function EloChart({ data = [], startDate, endDate }) {
         />
       ))}
       <polyline fill="none" stroke="#FF5252" strokeWidth="3" points={view} />
-      <text x="25" y="180" fontSize="12" fill="grey">
+      <text x="25" y="200" fontSize="12" fill="grey">
         {startDate}
       </text>
-      <text textAnchor="end" x="300" y="180" fontSize="12" fill="grey">
+      <text textAnchor="end" x="300" y="200" fontSize="12" fill="grey">
         {endDate}
       </text>
     </svg>
