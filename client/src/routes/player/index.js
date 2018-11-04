@@ -31,6 +31,12 @@ export default class Player extends Component {
       .then(elo => {
         this.setState({ elo })
       })
+      .catch(error =>
+        this.setState({
+          pending: false,
+          rejected: { data: error }
+        })
+      )
   }
 
   componentDidMount() {
