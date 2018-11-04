@@ -64,22 +64,24 @@ export default function EloChart({ data = [], startDate, endDate }) {
   lines = projectLines(lines)
   /* eslint-disable react/jsx-key */
   return (
-    <svg width="100%" height="215px" viewBox="0 0 300 215" class="chart">
-      {lines.map(({ pos, label }) => (
-        <text x="0" y={pos + 4} fontSize="12" fill="grey">
+    <svg width="100%" height="200px" viewBox="0 0 300 200" class="chart">
+      {lines.filter(({ pos }) => pos > 0 && pos < 190).map(({ pos, label }) => (
+        <text x="0" y={pos < 6 ? 10 : pos + 4} fontSize="12" fill="grey">
           {label}
         </text>
       ))}
-      {lines.map(({ pos }) => (
-        <line
-          x1="25"
-          y1={pos}
-          x2="300"
-          y2={pos}
-          strokeWidth="1"
-          stroke="#757575"
-        />
-      ))}
+      {lines
+        .filter(({ pos }) => pos > 0 && pos < 190)
+        .map(({ pos }) => (
+          <line
+            x1="25"
+            y1={pos}
+            x2="300"
+            y2={pos}
+            strokeWidth="1"
+            stroke="#757575"
+          />
+        ))}
       <polyline fill="none" stroke="#FF5252" strokeWidth="3" points={view} />
       <text x="25" y="200" fontSize="12" fill="grey">
         {startDate}
