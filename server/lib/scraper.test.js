@@ -70,9 +70,8 @@ test('player response', async t => {
   t.ok(player.teams[0].name)
 
   t.equal(
-    player.eloHref,
-    '/eloFilter?federation=STT&rankingDate=03.11.2018&ranking=354107824',
-    'elo'
+    player.eloHref.startsWith('/eloFilter?federation=STT&rankingDate'),
+    true
   )
   t.end()
 })
