@@ -512,6 +512,8 @@ function elo({ url }) {
       .find('#content')
       .set({
         start: "table tr:has(td > b:contains('Elo-Wert')):first td:last",
+        endDate: "table.result-set.table-layout-fixed:nth(1) tbody tr:first td:first-child",
+        startDate: "table.result-set.table-layout-fixed:last tbody tr:last td:first-child",
         data: osmosis.find('table.result-set.table-layout-fixed tbody tr').set({
           delta: 'td:last-child'
         })
@@ -532,6 +534,7 @@ function elo({ url }) {
         })
 
         res({
+          ...data,
           start,
           data: result.reverse()
         })

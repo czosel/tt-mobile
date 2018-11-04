@@ -43,7 +43,7 @@ export default function PlayerOverview({
           )}
         </tr>
       </Table>
-      {elo ? <EloChart data={elo.data} /> : <Loading />}
+      {elo ? <EloChart {...elo} /> : <Loading />}
       <h2 class="subtitle">Mannschaftseinsätze</h2>
       <Table>
         <tbody>
