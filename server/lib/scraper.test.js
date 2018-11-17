@@ -85,7 +85,7 @@ test('elo response', async t => {
   const start = Date.now()
   const elo = await scraper.elo({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter?federation=STT&rankingDate=03.11.2018&ranking=354107824'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter?federation=STT&rankingDate=17.11.2018&ranking=354218426'
   })
   console.log('elo request ', Date.now() - start)
   t.equal(typeof elo.data[0], 'number', 'elo')

@@ -38,7 +38,7 @@ export default class Team extends Component {
             <Table>
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th />
                   <th />
                   <th class="center optional">Eins.</th>
                   <th />
@@ -92,7 +92,7 @@ export default class Team extends Component {
               </tr>
             </thead>
             <tbody>
-              {games.map(({ href, date, opponent, isHome, result }) => (
+              {games.map(({ href, date, time, opponent, isHome, result }) => (
                 <LinkRow key={href} href={clientHref(href)}>
                   <td>
                     {opponent}
@@ -102,7 +102,9 @@ export default class Team extends Component {
                       ) : (
                         <span class="tag is-warning">Auswärts</span>
                       )}
-                      <span class="tag">{date}</span>
+                      <span class="tag">
+                        {date}, {time}
+                      </span>
                     </div>
                   </td>
                   <td class="result center">{result || '-:-'}</td>

@@ -66,6 +66,8 @@ function LeagueTable({ clubs }) {
           <th />
           <th>Mannschaft</th>
           <th class="center optional">Beg.</th>
+          <th class="center optional-2">Spiele</th>
+          <th class="center optional-3">+/-</th>
           <th>Punkte</th>
           <th />
         </tr>
@@ -76,6 +78,8 @@ function LeagueTable({ clubs }) {
             <td class="right thin">{club.rank}</td>
             <td>{club.name}</td>
             <td class="center optional">{club.nrOfGames}</td>
+            <td class="center optional-2">{club.games}</td>
+            <td class="center optional-3">{club.balance}</td>
             <td class="result center">{club.score}</td>
             <td class="thin">
               <i class="icon-right-open" />
