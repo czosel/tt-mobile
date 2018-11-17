@@ -56,6 +56,7 @@ const Teams = ({ name, teams }) => (
           <th>Team</th>
           <th>Liga</th>
           <th class="center optional">Rang</th>
+          <th class="center optional-2">Punkte</th>
           <th />
         </tr>
       </thead>
@@ -65,6 +66,7 @@ const Teams = ({ name, teams }) => (
             <td>{team.name}</td>
             <td>{team.league}</td>
             <td class="center optional">{team.rank}</td>
+            <td class="center optional-2">{team.points}</td>
             <td class="thin">
               <i class="icon-right-open" />
             </td>

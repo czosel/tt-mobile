@@ -101,6 +101,24 @@ td.thin > i {
   }
 }
 
+@media all and (max-width: 470px) {
+  .optional-2 {
+    display: none !important;
+  }
+}
+
+@media all and (max-width: 540px) {
+  .optional-3 {
+    display: none !important;
+  }
+}
+
+@media all and (max-width: 610px) {
+  .optional-4 {
+    display: none !important;
+  }
+}
+
 td.right {
   text-align: right;
 }
