@@ -19,9 +19,8 @@ export default class Home extends Component {
           </p>
           <br />
           <p>
-            TT-mobile ist Open Source (<a href="https://github.com/czosel/tt-mobile">
-              GitHub
-            </a>).
+            TT-mobile ist Open Source (
+            <a href="https://github.com/czosel/tt-mobile">GitHub</a>).
           </p>
         </Container>
       </div>

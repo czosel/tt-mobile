@@ -54,8 +54,9 @@ const addLinks = name => ({
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
 
+export default
 @wire('model', { data: ['api.me'], me: ['me'] })
-export default class Home extends Component {
+class Home extends Component {
   onClose = () => {
     localStorage.removeItem('me')
     this.setState({
@@ -78,7 +79,8 @@ export default class Home extends Component {
           ) : (
             <Card name="TT-mobile personalisieren">
               Um die App zu personalisieren, öffne deine Spieler-Seite und wähle
-              &quot;Das bin ich!&quot;<br />
+              &quot;Das bin ich!&quot;
+              <br />
             </Card>
           )}
           <br />

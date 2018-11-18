@@ -11,8 +11,9 @@ import ErrorPage from '../../components/error-page'
 
 const hrefify = e => ({ ...e, href: clientHref(e.href) })
 
+export default
 @wire('model', { data: ['api.assocHistory', 'step'] })
-export default class AssocHistory extends Component {
+class AssocHistory extends Component {
   render({ pending, rejected, data }) {
     if (pending) return <LoadingPage />
     if (rejected) return <ErrorPage info={rejected} />

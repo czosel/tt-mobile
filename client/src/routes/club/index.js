@@ -12,11 +12,12 @@ import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import Schedule from '../../components/schedule'
 
+export default
 @wire('model', {
   club: ['api.club', 'id'],
   clubTeams: ['api.clubTeams', 'id']
 })
-export default class Club extends Component {
+class Club extends Component {
   render({ pending, rejected, back, club, clubTeams }) {
     if (pending && Object.keys(pending).length >= 2)
       return <LoadingPage back={back} />
