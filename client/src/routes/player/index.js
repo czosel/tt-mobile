@@ -22,7 +22,7 @@ export default class Player extends Component {
   }
 
   update(href) {
-    this.setState({ pending: true })
+    this.setState({ elo: null, pending: true })
     get('player')(href)
       .then(data => {
         this.setState({ data, pending: false, rejected: false })
@@ -141,9 +141,7 @@ function Single({ singles }) {
       <tbody>
         {singles.map(({ opponent, classification, href, sets }) => (
           <LinkRow key={href} href={clientHref(href)}>
-            <td>
-              <a href={clientHref(href)}>{opponent}</a>
-            </td>
+            <td>{opponent}</td>
             <td class="center">
               <EloScore value={classification} />
             </td>

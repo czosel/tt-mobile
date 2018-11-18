@@ -102,26 +102,28 @@ class Home extends Component {
 function PlayerLinks({ club, clubId, teams, me }) {
   return (
     <Table>
-      <LinkRow href={clientHref(me)}>
-        <td>Spielerprofil</td>
-        <td class="thin">
-          <i class="icon-right-open" />
-        </td>
-      </LinkRow>
-      <LinkRow href={clientHref({ clubId })}>
-        <td>{club}</td>
-        <td class="thin">
-          <i class="icon-right-open" />
-        </td>
-      </LinkRow>
-      {teams.map(({ name, href }) => (
-        <LinkRow key={href} href={clientHref(href)}>
-          <td>{name}</td>
+      <tbody>
+        <LinkRow href={clientHref(me)}>
+          <td>Spielerprofil</td>
           <td class="thin">
             <i class="icon-right-open" />
           </td>
         </LinkRow>
-      ))}
+        <LinkRow href={clientHref({ clubId })}>
+          <td>{club}</td>
+          <td class="thin">
+            <i class="icon-right-open" />
+          </td>
+        </LinkRow>
+        {teams.map(({ name, href }) => (
+          <LinkRow key={href} href={clientHref(href)}>
+            <td>{name}</td>
+            <td class="thin">
+              <i class="icon-right-open" />
+            </td>
+          </LinkRow>
+        ))}
+      </tbody>
     </Table>
   )
 }
