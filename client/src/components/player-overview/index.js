@@ -43,7 +43,9 @@ export default function PlayerOverview({
           )}
         </tr>
       </Table>
-      {elo ? <EloChart {...elo} /> : <Loading />}
+      <div style="margin: 1rem 0;">
+        {elo ? <EloChart {...elo} /> : <Loading />}
+      </div>
       <h2 class="subtitle">Mannschaftseinsätze</h2>
       <Table>
         <tbody>

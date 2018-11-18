@@ -7,7 +7,7 @@ const getStyle = value => {
   if (typeof value === 'number') {
     value = getClass(value)
   }
-  const angle = parseInt(value.substr(1)) / 20 * 360 + 180
+  const angle = (parseInt(value.substr(1)) / 20) * 360 + 180
   return {
     'background-color': `hsl(${angle}, 100%, 40%)`,
     'font-weight': 'bold',

@@ -69,7 +69,7 @@ export default class Header extends Component {
                       <a
                         class="navbar-item"
                         target="_blank"
-                        rel="noopener"
+                        rel="noopener noreferrer"
                         href={baseUrl + clickTTPath}
                       >
                         In click-TT öffnen

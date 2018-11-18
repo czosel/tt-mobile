@@ -44,8 +44,10 @@ export default class Player extends Component {
     this.update(this.props.href)
   }
 
-  componentDidReceiveProps({ href }) {
-    if (href !== this.props.href) this.update(href)
+  componentDidUpdate({ href }) {
+    if (href !== this.props.href) {
+      this.update(this.props.href)
+    }
   }
 
   render({ href, tab, back }, { pending = true, rejected, data, elo, me }) {
@@ -139,7 +141,9 @@ function Single({ singles }) {
       <tbody>
         {singles.map(({ opponent, classification, href, sets }) => (
           <LinkRow key={href} href={clientHref(href)}>
-            <td>{opponent}</td>
+            <td>
+              <a href={clientHref(href)}>{opponent}</a>
+            </td>
             <td class="center">
               <EloScore value={classification} />
             </td>

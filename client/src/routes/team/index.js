@@ -12,8 +12,9 @@ import LinkRow from '../../components/link-row'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
+export default
 @wire('model', { data: ['api.team', 'href'] })
-export default class Team extends Component {
+class Team extends Component {
   render({ pending, rejected, back, data, href }) {
     if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
@@ -78,6 +79,7 @@ export default class Team extends Component {
           <a
             href={icalHref(href)}
             target="_blank"
+            rel="noopener noreferrer"
             class="button is-small is-pulled-right"
           >
             Zum Kalender hinzufügen
