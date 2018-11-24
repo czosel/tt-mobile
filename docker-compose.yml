@@ -2,10 +2,16 @@ version: "3"
 services:
   client:
     build: ./client
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
      - "80:8080"
 
   server:
     build: ./server
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - "3020:3020"
