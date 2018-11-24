@@ -31,12 +31,15 @@ const removeIfNotList = (obj, prop) => {
   return !Array.isArray(obj[prop]) ? R.omit([prop], obj) : obj
 }
 
-const simplifyLinks = obj => {
-  return {
-    ...obj,
-    href: simplify(obj.href)
-  }
-}
+const simplifyLinks = obj => ({
+  ...obj,
+  href: simplify(obj.href)
+})
+
+const formatTime = obj => ({
+  ...obj,
+  time: obj.time.split(" ")[0]
+})
 
 // strip "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/" from URL
 const simplify = href => (href ? href.substring(href.lastIndexOf('/')) : '')
@@ -174,7 +177,7 @@ function league({ url }) {
       .error(R.pipe(error('league'), rej))
       .data(data => {
         const titleParts = splitTitle(data.title)
-        const games = toArray(data.games).map(simplifyLinks)
+        const games = toArray(data.games).map(simplifyLinks).map(formatTime)
 
         res({
           assoc: titleParts[0],
@@ -325,6 +328,7 @@ function team({ url, format }, expressRes) {
 
         const games = toArray(data.games)
           .map(simplifyLinks)
+          .map(formatTime)
           .map(game => ({
             ...game,
             opponent: game.guest.includes(data.club) ? game.home : game.guest,
