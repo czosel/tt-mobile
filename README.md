@@ -9,10 +9,25 @@ You can [view the app here](https://tt-mobile.ch).
 
 ## Development
 
+First, clone the repository:
+
 ```shell
 git clone git@github.com:czosel/tt-mobile.git
 cd tt-mobile
+```
 
+### Docker
+
+With docker and docker-compose installed, run
+```shell
+docker-compose up -d
+```
+
+### Local installation
+
+Alternatively, install and run the server and client locally:
+
+```shell
 # server
 cd server
 npm install && npm start
