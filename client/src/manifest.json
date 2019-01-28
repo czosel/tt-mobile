@@ -3,7 +3,6 @@
   "short_name": "TT mobile",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#607D8B",
   "theme_color": "#FF5252",
   "icons": [

@@ -71,6 +71,14 @@ export default class App extends Component {
             <Game path="/game/:href?" back={this.goBack} />
             <About path="/about" />
           </Router>
+          <footer class="footer">
+            <div class="content has-text-centered">
+              <p>
+                <strong>TT-Mobile</strong> <br />
+                <a href="/about">Version 1.0.0 (28.1.2019)</a>
+              </p>
+            </div>
+          </footer>
         </div>
       </Provider>
     )
