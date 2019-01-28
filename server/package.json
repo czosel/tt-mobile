@@ -6,7 +6,8 @@
   "scripts": {
     "start": "babel-watch lib/index.js",
     "build": "babel lib -d dist",
-    "watch": "tape-watch -r babel-register -c ./**/*.test.js | tap-spec",
+    "watch": "nodemon lib/index.js",
+    "test-watch": "tape-watch -r babel-register -c ./**/*.test.js | tap-spec",
     "test": "node ./**/*.test.js"
   },
   "keywords": [],
@@ -19,6 +20,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "babel-register": "^6.26.0",
     "babel-watch": "^2.0.7",
+    "nodemon": "^1.18.9",
     "osmosis": "^1.1.8",
     "tap-dot": "^2.0.0",
     "tap-spec": "^5.0.0",

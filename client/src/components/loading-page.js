@@ -6,7 +6,7 @@ export default function LoadingPage({ back }) {
     <div>
       <Loading center={true} />
       <Header loading={true} back={back} />
-      <section class="section" />
+      <div class="spacer" />
     </div>
   )
 }
