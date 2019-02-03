@@ -2,15 +2,15 @@ import { h, Component } from 'preact'
 import wire from 'wiretie'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
 import Container from '../../components/container'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
-export default
 @wire('model', { data: ['api.game', 'href'] })
-class Game extends Component {
+export default class Game extends Component {
   render({ pending, rejected, back, data }) {
     if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
@@ -87,6 +87,7 @@ class Game extends Component {
             {date}, {time}
           </p>
         </Container>
+        <Footer />
       </div>
     )
   }

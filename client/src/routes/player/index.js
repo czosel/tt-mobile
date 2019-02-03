@@ -4,6 +4,7 @@ import { route } from 'preact-router'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import Container from '../../components/container'
 import Loading from '../../components/loading'
 import LinkRow from '../../components/link-row/'
@@ -93,16 +94,19 @@ export default class Player extends Component {
       )
 
     return (
-      <Wrapper tab={tab} href={this.props.href} back={back}>
-        {!me && (
-          <button class="button is-pulled-right" onClick={this.setMe}>
-            Das bin ich!
-          </button>
-        )}
-        <h1 class="title">{name}</h1>
+      <div>
+        <Wrapper tab={tab} href={this.props.href} back={back}>
+          {!me && (
+            <button class="button is-pulled-right" onClick={this.setMe}>
+              Das bin ich!
+            </button>
+          )}
+          <h1 class="title">{name}</h1>
 
-        {content}
-      </Wrapper>
+          {content}
+        </Wrapper>
+        <Footer />
+      </div>
     )
   }
 }
