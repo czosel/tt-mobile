@@ -69,7 +69,7 @@ export default class App extends Component {
             <Club path="/club/:id" back={this.goBack} />
             <Player path="/player/:href/:tab?" back={this.goBack} />
             <Game path="/game/:href?" back={this.goBack} />
-            <About path="/about" />
+            <About path="/about" back={this.goBack} />
           </Router>
         </div>
       </Provider>
