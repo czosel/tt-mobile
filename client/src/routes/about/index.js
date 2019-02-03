@@ -6,10 +6,10 @@ import Footer from '../../components/footer'
 import Container from '../../components/container'
 
 export default class Home extends Component {
-  render() {
+  render({ back }) {
     return (
       <div>
-        <Header />
+        <Header back={back} />
         <Container>
           <div class="content">
             <img src="/assets/logo.svg" class={style.logo} />
