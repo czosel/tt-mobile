@@ -5,6 +5,7 @@ import clientHref from '../../lib/link'
 import { icalHref } from '../../lib/model'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
@@ -12,9 +13,8 @@ import LinkRow from '../../components/link-row'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
-export default
 @wire('model', { data: ['api.team', 'href'] })
-class Team extends Component {
+export default class Team extends Component {
   render({ pending, rejected, back, data, href }) {
     if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
@@ -118,6 +118,7 @@ class Team extends Component {
             </tbody>
           </Table>
         </Container>
+        <Footer />
       </div>
     )
   }

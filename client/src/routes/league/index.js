@@ -6,6 +6,7 @@ import style from './style'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import Container from '../../components/container'
 import Schedule from '../../components/schedule'
 import LoadingPage from '../../components/loading-page'
@@ -15,9 +16,8 @@ import Table from '../../components/table'
 import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
 
-export default
 @wire('model', { data: ['api.league', 'href'] })
-class League extends Component {
+export default class League extends Component {
   handleChange = tab => {
     route(clientHref(this.props.href, tab))
   }
@@ -54,6 +54,7 @@ class League extends Component {
           </h2>
           {content}
         </Container>
+        <Footer />
       </div>
     )
   }

@@ -4,6 +4,7 @@ import wire from 'wiretie'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import Loading from '../../components/loading'
@@ -12,12 +13,11 @@ import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import Schedule from '../../components/schedule'
 
-export default
 @wire('model', {
   club: ['api.club', 'id'],
   clubTeams: ['api.clubTeams', 'id']
 })
-class Club extends Component {
+export default class Club extends Component {
   render({ pending, rejected, back, club, clubTeams }) {
     if (pending && Object.keys(pending).length >= 2)
       return <LoadingPage back={back} />
@@ -42,6 +42,7 @@ class Club extends Component {
             </div>
           )}
         </Container>
+        <Footer />
       </div>
     )
   }

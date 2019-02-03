@@ -3,15 +3,15 @@ import wire from 'wiretie'
 import style from './style'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
 import Table from '../../components/table'
 import LinkRow from '../../components/link-row'
 
-export default
 @wire('model', { data: ['api.assoc', 'href'] })
-class Assoc extends Component {
+export default class Assoc extends Component {
   render({ pending, rejected, back, data }) {
     if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
@@ -40,6 +40,7 @@ class Assoc extends Component {
             </tbody>
           </Table>
         </Container>
+        <Footer />
       </div>
     )
   }

@@ -1,6 +1,5 @@
 @import '../assets/css/fontello.css';
 @import '../../node_modules/bulma/sass/utilities/initial-variables';
-
 // bulma customization
 $link: #607d8b;
 $primary: #455a64;
@@ -131,8 +130,4 @@ td.right {
 
 tr.no-hover {
   background-color: transparent !important;
-}
-
-.spacer {
-  min-height: 100vh;
 }

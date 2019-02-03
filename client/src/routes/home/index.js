@@ -5,6 +5,7 @@ import style from './style'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import Container from '../../components/container'
 import CardList from '../../components/card-list'
 import Card from '../../components/card'
@@ -54,9 +55,8 @@ const addLinks = name => ({
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
 
-export default
 @wire('model', { data: ['api.me'], me: ['me'] })
-class Home extends Component {
+export default class Home extends Component {
   onClose = () => {
     localStorage.removeItem('me')
     this.setState({
@@ -94,6 +94,7 @@ class Home extends Component {
           <br />
           <CardList name="Ergebnisarchive" content={history} nameAsKey={true} />
         </Container>
+        <Footer />
       </div>
     )
   }

@@ -2,6 +2,7 @@ import { h, Component } from 'preact'
 import style from './style'
 
 import Header from '../../components/header'
+import Footer from '../../components/footer'
 import Container from '../../components/container'
 
 export default class Home extends Component {
@@ -36,6 +37,7 @@ export default class Home extends Component {
             </ul>
           </div>
         </Container>
+        <Footer />
       </div>
     )
   }
