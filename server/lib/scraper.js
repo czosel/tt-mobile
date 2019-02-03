@@ -560,9 +560,9 @@ function elo({ url }) {
           })
         result.reverse()
         current = result[result.length - 1]
-        // preview
+        // preview: elo values for both players, but no delta yet on click-tt
         data.data
-          .filter(row => !row.delta)
+          .filter(row => !row.delta && row.myElo && row.opponentElo)
           .reverse()
           .forEach(row => {
             current =

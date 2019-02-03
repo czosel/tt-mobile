@@ -8,9 +8,13 @@ const scraper = require('./scraper')
 
 const app = express()
 
+const env = process.env.NODE_ENV
+
 app.use(compression())
 app.use(cors())
-app.use(apicache.middleware('10 minutes'))
+app.use(
+  apicache.options({ enabled: env !== 'development' }).middleware('10 minutes')
+)
 
 const endpoints = [
   'assocHistory',
