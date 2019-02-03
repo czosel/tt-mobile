@@ -25,6 +25,16 @@ export default class Home extends Component {
               <a href="https://github.com/czosel/tt-mobile">GitHub</a>).
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.0.1 (3.2.2019)
+            <ul>
+              <li>
+                Bugfix: Fehler in Elo-Vorschau behoben, der durch
+                Elo-Korrekturen im Protokoll ausgelöst wurde
+              </li>
+              <li>
+                Bugfix: Footer wird nicht mehr auf Ladebildschirm angezeigt
+              </li>
+            </ul>
             v1.0.0 (28.1.2019)
             <ul>
               <li>

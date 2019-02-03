@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-watch lib/index.js",
+    "start": "NODE_ENV=development babel-watch lib/index.js",
     "build": "babel lib -d dist",
-    "watch": "nodemon lib/index.js",
     "test-watch": "tape-watch -r babel-register -c ./**/*.test.js | tap-spec",
     "test": "node ./**/*.test.js"
   },
