@@ -39,8 +39,10 @@ class Club extends Component {
             <Loading />
           ) : (
             <div>
-              <h2>Spielplan (Auszug)</h2>
-              <Schedule {...club} />
+              <h2>Spielplan (Rückschau)</h2>
+              <Schedule chunks={club && club.lastMatches} />
+              <h2>Spielplan (Vorschau)</h2>
+              <Schedule chunks={club && club.nextMatches} />
             </div>
           )}
         </Container>
