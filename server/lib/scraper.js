@@ -94,12 +94,7 @@ function assocHistory({ step }) {
             href: '@href'
           })
       })
-      .error(
-        R.pipe(
-          error('assocHistory'),
-          rej
-        )
-      )
+      .error(R.pipe(error('assocHistory'), rej))
       .data(({ regular, trophy }) => {
         res({
           regular: toArray(regular).map(simplifyLinks),
@@ -121,12 +116,7 @@ function assoc({ url }) {
           href: 'a@href'
         })
       })
-      .error(
-        R.pipe(
-          error('assoc'),
-          rej
-        )
-      )
+      .error(R.pipe(error('assoc'), rej))
       .data(({ title, leagues }) => {
         res({
           title: splitTitle(title)[0],
@@ -185,12 +175,7 @@ function league({ url }) {
             score: 'td:last-child'
           })
       })
-      .error(
-        R.pipe(
-          error('league'),
-          rej
-        )
-      )
+      .error(R.pipe(error('league'), rej))
       .data(data => {
         const titleParts = splitTitle(data.title)
         const games = toArray(data.games)
@@ -225,25 +210,30 @@ function club(id) {
       )
       .find('#content')
       .set({
-        matches: osmosis
-          .find('#content-row1 table.result-set tr:has(td:nth-child(11) a)')
+        lastMatches: osmosis
+          .find(
+            '#content-row1 table.result-set:first tr:has(td:nth-child(4) a)'
+          )
           .set({
             date: 'td:nth-child(2)',
             home: 'td:nth-child(7)',
             guest: 'td:nth-child(9)',
             href: 'td:nth-child(11) a@href',
             result: 'td:nth-child(11)'
+          }),
+        nextMatches: osmosis
+          .find('#content-row1 table.result-set:last tr:not(th)')
+          .set({
+            date: 'td:nth-child(2)',
+            home: 'td:nth-child(7)',
+            guest: 'td:nth-child(9)'
           })
       })
-      .error(
-        R.pipe(
-          error('club'),
-          rej
-        )
-      )
+      .error(R.pipe(error('club'), rej))
       .data(data => {
         res({
-          chunks: asChunks(toArray(data.matches).map(simplifyLinks))
+          lastMatches: asChunks(toArray(data.lastMatches).map(simplifyLinks)),
+          nextMatches: asChunks(toArray(data.nextMatches).map(simplifyLinks))
         })
       })
   })
@@ -272,12 +262,7 @@ function clubTeams(id) {
             points: 'td:nth-child(5)'
           })
       })
-      .error(
-        R.pipe(
-          error('clubTeams'),
-          rej
-        )
-      )
+      .error(R.pipe(error('clubTeams'), rej))
       .data(data => {
         res({
           name: splitTitle(data.title)[0],
@@ -415,12 +400,7 @@ function game({ url }) {
           game: 'td:last'
         })
       })
-      .error(
-        R.pipe(
-          error('game'),
-          rej
-        )
-      )
+      .error(R.pipe(error('game'), rej))
       .data(data => {
         const split = data.title.split('<br>').map(i => i.trim())
         const lastParts = splitTitle(split[2])
@@ -550,12 +530,7 @@ function elo({ url }) {
           delta: 'td:last-child'
         })
       })
-      .error(
-        R.pipe(
-          error('elo'),
-          rej
-        )
-      )
+      .error(R.pipe(error('elo'), rej))
       .data(data => {
         let current = parseInt(data.start)
         const start = current
@@ -621,12 +596,7 @@ function me({ url }) {
           )
           .set('balance')
       })
-      .error(
-        R.pipe(
-          error('club'),
-          rej
-        )
-      )
+      .error(R.pipe(error('club'), rej))
       .data(data => {
         res({
           ...data,
@@ -669,12 +639,7 @@ function _searchBy(prop, term) {
           elo: 'td:nth-child(4)'
         })
       })
-      .error(
-        R.pipe(
-          error('search'),
-          rej
-        )
-      )
+      .error(R.pipe(error('search'), rej))
       .data(data =>
         res({
           [prop]: arrayify(data[prop])

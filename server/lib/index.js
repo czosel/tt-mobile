@@ -26,6 +26,7 @@ const endpoints = [
   'league',
   'team',
   'club',
+  'clubPreview',
   'game',
   'player',
   'elo',
