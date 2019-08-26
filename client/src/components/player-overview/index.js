@@ -10,6 +10,7 @@ import EloScore from '../../components/elo-score'
 
 export default function PlayerOverview({
   balance,
+  seasons,
   classification,
   club,
   clubId,
@@ -66,6 +67,17 @@ export default function PlayerOverview({
             <td>{team}</td>
             <td>{data}</td>
           </tr>
+        ))}
+      </Table>
+      <h2 class="subtitle">Saisons</h2>
+      <Table>
+        {seasons.map(({ name, href }) => (
+          <LinkRow key={href} href={clientHref(href)}>
+            <td>{name}</td>
+            <td class="thin">
+              <i class="icon-right-open" />
+            </td>
+          </LinkRow>
         ))}
       </Table>
     </div>

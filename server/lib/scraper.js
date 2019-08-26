@@ -457,6 +457,12 @@ function player({ url }) {
           '#content-row1 > table.result-set:first tr:first-child td:last a@href',
         classification:
           '#content-row1 > table.result-set:first tr:nth-child(4) td:last',
+        seasons: osmosis
+          .find('table.result-set:nth(1) tr:first-child td a')
+          .set('name')
+          .set({
+            href: '@href'
+          }),
         teams: osmosis
           .find('table.result-set table.result-set tr:nth-child(2) > td a')
           .set('name')
@@ -505,6 +511,7 @@ function player({ url }) {
           name: splitTitle(data.title)[1],
           clubId: getClubId(data.clubHref),
           breadcrumbs: extractBreadcrumbs(data),
+          seasons: arrayify(data.seasons).map(simplifyLinks),
           teams: arrayify(data.teams).map(simplifyLinks),
           balance: unique(
             arrayify(data.balances)

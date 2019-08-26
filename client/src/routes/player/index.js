@@ -64,6 +64,7 @@ export default class Player extends Component {
 
     const {
       balance,
+      seasons,
       classification,
       singles,
       doubles,
@@ -78,6 +79,7 @@ export default class Player extends Component {
         <PlayerOverview
           {...{
             balance,
+            seasons,
             classification,
             club,
             clubId,
