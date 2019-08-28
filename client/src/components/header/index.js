@@ -61,6 +61,9 @@ export default class Header extends Component {
           </div>
           <div class={'navbar-menu ' + active}>
             <div class="navbar-end">
+              <Link class="navbar-item" href="/search">
+                Spielersuche
+              </Link>
               <Match>
                 {({ path }) => {
                   const clickTTPath = getClickTTPath(path)

@@ -9,6 +9,7 @@ import Provider from 'preact-context-provider'
 import model from '../lib/model.js'
 
 import Home from '../routes/home'
+import Search from '../routes/search'
 import Assoc from '../routes/assoc'
 import AssocHistory from '../routes/assoc-history'
 import League from '../routes/league'
@@ -62,6 +63,7 @@ export default class App extends Component {
           />
           <Router onChange={this.handleRoute}>
             <Home path="/" />
+            <Search path="/search" back={this.goBack} />
             <Assoc path="/assoc/:href" back={this.goBack} />
             <AssocHistory path="/assocHistory/:step" />
             <League path="/league/:href/:tab?" back={this.goBack} />

@@ -3,6 +3,7 @@ const map = {
   leaguePage: 'assoc',
   teamPortrait: 'team',
   playerPortrait: 'player',
+  elo: 'player',
   groupMeetingReport: 'game',
   clubInfoDisplay: 'club',
   clubMeetingReport: 'game'
