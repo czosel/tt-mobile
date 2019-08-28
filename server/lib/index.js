@@ -62,6 +62,14 @@ app.get('/club-teams/:id', async ({ params }, res) => {
   }
 })
 
+app.get('/search/:term', async ({ params }, res) => {
+  try {
+    res.json(await scraper.search(params.term))
+  } catch (e) {
+    console.error(e)
+  }
+})
+
 app.listen(3020, function() {
   console.log('server listening on port 3020')
 })

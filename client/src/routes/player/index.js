@@ -24,20 +24,37 @@ export default class Player extends Component {
 
   update(href) {
     this.setState({ elo: null, pending: true })
-    get('player')(href)
-      .then(data => {
-        this.setState({ data, pending: false, rejected: false })
-        return get('elo')(data.eloHref)
-      })
-      .then(elo => {
-        this.setState({ elo })
-      })
-      .catch(error =>
-        this.setState({
-          pending: false,
-          rejected: { data: error }
+    if (href.includes('playerPortrait')) {
+      get('player')(href)
+        .then(data => {
+          this.setState({ data, pending: false, rejected: false })
+          return get('elo')(data.eloHref)
         })
-      )
+        .then(elo => {
+          this.setState({ elo })
+        })
+        .catch(error =>
+          this.setState({
+            pending: false,
+            rejected: { data: error }
+          })
+        )
+    } else {
+      get('elo')(href)
+        .then(elo => {
+          this.setState({ elo })
+          return get('player')(elo.playerHref)
+        })
+        .then(data => {
+          this.setState({ data, pending: false, rejected: false })
+        })
+        .catch(error =>
+          this.setState({
+            pending: false,
+            rejected: { data: error }
+          })
+        )
+    }
   }
 
   componentDidMount() {
@@ -63,7 +80,7 @@ export default class Player extends Component {
     if (rejected) return <ErrorPage info={rejected} />
 
     const {
-      balance,
+      balances,
       seasons,
       classification,
       singles,
@@ -78,7 +95,7 @@ export default class Player extends Component {
       tab === 'overview' ? (
         <PlayerOverview
           {...{
-            balance,
+            balances,
             seasons,
             classification,
             club,

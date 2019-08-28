@@ -72,6 +72,11 @@ export default class Home extends Component {
       <div class={style.home}>
         <Header />
         <Container>
+          <Card name="Neu: Spielersuche">
+            TT-Mobile unterstützt neu die Suche nach Spielern. Du findest die
+            Suche im Menü oder <a href="/search">hier</a>.
+          </Card>
+          <br />
           {data && !closed ? (
             <Card name={data.name} closeable="true" onClose={this.onClose}>
               <PlayerLinks {...data} me={me} />

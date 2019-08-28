@@ -31,10 +31,11 @@ const removeIfNotList = (obj, prop) => {
   return !Array.isArray(obj[prop]) ? R.omit([prop], obj) : obj
 }
 
-const simplifyLinks = obj => ({
+const simplifyObject = prop => obj => ({
   ...obj,
-  href: simplify(obj.href)
+  [prop]: simplify(obj[prop])
 })
+const simplifyLinks = simplifyObject('href')
 
 const formatTime = obj => ({
   ...obj,
@@ -464,10 +465,10 @@ function player({ url }) {
             href: '@href'
           }),
         teams: osmosis
-          .find('table.result-set table.result-set tr:nth-child(2) > td a')
-          .set('name')
+          .find('table.result-set table.result-set tr:nth-child(2) > td')
           .set({
-            href: '@href'
+            name: 'a',
+            href: 'a@href'
           }),
         balances: osmosis
           .find(
@@ -486,7 +487,7 @@ function player({ url }) {
           }),
         doubles: osmosis
           .find(
-            '#content-row1 > table.result-set:last tr:has(td:nth-child(3) a)'
+            '#content-row1 > table.result-set:nth(3) tr:has(td:nth-child(3) a)'
           )
           .set({
             partner: 'td:nth-child(3)',
@@ -499,32 +500,32 @@ function player({ url }) {
           }),
         eloHref: 'ul.content-tabs > li:first-child a@href'
       })
-      .error(
-        R.pipe(
-          error('club'),
-          rej
-        )
-      )
+      .error(error('player'))
       .data(data => {
+        console.log('TEAMS:', data.teams)
         res({
           ...data,
           name: splitTitle(data.title)[1],
           clubId: getClubId(data.clubHref),
           breadcrumbs: extractBreadcrumbs(data),
           seasons: arrayify(data.seasons).map(simplifyLinks),
-          teams: arrayify(data.teams).map(simplifyLinks),
-          balance: unique(
+          teams: arrayify(data.teams)
+            .map(simplifyLinks)
+            .filter(t => t.href),
+          balances: unique(
             arrayify(data.balances)
               .map(b => b.balance)
               .join('\n')
               .split('\n')
-              .filter(str => !!str.trim())
+              .filter(str => str.trim())
               .map(str => ({
                 team: str.substr(0, str.indexOf(':')).trim(),
                 data: str.substr(str.indexOf(':') + 1).trim()
               }))
+              .filter(e => e.team.trim())
           ),
           singles: toArray(data.singles).map(simplifyLinks),
+          doubles: toArray(data.doubles).map(simplifyObject('partnerHref')),
           eloHref: simplify(data.eloHref)
         })
       })
@@ -537,6 +538,7 @@ function elo({ url }) {
       .get(resolve(host, url))
       .find('#content')
       .set({
+        playerHref: 'ul.content-tabs > li:last-child a@href',
         start: "table tr:has(td > b:contains('Elo-Wert')):first td:last",
         endDate:
           'table.result-set.table-layout-fixed:first tbody tr:first td:first-child',
@@ -580,6 +582,7 @@ function elo({ url }) {
 
         res({
           ...data,
+          playerHref: simplify(data.playerHref),
           start,
           data: result.map(x => Math.round(100 * x) / 100)
         })
@@ -648,6 +651,49 @@ function me({ url }) {
   })
 }
 
+function _searchBy(prop, term) {
+  return new Promise((res, rej) => {
+    osmosis
+      .post(resolve(host, `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter`), {
+        [prop]: term,
+        WOSubmitAction: 'eloFilter',
+        federation: 'STT',
+        rankingDate: '10.08.2019'
+      })
+      .set({
+        [prop]: osmosis.find('table.result-set > tbody > tr').set({
+          name: 'td:first-child a',
+          href: 'td:first-child a@href',
+          club: 'td:nth-child(3)',
+          elo: 'td:nth-child(4)'
+        })
+      })
+      .error(
+        R.pipe(
+          error('search'),
+          rej
+        )
+      )
+      .data(data =>
+        res({
+          [prop]: arrayify(data[prop])
+            .filter(Boolean)
+            .map(simplifyLinks)
+        })
+      )
+  })
+}
+
+function search(term) {
+  return Promise.all([
+    _searchBy('lastname', term),
+    _searchBy('firstname', term)
+  ]).then(values => ({
+    ...values[0],
+    ...values[1]
+  }))
+}
+
 module.exports = {
   arrayify,
   assocHistory,
@@ -659,5 +705,6 @@ module.exports = {
   game,
   player,
   elo,
-  me
+  me,
+  search
 }
