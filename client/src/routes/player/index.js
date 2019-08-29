@@ -18,7 +18,7 @@ import { get } from '../../lib/model'
 
 export default class Player extends Component {
   setMe = () => {
-    localStorage.setItem('me', this.props.href)
+    localStorage.setItem('me', this.state.elo.playerHref)
     route('/')
   }
 

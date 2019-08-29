@@ -611,10 +611,10 @@ function me({ url }) {
         classification:
           '#content-row1 > table.result-set:first tr:nth-child(4) td:last',
         teams: osmosis
-          .find('table.result-set table.result-set tr:nth-child(2) > td a')
-          .set('name')
+          .find('table.result-set table.result-set tr:nth-child(2) > td')
           .set({
-            href: '@href'
+            name: 'a',
+            href: 'a@href'
           }),
         balances: osmosis
           .find(
@@ -634,7 +634,9 @@ function me({ url }) {
           name: splitTitle(data.title)[1],
           clubId: getClubId(data.clubHref),
           breadcrumbs: extractBreadcrumbs(data),
-          teams: arrayify(data.teams).map(simplifyLinks),
+          teams: arrayify(data.teams)
+            .map(simplifyLinks)
+            .filter(t => t.href),
           balance: unique(
             arrayify(data.balances)
               .map(b => b.balance)
