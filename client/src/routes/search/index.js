@@ -11,7 +11,7 @@ import LinkRow from '../../components/link-row/'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
-const API_ORIGIN = 'http://localhost:3020'
+import { API_ORIGIN } from '../../lib/model'
 
 function debounce(callback, wait) {
   let timeout

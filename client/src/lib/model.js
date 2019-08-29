@@ -1,4 +1,4 @@
-const API_ORIGIN = 'http://localhost:3020'
+export const API_ORIGIN = 'http://localhost:3020'
 const asJson = r => r.json()
 
 export const get = endpoint => href =>
