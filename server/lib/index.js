@@ -1,5 +1,6 @@
 const compression = require('compression')
 const express = require('express')
+const helmet = require('helmet')
 const cors = require('cors')
 const apicache = require('apicache')
 const { join } = require('path')
@@ -10,6 +11,7 @@ const app = express()
 
 const env = process.env.NODE_ENV
 
+app.use(helmet())
 app.use(compression())
 app.use(cors())
 app.use(

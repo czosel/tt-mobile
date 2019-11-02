@@ -1,7 +1,6 @@
-const { parse } = require('url')
+const { parse, resolve } = require('url')
 const util = require('util')
 const R = require('ramda')
-const { resolve } = require('url')
 const ical = require('ical-generator')
 const moment = require('moment')
 
