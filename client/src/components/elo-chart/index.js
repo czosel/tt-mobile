@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { createElement as h } from 'preact/compat'
 import {
   multiply,
   pipe,
@@ -88,7 +88,13 @@ export default function EloChart({ data = [], startDate, endDate }) {
       {lines
         .filter(({ pos }) => pos > 0 && pos < 190)
         .map(({ pos, label }) => (
-          <text x="0" y={pos < 6 ? 10 : pos + 4} fontSize="12" fill="grey">
+          <text
+            x="20"
+            y={pos < 6 ? 10 : pos + 4}
+            textAnchor="end"
+            fontSize="12"
+            fill="grey"
+          >
             {label}
           </text>
         ))}
