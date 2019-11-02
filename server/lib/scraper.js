@@ -22,6 +22,7 @@ const logger = R.curry((level, prefix, val) => {
   console[level](prefix, val)
   return val
 })
+
 const log = logger('log')
 const error = logger('error')
 
@@ -502,7 +503,6 @@ function player({ url }) {
       })
       .error(error('player'))
       .data(data => {
-        console.log('TEAMS:', data.teams)
         res({
           ...data,
           name: splitTitle(data.title)[1],
