@@ -43,9 +43,11 @@ export default class Header extends Component {
               </Link>
             ) : !loading ? (
               <Link class="navbar-item" href="/">
-                <strong>
-                  {location.pathname !== '/' && <span>❮ </span>}TT mobile
-                </strong>
+                <h1>
+                  <strong>
+                    {location.pathname !== '/' && <span>❮ </span>}TT mobile
+                  </strong>
+                </h1>
               </Link>
             ) : (
               <span />

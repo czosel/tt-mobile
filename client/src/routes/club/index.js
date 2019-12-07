@@ -1,4 +1,5 @@
 import { h, Component } from 'preact'
+import Helmet from 'preact-helmet'
 import wire from 'wiretie'
 
 import clientHref from '../../lib/link'
@@ -50,6 +51,7 @@ export default class Club extends Component {
 
 const Teams = ({ name, teams }) => (
   <div>
+    <Helmet title={name} />
     <h1 class="title">{name}</h1>
     <h2 class="subtitle">Mannschaften</h2>
     <Table>

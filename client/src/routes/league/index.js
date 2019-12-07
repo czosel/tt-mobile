@@ -1,6 +1,7 @@
 import { h, Component } from 'preact'
 import wire from 'wiretie'
 import { route } from 'preact-router'
+import Helmet from 'preact-helmet'
 import style from './style'
 
 import clientHref from '../../lib/link'
@@ -38,6 +39,7 @@ export default class League extends Component {
       )
     return (
       <div class={style.profile}>
+        <Helmet title={league} />
         <Header back={back} breadcrumb={breadcrumbs[0]} />
         <Container>
           {clubs.length > 0 ? (

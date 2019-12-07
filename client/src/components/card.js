@@ -2,7 +2,7 @@ export default function Card({ name, children, closeable, onClose }) {
   return (
     <div class="card">
       <header class="card-header">
-        <p class="card-header-title">{name}</p>
+        <h2 class="card-header-title">{name}</h2>
         {closeable && (
           <a
             onClick={onClose}

@@ -1,4 +1,5 @@
 import { h, Component } from 'preact'
+import Helmet from 'preact-helmet'
 import wire from 'wiretie'
 import style from './style'
 
@@ -18,6 +19,7 @@ export default class Assoc extends Component {
     const { title, leagues } = data
     return (
       <div class={style.home}>
+        <Helmet title={title} />
         <Header back={back} />
         <Container>
           <h1 class="title">{title}</h1>

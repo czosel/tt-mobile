@@ -37,6 +37,9 @@ export default class App extends Component {
       <Provider model={this.model}>
         <div id="app">
           <Helmet
+            defaultTitle="TT-Mobile | Die Tischtennis-App"
+            titleTemplate="%s | TT-Mobile"
+            htmlAttributes={{ lang: 'de' }}
             link={[
               {
                 rel: 'apple-touch-icon',
@@ -58,7 +61,12 @@ export default class App extends Component {
                 name: 'msapplication-config',
                 content: '/assets/browserconfig.xml'
               },
-              { name: 'theme-color', content: '#FF5252' }
+              { name: 'theme-color', content: '#FF5252' },
+              {
+                name: 'description',
+                content:
+                  'TT-Mobile ist die App für Tischtennis-Ergebnisse in der Schweiz.'
+              }
             ]}
           />
           <Router onChange={this.handleRoute}>

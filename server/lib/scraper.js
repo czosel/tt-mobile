@@ -417,7 +417,7 @@ function game({ url }) {
       })
       .error(
         R.pipe(
-          error('club'),
+          error('game'),
           rej
         )
       )

@@ -1,4 +1,5 @@
 import { h, Component } from 'preact'
+import Helmet from 'preact-helmet'
 import wire from 'wiretie'
 
 import clientHref from '../../lib/link'
@@ -23,6 +24,7 @@ export default class Team extends Component {
     const link = 'https://maps.google.com/?q=' + location
     return (
       <div>
+        <Helmet title={name} />
         <Header breadcrumb={breadcrumbs[1]} back={back} />
         <Container>
           <h1 class="title">{name}</h1>

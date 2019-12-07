@@ -1,4 +1,5 @@
 import { h, Component } from 'preact'
+import Helmet from 'preact-helmet'
 import wire from 'wiretie'
 
 import Header from '../../components/header'
@@ -18,6 +19,7 @@ export default class Game extends Component {
     const { matches, summary, home, guest, league, date, time } = data
     return (
       <div>
+        <Helmet title={home + ' - ' + guest} />
         <Header back={back} />
         <Container>
           <h1 class="title">
