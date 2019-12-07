@@ -1,5 +1,6 @@
 import { h, Component } from 'preact'
 import { route } from 'preact-router'
+import Helmet from 'preact-helmet'
 
 import clientHref from '../../lib/link'
 
@@ -114,6 +115,7 @@ export default class Player extends Component {
 
     return (
       <div>
+        <Helmet title={name} />
         <Wrapper tab={tab} href={this.props.href} back={back}>
           {!me && (
             <button class="button is-pulled-right" onClick={this.setMe}>
