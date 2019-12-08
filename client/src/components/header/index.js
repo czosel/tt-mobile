@@ -54,11 +54,13 @@ export default class Header extends Component {
             )}
             <button
               onClick={this.toggleMenu}
-              class={style.burger + ' button navbar-burger ' + active}
+              class={style.burger + ' navbar-burger ' + active}
+              aria-label="menu"
+              aria-expanded={menuOpen}
             >
-              <span />
-              <span />
-              <span />
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
             </button>
           </div>
           <div class={'navbar-menu ' + active}>
