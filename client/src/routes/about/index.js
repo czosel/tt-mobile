@@ -14,15 +14,29 @@ export default class Home extends Component {
           <div class="content">
             <img src="/assets/logo.svg" class={style.logo} />
             <h2>TT-mobile</h2>
+            <p>von Christian Zosel</p>
             <p>
-              von Christian Zosel
-              <br />
-              Feedback?{' '}
+              E-Mail{' '}
               <a href="mailto:feedback@tt-mobile.ch">feedback@tt-mobile.ch</a>
+              <br />
+              Twitter{' '}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://twitter.com/TTmobileCH"
+              >
+                @TTmobileCH
+              </a>
             </p>
             <p>
-              TT-mobile ist Open Source (
-              <a href="https://github.com/czosel/tt-mobile">GitHub</a>).
+              Code{' '}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://github.com/czosel/tt-mobile"
+              >
+                GitHub
+              </a>
             </p>
             <h3>Letzte Änderungen</h3>
             v1.0.4 (8.12.2019)
