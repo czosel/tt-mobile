@@ -1,4 +1,4 @@
-export const API_ORIGIN = 'http://localhost:3020'
+export const API_ORIGIN = process.env.PREACT_APP_API
 const asJson = r => r.json()
 
 export const get = endpoint => href =>

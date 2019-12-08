@@ -22,6 +22,7 @@
     "if-env": "^1.0.4",
     "node-sass": "^4.11.0",
     "preact-cli": "^3.0.0-rc.6",
+    "preact-cli-plugin-env-vars": "^1.2.1",
     "prettier": "^1.15.2",
     "sass-loader": "^6.0.7"
   },

@@ -14,6 +14,7 @@ First, clone the repository:
 ```shell
 git clone git@github.com:czosel/tt-mobile.git
 cd tt-mobile
+echo PREACT_APP_API=http://localhost:3020 > ./client/.env
 ```
 
 ### Docker
