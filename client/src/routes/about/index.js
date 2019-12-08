@@ -25,6 +25,10 @@ export default class Home extends Component {
               <a href="https://github.com/czosel/tt-mobile">GitHub</a>).
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.0.4 (8.12.2019)
+            <ul>
+              <li>Softwarepflege</li>
+            </ul>
             v1.0.3 (29.8.2019)
             <ul>
               <li>Feature: Spielersuche</li>
