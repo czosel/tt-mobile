@@ -7,6 +7,8 @@ const { join } = require('path')
 
 const scraper = require('./scraper')
 
+require('dotenv').config()
+
 const app = express()
 
 const env = process.env.NODE_ENV
@@ -72,6 +74,8 @@ app.get('/search/:term', async ({ params }, res) => {
   }
 })
 
-app.listen(3020, function() {
-  console.log('server listening on port 3020')
+const port = process.env.PORT || 3020
+
+app.listen(port, function() {
+  console.log(`server listening on port ${port}`)
 })
