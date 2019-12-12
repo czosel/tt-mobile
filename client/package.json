@@ -15,6 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-eslint": "^10.0.1",
+    "copy-webpack-plugin": "^5.1.1",
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-prettier": "^3.0.0",
