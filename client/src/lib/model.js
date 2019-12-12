@@ -1,6 +1,9 @@
 export const API_ORIGIN = process.env.PREACT_APP_API
 const asJson = r => r.json()
 
+const isBrowser = () => typeof window !== 'undefined'
+const me = () => isBrowser() && localStorage.getItem('me')
+
 export const get = endpoint => href =>
   fetch(`${API_ORIGIN}/${endpoint}?url=${encodeURIComponent(href)}`).then(
     asJson
@@ -11,9 +14,7 @@ export const icalHref = href =>
 
 export default function model() {
   return {
-    me() {
-      return localStorage.getItem('me')
-    },
+    me,
     api: {
       assoc: get('assoc'),
       league: get('league'),
@@ -21,7 +22,7 @@ export default function model() {
       player: get('player'),
       elo: get('elo'),
       me: () => {
-        const href = localStorage.getItem('me')
+        const href = me()
         return href ? get('me')(href) : null
       },
       game: get('game'),

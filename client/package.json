@@ -6,8 +6,8 @@
   "scripts": {
     "test": "eslint src",
     "start": "if-env NODE_ENV=production && npm run -s serve || npm run -s dev",
-    "build": "preact build --no-prerender",
-    "serve": "preact build --no-prerender && preact serve",
+    "build": "preact build",
+    "serve": "preact build && preact serve",
     "dev": "preact watch"
   },
   "keywords": [],
@@ -32,6 +32,7 @@
     "preact": "^10.0.5",
     "preact-context-provider": "^2.0.0-preactx.2",
     "preact-helmet": "^4.0.0-alpha-3",
+    "preact-render-to-string": "^5.1.2",
     "preact-router": "^3.1.0",
     "rambda": "^1.2.6",
     "react-spinners": "^0.6.1",
