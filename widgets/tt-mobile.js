@@ -56,7 +56,7 @@ var TTmobile = (function(exports) {
     return `
       <tr>
         <td>
-          <a target="_blank" href="https://tt-mobile.ch/team/${encodeURIComponent(
+          <a target="_blank" href="https://tt-mobile.ch/player/${encodeURIComponent(
             row.href
           )}">${row.name}</a>
         </td>
