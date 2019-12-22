@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development babel-watch lib/index.js",
+    "start": "NODE_ENV=development nodemon exec babel-node lib/index.js",
     "build": "babel lib -d dist",
     "test": "node ./**/*.test.js"
   },
@@ -14,8 +14,8 @@
   "devDependencies": {
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
+    "@babel/node": "^7.7.7",
     "@babel/preset-env": "^7.7.6",
-    "babel-watch": "^7.0.0",
     "nodemon": "^1.19.4",
     "osmosis": "^1.1.10",
     "tape": "^4.11.0"
