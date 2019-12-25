@@ -1,0 +1,19 @@
+{
+  "name": "tt-mobile-widgets",
+  "version": "1.0.0",
+  "description": "Client-side widgets for embedding TT-mobile",
+  "main": "tt-mobile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/czosel/tt-mobile.git"
+  },
+  "author": "Christian Zosel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/czosel/tt-mobile/issues"
+  },
+  "homepage": "https://github.com/czosel/tt-mobile#readme"
+}

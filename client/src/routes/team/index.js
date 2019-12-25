@@ -6,6 +6,7 @@ import clientHref from '../../lib/link'
 import { icalHref } from '../../lib/model'
 
 import Header from '../../components/header'
+import Embed from '../../components/embed'
 import Footer from '../../components/footer'
 import Container from '../../components/container'
 import LoadingPage from '../../components/loading-page'
@@ -68,6 +69,7 @@ export default class Team extends Component {
               </tbody>
             </Table>
           )}
+          <Embed param="team-url" url={href} />
           <Table>
             <tbody>
               <LinkRow href={clientHref({ clubId })}>

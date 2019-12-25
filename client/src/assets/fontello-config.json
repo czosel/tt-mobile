@@ -35,6 +35,12 @@
       "css": "cancel",
       "code": 59395,
       "src": "fontawesome"
+    },
+    {
+      "uid": "7034e4d22866af82bef811f52fb1ba46",
+      "css": "code",
+      "code": 61729,
+      "src": "fontawesome"
     }
   ]
 }

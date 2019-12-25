@@ -7,6 +7,7 @@ import style from './style'
 import clientHref from '../../lib/link'
 
 import Header from '../../components/header'
+import Embed from '../../components/embed'
 import Footer from '../../components/footer'
 import Container from '../../components/container'
 import Schedule from '../../components/schedule'
@@ -23,7 +24,7 @@ export default class League extends Component {
     route(clientHref(this.props.href, tab))
   }
 
-  render({ pending, rejected, back, data, tab }) {
+  render({ pending, rejected, back, data, tab, href }) {
     if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
 
@@ -33,7 +34,7 @@ export default class League extends Component {
 
     const content =
       tab === 'table' ? (
-        <LeagueTable {...{ clubs }} />
+        <LeagueTable {...{ clubs, href }} />
       ) : (
         <Schedule {...{ chunks }} />
       )
@@ -62,35 +63,38 @@ export default class League extends Component {
   }
 }
 
-function LeagueTable({ clubs }) {
+function LeagueTable({ clubs, href }) {
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th />
-          <th>Mannschaft</th>
-          <th class="center optional">Beg.</th>
-          <th class="center optional-2">Spiele</th>
-          <th class="center optional-3">+/-</th>
-          <th>Punkte</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        {clubs.map(club => (
-          <LinkRow key={club.href} href={clientHref(club.href)}>
-            <td class="right thin">{club.rank}</td>
-            <td>{club.name}</td>
-            <td class="center optional">{club.nrOfGames}</td>
-            <td class="center optional-2">{club.games}</td>
-            <td class="center optional-3">{club.balance}</td>
-            <td class="result center">{club.score}</td>
-            <td class="thin">
-              <i class="icon-right-open" />
-            </td>
-          </LinkRow>
-        ))}
-      </tbody>
-    </Table>
+    <>
+      <Table>
+        <thead>
+          <tr>
+            <th />
+            <th>Mannschaft</th>
+            <th class="center optional">Beg.</th>
+            <th class="center optional-2">Spiele</th>
+            <th class="center optional-3">+/-</th>
+            <th>Punkte</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {clubs.map(club => (
+            <LinkRow key={club.href} href={clientHref(club.href)}>
+              <td class="right thin">{club.rank}</td>
+              <td>{club.name}</td>
+              <td class="center optional">{club.nrOfGames}</td>
+              <td class="center optional-2">{club.games}</td>
+              <td class="center optional-3">{club.balance}</td>
+              <td class="result center">{club.score}</td>
+              <td class="thin">
+                <i class="icon-right-open" />
+              </td>
+            </LinkRow>
+          ))}
+        </tbody>
+      </Table>
+      <Embed param="table-url" url={href} />
+    </>
   )
 }
