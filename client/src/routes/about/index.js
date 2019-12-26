@@ -39,6 +39,10 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.0.5 (26.12.2019)
+            <ul>
+              <li>TT-mobile kann auf Vereinswebsites eingebettet werden</li>
+            </ul>
             v1.0.4 (8.12.2019)
             <ul>
               <li>Softwarepflege</li>

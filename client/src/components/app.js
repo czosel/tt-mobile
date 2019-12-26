@@ -37,8 +37,8 @@ export default class App extends Component {
       <Provider model={this.model}>
         <div id="app">
           <Helmet
-            defaultTitle="TT-Mobile | Die Tischtennis-App"
-            titleTemplate="%s | TT-Mobile"
+            defaultTitle="TT-mobile | Die Tischtennis-App"
+            titleTemplate="%s | TT-mobile"
             htmlAttributes={{ lang: 'de' }}
             link={[
               {
@@ -65,7 +65,7 @@ export default class App extends Component {
               {
                 name: 'description',
                 content:
-                  'TT-Mobile ist die App für Tischtennis-Ergebnisse in der Schweiz.'
+                  'TT-mobile ist die App für Tischtennis-Ergebnisse in der Schweiz.'
               }
             ]}
           />
