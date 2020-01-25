@@ -15,6 +15,8 @@ import LinkRow from '../../components/link-row'
 import Table from '../../components/table'
 import EloScore from '../../components/elo-score'
 
+import { winnerClass } from '../../lib/winner'
+
 @wire('model', { data: ['api.team', 'href'] })
 export default class Team extends Component {
   render({ pending, rejected, back, data, href }) {
@@ -98,27 +100,33 @@ export default class Team extends Component {
               </tr>
             </thead>
             <tbody>
-              {games.map(({ href, date, time, opponent, isHome, result }) => (
-                <LinkRow key={href} href={clientHref(href)}>
-                  <td>
-                    {opponent}
-                    <div class="tags has-addons">
-                      {isHome ? (
-                        <span class="tag is-success">Zuhause</span>
-                      ) : (
-                        <span class="tag is-warning">Auswärts</span>
-                      )}
-                      <span class="tag">
-                        {date}, {time}
-                      </span>
-                    </div>
-                  </td>
-                  <td class="result center">{result || '-:-'}</td>
-                  <td class="thin">
-                    {result && <i class="icon-right-open" />}
-                  </td>
-                </LinkRow>
-              ))}
+              {games.map(
+                ({ href, date, time, opponent, isHome, result }, index) => (
+                  <LinkRow
+                    key={index}
+                    href={clientHref(href)}
+                    class={winnerClass(result, !isHome)}
+                  >
+                    <td>
+                      {opponent}
+                      <div class="tags has-addons">
+                        {isHome ? (
+                          <span class="tag is-success">Zuhause</span>
+                        ) : (
+                          <span class="tag is-warning">Auswärts</span>
+                        )}
+                        <span class="tag">
+                          {date}, {time}
+                        </span>
+                      </div>
+                    </td>
+                    <td class="result center">{result || '-:-'}</td>
+                    <td class="thin">
+                      {result && <i class="icon-right-open" />}
+                    </td>
+                  </LinkRow>
+                )
+              )}
             </tbody>
           </Table>
         </Container>

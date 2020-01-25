@@ -9,11 +9,15 @@ export default class LinkRow extends Component {
     }
   }
 
-  render({ children, href }) {
+  render({ children, href, ...props }) {
     return href ? (
-      <tr class={style.row} onClick={this.onOpen} {...{ children }} />
+      <tr
+        class={(style.row, props.class)}
+        onClick={this.onOpen}
+        {...{ children }}
+      />
     ) : (
-      <tr class="no-hover" {...{ children }} />
+      <tr class={('no-hover', props.class)} {...{ children }} />
     )
   }
 }

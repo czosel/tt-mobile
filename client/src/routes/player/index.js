@@ -17,6 +17,8 @@ import EloScore from '../../components/elo-score'
 import PlayerOverview from '../../components/player-overview'
 import { get } from '../../lib/model'
 
+import { winnerClass } from '../../lib/winner'
+
 export default class Player extends Component {
   setMe = () => {
     localStorage.setItem('me', this.state.elo.playerHref)
@@ -164,8 +166,12 @@ function Single({ singles }) {
         </tr>
       </thead>
       <tbody>
-        {singles.map(({ opponent, classification, href, sets }) => (
-          <LinkRow key={href} href={clientHref(href)}>
+        {singles.map(({ opponent, classification, href, sets }, index) => (
+          <LinkRow
+            key={index}
+            href={clientHref(href)}
+            class={winnerClass(sets)}
+          >
             <td>{opponent}</td>
             <td class="center">
               <EloScore value={classification} />
@@ -193,7 +199,7 @@ function Double({ doubles }) {
       </thead>
       <tbody>
         {doubles.map(({ partner, opponent1, opponent2, sets }, index) => (
-          <tr key={index} class="no-hover">
+          <tr key={index} class={('no-hover', winnerClass(sets))}>
             <td>{partner}</td>
             <td>
               {opponent1}
