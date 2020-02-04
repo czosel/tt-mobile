@@ -18,8 +18,9 @@ import Table from '../../components/table'
 import Tabs from '../../components/tabs'
 import Tab from '../../components/tab'
 
+export default
 @wire('model', { data: ['api.league', 'href'] })
-export default class League extends Component {
+class League extends Component {
   handleChange = tab => {
     route(clientHref(this.props.href, tab))
   }

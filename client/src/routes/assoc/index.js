@@ -11,8 +11,9 @@ import ErrorPage from '../../components/error-page'
 import Table from '../../components/table'
 import LinkRow from '../../components/link-row'
 
+export default
 @wire('model', { data: ['api.assoc', 'href'] })
-export default class Assoc extends Component {
+class Assoc extends Component {
   render({ pending, rejected, back, data }) {
     if (pending) return <LoadingPage back={back} />
     if (rejected) return <ErrorPage info={rejected} />
