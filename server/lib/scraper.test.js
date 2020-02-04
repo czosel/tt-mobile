@@ -58,12 +58,12 @@ test('arrayify', t => {
 test('player response', async t => {
   const player = await scraper.player({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2017%2F18&person=1714709&club=33123'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123'
   })
   t.ok(isClass(player.classification), 'classification')
   t.equal(typeof player.title, 'string', 'title')
-  t.equal(typeof player.balance[0].team, 'string', 'balance:team')
-  t.equal(typeof player.balance[0].data, 'string', 'balance:data')
+  t.equal(typeof player.balances[0].team, 'string', 'balance:team')
+  t.equal(typeof player.balances[0].data, 'string', 'balance:data')
 
   t.equal(typeof player.singles[0].opponent, 'string', 'singles:opponent')
   t.ok(isUrl(player.singles[0].href), 'singles:href')
@@ -85,7 +85,7 @@ test('elo response', async t => {
   const start = Date.now()
   const elo = await scraper.elo({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter?federation=STT&rankingDate=17.11.2018&ranking=354218426'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter?federation=STT&rankingDate=04.02.2020&ranking=356207700'
   })
   console.log('elo request ', Date.now() - start)
   t.equal(typeof elo.data[0], 'number', 'elo')
@@ -98,7 +98,7 @@ test('elo response', async t => {
 test('short player response', async t => {
   const player = await scraper.me({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2017%2F18&person=1714709&club=33123'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123'
   })
   t.ok(isClass(player.classification), 'classification')
   t.equal(typeof player.title, 'string', 'title')
@@ -116,7 +116,7 @@ test('game', async t => {
   // Royal Bern
   const response = await scraper.game({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6371295&championship=MTTV+17%2F18&group=201630'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6409697&championship=MTTV+19%2F20&group=205664'
   })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.summary.game, 'string')
@@ -128,7 +128,7 @@ test('typical league', async t => {
   // Nationalliga A
   const response = await scraper.league({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+17%2F18&group=201744'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+19%2F20&group=205604'
   })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.clubs[0].name, 'string')
