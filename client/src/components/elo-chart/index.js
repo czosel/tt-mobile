@@ -20,24 +20,10 @@ const min = arr => Math.min(...arr)
 const shrink = multiply(0.98)
 const grow = multiply(1.02)
 
-const x1 = pipe(
-  map(head),
-  min
-)
-const x2 = pipe(
-  map(head),
-  max
-)
-const y1 = pipe(
-  map(last),
-  min,
-  shrink
-)
-const y2 = pipe(
-  map(last),
-  max,
-  grow
-)
+const x1 = pipe(map(head), min)
+const x2 = pipe(map(head), max)
+const y1 = pipe(map(last), min, shrink)
+const y2 = pipe(map(last), max, grow)
 const dx = p => subtract(x2(p), x1(p))
 const dy = p => subtract(y2(p), y1(p))
 
@@ -56,10 +42,7 @@ const project = curry((points, [x, y]) => [
   projectY(y, points)
 ])
 
-const asString = compose(
-  join(','),
-  map(join(','))
-)
+const asString = compose(join(','), map(join(',')))
 
 export default function EloChart({ data = [], startDate, endDate }) {
   if (!data || !data.length) {
@@ -69,10 +52,7 @@ export default function EloChart({ data = [], startDate, endDate }) {
   const points = dataToPoints(data)
   const process = map(project(points))
 
-  const view = compose(
-    asString,
-    process
-  )(points)
+  const view = compose(asString, process)(points)
   const projectLines = map(({ label, y }) => ({
     label,
     pos: projectY(y, points)

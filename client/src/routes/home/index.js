@@ -55,8 +55,9 @@ const addLinks = name => ({
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
 
+export default
 @wire('model', { data: ['api.me'], me: ['me'] })
-export default class Home extends Component {
+class Home extends Component {
   onClose = () => {
     localStorage.removeItem('me')
     this.setState({
@@ -75,7 +76,7 @@ export default class Home extends Component {
           <Card name="Neu: TT-mobile auf deiner Vereinswebsite">
             Tabellen und Mannschaften können ab jetzt direkt auf deiner
             Vereinswebsite angezeigt werden. Um mehr zu erfahren, wähle
-            "Einbetten" auf der jeweiligen Seite.
+            &quot;Einbetten&quot; auf der jeweiligen Seite.
           </Card>
           <br />
           {data && !closed ? (

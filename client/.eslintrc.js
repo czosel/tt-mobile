@@ -11,6 +11,9 @@ module.exports = {
   env: {
     browser: true
   },
+  globals: {
+    process: true
+  },
   settings: {
     react: {
       pragma: 'h'
