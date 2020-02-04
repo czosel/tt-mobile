@@ -1,11 +1,10 @@
 language: node_js
 node_js:
-  - "8"
+  - "10"
 
 env:
    - TEST_DIR=client
    - TEST_DIR=server
 
-install: cd $TEST_DIR && npm install && cd ..
-script: cd $TEST_DIR && npm test && cd ..
-
+install: cd $TEST_DIR && yarn && cd ..
+script: cd $TEST_DIR && yarn test && cd ..
