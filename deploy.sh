@@ -2,6 +2,6 @@
 stage=$(<stage)
 
 git pull
-(cd client && yarn && yarn build)
-(cd widget-docs && yarn && yarn build)
-(cd server && yarn && yarn build && pm2 restart "tt-mobile-${stage}")
+(cd client && yarn --frozen-lockfile && yarn build)
+(cd widget-docs && yarn --frozen-lockfile && yarn build)
+(cd server && yarn --frozen-lockfile && yarn build && pm2 restart "tt-mobile-${stage}")
