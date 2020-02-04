@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon exec babel-node lib/index.js",
     "build": "babel lib -d dist",
-    "test": "node ./**/*.test.js"
+    "test": "node ./lib/*.test.js"
   },
   "keywords": [],
   "author": "",
