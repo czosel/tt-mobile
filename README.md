@@ -32,9 +32,9 @@ Alternatively, install and run the server and client locally:
 ```shell
 # server
 cd server
-npm install && npm start
+yarn && yarn start
 
 # client
 cd client
-npm install && npm start
+yarn && yarn start
 ```
