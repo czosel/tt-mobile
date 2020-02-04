@@ -2,6 +2,6 @@
 stage=$(<stage)
 
 git pull
-(cd client && npm i && npm run build)
-(cd widget-docs && npm i && npm run build)
-(cd server && npm i && npm run build && pm2 restart "tt-mobile-${stage}")
+(cd client && yarn && yarn build)
+(cd widget-docs && yarn && yarn build)
+(cd server && yarn && yarn build && pm2 restart "tt-mobile-${stage}")
