@@ -73,12 +73,6 @@ class Home extends Component {
       <div class={style.home}>
         <Header />
         <Container>
-          <Card name="Neu: TT-mobile auf deiner Vereinswebsite">
-            Tabellen und Mannschaften können ab jetzt direkt auf deiner
-            Vereinswebsite angezeigt werden. Um mehr zu erfahren, wähle
-            &quot;Einbetten&quot; auf der jeweiligen Seite.
-          </Card>
-          <br />
           {data && !closed ? (
             <Card name={data.name} closeable="true" onClose={this.onClose}>
               <PlayerLinks {...data} me={me} />
