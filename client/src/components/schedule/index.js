@@ -4,7 +4,6 @@ import LinkRow from '../link-row'
 import Table from '../table'
 
 export default function Schedule({ chunks }) {
-  console.log(chunks)
   return (
     <div>
       {Array.isArray(chunks) &&
