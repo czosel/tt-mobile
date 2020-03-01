@@ -233,7 +233,9 @@ function club(id) {
       .data(data => {
         res({
           lastMatches: asChunks(toArray(data.lastMatches).map(simplifyLinks)),
-          nextMatches: asChunks(toArray(data.nextMatches).map(simplifyLinks))
+          nextMatches: asChunks(toArray(data.nextMatches).map(simplifyLinks)),
+          // deprecated
+          chunks: asChunks(toArray(data.lastMatches).map(simplifyLinks))
         })
       })
   })
