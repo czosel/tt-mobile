@@ -6,7 +6,7 @@ const moment = require('moment')
 
 const osmosis = require('osmosis')
 
-const host = 'http://click-tt.ch'
+const host = 'https://click-tt.ch'
 
 function unique(arr) {
   return arr.filter(
