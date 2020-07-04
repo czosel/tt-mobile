@@ -39,6 +39,11 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.0.7 (4.7.2020)
+            <ul>
+              <li>App für neue Spielsaison angepasst</li>
+              <li>Softwarepflege</li>
+            </ul>
             v1.0.6 (29.2.2020)
             <ul>
               <li>Spielplan-Vorschau auf Clubseite (Tobias Flühmann)</li>
