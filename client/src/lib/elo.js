@@ -20,14 +20,14 @@ export const eloMin = [
   1470,
   1540,
   1630,
-  1730
+  1730,
 ]
 
 export function getClass(elo) {
   if (typeof elo !== 'number') {
     return elo
   }
-  const i = eloMin.length - findIndex(e => elo >= e, reverse(eloMin))
+  const i = eloMin.length - findIndex((e) => elo >= e, reverse(eloMin))
   return getLabel(i - 1)
 }
 

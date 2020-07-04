@@ -16,9 +16,9 @@
     "@babel/core": "^7.7.5",
     "@babel/node": "^7.7.7",
     "@babel/preset-env": "^7.7.6",
-    "nodemon": "^1.19.4",
+    "nodemon": "^2.0.4",
     "osmosis": "^1.1.10",
-    "tape": "^4.11.0"
+    "tape": "^5.0.1"
   },
   "dependencies": {
     "apicache": "^1.5.2",
@@ -29,9 +29,6 @@
     "helmet": "^3.21.2",
     "ical-generator": "^1.9.1",
     "moment": "^2.24.0",
-    "ramda": "^0.26.0"
-  },
-  "resolutions": {
-    "needle": "2.3.0"
+    "ramda": "^0.27.0"
   }
 }

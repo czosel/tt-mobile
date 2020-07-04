@@ -1,15 +1,15 @@
 export const API_ORIGIN = process.env.PREACT_APP_API
-const asJson = r => r.json()
+const asJson = (r) => r.json()
 
 const isBrowser = () => typeof window !== 'undefined'
 const me = () => isBrowser() && localStorage.getItem('me')
 
-export const get = endpoint => href =>
+export const get = (endpoint) => (href) =>
   fetch(`${API_ORIGIN}/${endpoint}?url=${encodeURIComponent(href)}`).then(
     asJson
   )
 
-export const icalHref = href =>
+export const icalHref = (href) =>
   `${API_ORIGIN}/team?format=ics&url=${encodeURIComponent(href)}`
 
 export default function model() {
@@ -34,7 +34,7 @@ export default function model() {
       },
       clubTeams(id) {
         return fetch(`${API_ORIGIN}/club-teams/${id}`).then(asJson)
-      }
-    }
+      },
+    },
   }
 }

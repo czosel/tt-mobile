@@ -11,7 +11,7 @@ const host = 'https://click-tt.ch'
 function unique(arr) {
   return arr.filter(
     (entry, index, self) =>
-      self.findIndex(t => {
+      self.findIndex((t) => {
         return t.data === entry.data && t.team === entry.team
       }) === index
   )
@@ -25,41 +25,41 @@ const logger = R.curry((level, prefix, val) => {
 const log = logger('log')
 const error = logger('error')
 
-const arrayify = R.unless(Array.isArray, a => [a])
+const arrayify = R.unless(Array.isArray, (a) => [a])
 
 const removeIfNotList = (obj, prop) => {
   return !Array.isArray(obj[prop]) ? R.omit([prop], obj) : obj
 }
 
-const simplifyObject = prop => obj => ({
+const simplifyObject = (prop) => (obj) => ({
   ...obj,
-  [prop]: simplify(obj[prop])
+  [prop]: simplify(obj[prop]),
 })
 const simplifyLinks = simplifyObject('href')
 
-const formatTime = obj => ({
+const formatTime = (obj) => ({
   ...obj,
-  time: obj.time.split(' ')[0]
+  time: obj.time.split(' ')[0],
 })
 
 // strip "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/" from URL
-const simplify = href => (href ? href.substring(href.lastIndexOf('/')) : '')
+const simplify = (href) => (href ? href.substring(href.lastIndexOf('/')) : '')
 
-const toArray = arr => (Array.isArray(arr) ? arr : [])
+const toArray = (arr) => (Array.isArray(arr) ? arr : [])
 
-const splitTitle = title => {
+const splitTitle = (title) => {
   return title
     ? title
         .split('\n')
-        .map(i => i.trim())
-        .filter(i => !!i)
-        .filter(i => i != '-')
+        .map((i) => i.trim())
+        .filter((i) => !!i)
+        .filter((i) => i != '-')
     : []
 }
 
-const asChunks = games => {
+const asChunks = (games) => {
   const chunks = []
-  games.forEach(g => {
+  games.forEach((g) => {
     if (g.date !== '') {
       chunks.push({ date: g.date, games: [] })
     }
@@ -68,7 +68,7 @@ const asChunks = games => {
   return chunks
 }
 
-const getClubId = clubHref => Number(parse(clubHref, true).query.club)
+const getClubId = (clubHref) => Number(parse(clubHref, true).query.club)
 
 function assocHistory({ step }) {
   const url =
@@ -78,27 +78,21 @@ function assocHistory({ step }) {
       .get(resolve(host, url))
       .find(`table.matrix tr:eq(${step}) td:first-child`)
       .set({
-        regular: osmosis
-          .find('a')
-          .set('name')
-          .set({
-            href: '@href'
-          })
+        regular: osmosis.find('a').set('name').set({
+          href: '@href',
+        }),
       })
       .find(`table.matrix tr:eq(${step}) td:last-child`)
       .set({
-        trophy: osmosis
-          .find('a')
-          .set('name')
-          .set({
-            href: '@href'
-          })
+        trophy: osmosis.find('a').set('name').set({
+          href: '@href',
+        }),
       })
       .error(R.pipe(error('assocHistory'), rej))
       .data(({ regular, trophy }) => {
         res({
           regular: toArray(regular).map(simplifyLinks),
-          trophy: toArray(trophy).map(simplifyLinks)
+          trophy: toArray(trophy).map(simplifyLinks),
         })
       })
   })
@@ -113,38 +107,33 @@ function assoc({ url }) {
         title: '#content-col1 h1',
         leagues: osmosis.find('table.matrix td ul li span').set({
           name: 'a',
-          href: 'a@href'
-        })
+          href: 'a@href',
+        }),
       })
       .error(R.pipe(error('assoc'), rej))
       .data(({ title, leagues }) => {
         res({
           title: splitTitle(title)[0],
-          leagues: toArray(leagues).map(simplifyLinks)
+          leagues: toArray(leagues).map(simplifyLinks),
         })
       })
   })
 }
 
-const findBreadcrumbs = osmosis =>
-  osmosis
-    .find('#breadcrumb a')
-    .set('name')
-    .set({
-      href: '@href'
-    })
+const findBreadcrumbs = (osmosis) =>
+  osmosis.find('#breadcrumb a').set('name').set({
+    href: '@href',
+  })
 
 const extractBreadcrumbs = ({ breadcrumbs }) =>
-  toArray(breadcrumbs)
-    .map(simplifyLinks)
-    .slice(2)
+  toArray(breadcrumbs).map(simplifyLinks).slice(2)
 
 function league({ url }) {
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
       .set({
-        breadcrumbs: findBreadcrumbs(osmosis)
+        breadcrumbs: findBreadcrumbs(osmosis),
       })
       .find('#content')
       .set({
@@ -159,7 +148,7 @@ function league({ url }) {
             home: 'td:nth-child(6)',
             guest: 'td:nth-child(8)',
             result: 'td:nth-child(10)',
-            href: 'td:nth-child(10) a@href'
+            href: 'td:nth-child(10) a@href',
           }),
         clubs: osmosis
           .find(
@@ -172,15 +161,13 @@ function league({ url }) {
             nrOfGames: 'td:nth-child(4)',
             games: 'td:nth-child(8)',
             balance: 'td:nth-child(9)',
-            score: 'td:last-child'
-          })
+            score: 'td:last-child',
+          }),
       })
       .error(R.pipe(error('league'), rej))
-      .data(data => {
+      .data((data) => {
         const titleParts = splitTitle(data.title)
-        const games = toArray(data.games)
-          .map(simplifyLinks)
-          .map(formatTime)
+        const games = toArray(data.games).map(simplifyLinks).map(formatTime)
 
         res({
           assoc: titleParts[0],
@@ -189,11 +176,13 @@ function league({ url }) {
           breadcrumbs: extractBreadcrumbs(data),
           chunks: asChunks(games),
           clubs: toArray(data.clubs)
-            .map(club => ({
+            .map((club) => ({
               ...club,
-              score: club.score.startsWith('zurückgezogen') ? '-:-' : club.score
+              score: club.score.startsWith('zurückgezogen')
+                ? '-:-'
+                : club.score,
             }))
-            .map(simplifyLinks)
+            .map(simplifyLinks),
         })
       })
   })
@@ -219,23 +208,23 @@ function club(id) {
             home: 'td:nth-child(7)',
             guest: 'td:nth-child(9)',
             href: 'td:nth-child(11) a@href',
-            result: 'td:nth-child(11)'
+            result: 'td:nth-child(11)',
           }),
         nextMatches: osmosis
           .find('#content-row1 table.result-set:last tr:not(th)')
           .set({
             date: 'td:nth-child(2)',
             home: 'td:nth-child(7)',
-            guest: 'td:nth-child(9)'
-          })
+            guest: 'td:nth-child(9)',
+          }),
       })
       .error(R.pipe(error('club'), rej))
-      .data(data => {
+      .data((data) => {
         res({
           lastMatches: asChunks(toArray(data.lastMatches).map(simplifyLinks)),
           nextMatches: asChunks(toArray(data.nextMatches).map(simplifyLinks)),
           // deprecated
-          chunks: asChunks(toArray(data.lastMatches).map(simplifyLinks))
+          chunks: asChunks(toArray(data.lastMatches).map(simplifyLinks)),
         })
       })
   })
@@ -261,14 +250,14 @@ function clubTeams(id) {
             href: 'td:nth-child(2) a@href',
             captain: 'td:nth-child(3)',
             rank: 'td:nth-child(4)',
-            points: 'td:nth-child(5)'
-          })
+            points: 'td:nth-child(5)',
+          }),
       })
       .error(R.pipe(error('clubTeams'), rej))
-      .data(data => {
+      .data((data) => {
         res({
           name: splitTitle(data.title)[0],
-          teams: toArray(data.teams).map(simplifyLinks)
+          teams: toArray(data.teams).map(simplifyLinks),
         })
       })
   })
@@ -279,7 +268,7 @@ function team({ url, format }, expressRes) {
     osmosis
       .get(resolve(host, url))
       .set({
-        breadcrumbs: findBreadcrumbs(osmosis)
+        breadcrumbs: findBreadcrumbs(osmosis),
       })
       .find('#content')
       .do(
@@ -288,7 +277,7 @@ function team({ url, format }, expressRes) {
           club: '#content-row1 table.result-set tr:first-child td a',
           clubHref: '#content-row1 table.result-set tr:first-child td a@href',
           location:
-            '#content-row1 table.result-set tr:first-child td:last-child:html'
+            '#content-row1 table.result-set tr:first-child td:last-child:html',
         }),
         osmosis.set({
           players: osmosis
@@ -298,8 +287,8 @@ function team({ url, format }, expressRes) {
               href: 'td:nth-child(2) a@href',
               classification: 'td:nth-child(3)',
               appearances: 'td:nth-child(5)',
-              balance: 'td:nth-child(8)'
-            })
+              balance: 'td:nth-child(8)',
+            }),
         }),
         osmosis.set({
           games: osmosis
@@ -313,18 +302,18 @@ function team({ url, format }, expressRes) {
               home: 'td:nth-child(6)',
               guest: 'td:nth-child(8)',
               result: 'td:nth-child(10)',
-              href: 'td:nth-child(10) a@href'
-            })
+              href: 'td:nth-child(10) a@href',
+            }),
         })
       )
       .error(error('club'))
-      .data(data => {
+      .data((data) => {
         if (format === 'ics') {
           const cal = ical({ domain: 'tt-mobile.ch', name: data.club })
           cal.events(
             toArray(data.games)
               .map(simplifyLinks)
-              .map(game => {
+              .map((game) => {
                 const start = moment(
                   `${game.date} ${game.time}`,
                   'DD.MM.YYYY H:m'
@@ -333,7 +322,7 @@ function team({ url, format }, expressRes) {
                   start: start.toDate(),
                   end: start.add(3, 'h').toDate(),
                   summary: `${game.home} - ${game.guest}`,
-                  description: game.isHome ? 'Heimspiel' : 'Auswärtsspiel'
+                  description: game.isHome ? 'Heimspiel' : 'Auswärtsspiel',
                 }
               })
           )
@@ -344,22 +333,20 @@ function team({ url, format }, expressRes) {
         const games = toArray(data.games)
           .map(simplifyLinks)
           .map(formatTime)
-          .map(game => ({
+          .map((game) => ({
             ...game,
             opponent: game.guest.includes(data.club) ? game.home : game.guest,
-            isHome: !game.guest.includes(data.club)
+            isHome: !game.guest.includes(data.club),
           }))
         res({
           ...data,
           games,
-          location: splitTitle(data.location)[3]
-            .split('<br>')
-            .join(', '),
+          location: splitTitle(data.location)[3].split('<br>').join(', '),
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],
           clubId: getClubId(data.clubHref),
-          players: toArray(data.players).map(simplifyLinks)
+          players: toArray(data.players).map(simplifyLinks),
         })
       })
   })
@@ -374,7 +361,7 @@ function game({ url }) {
     osmosis
       .get(resolve(host, url))
       .set({
-        breadcrumbs: findBreadcrumbs(osmosis)
+        breadcrumbs: findBreadcrumbs(osmosis),
       })
       .find('#content')
       .set({
@@ -394,17 +381,17 @@ function game({ url }) {
             s4: 'td:nth-child(9)',
             s5: 'td:nth-child(10)',
             sets: 'td:nth-child(11)',
-            game: 'td:nth-child(12)'
+            game: 'td:nth-child(12)',
           }),
         summary: osmosis.find('table.result-set tr:last').set({
           balls: 'td:nth(2)',
           sets: 'td:nth(3)',
-          game: 'td:last'
-        })
+          game: 'td:last',
+        }),
       })
       .error(R.pipe(error('game'), rej))
-      .data(data => {
-        const split = data.title.split('<br>').map(i => i.trim())
+      .data((data) => {
+        const split = data.title.split('<br>').map((i) => i.trim())
         const lastParts = splitTitle(split[2])
         res({
           ...data,
@@ -415,11 +402,11 @@ function game({ url }) {
           guest: lastParts[1],
           date: lastParts[2].split(',')[1],
           time: lastParts[3],
-          matches: toArray(data.matches).map(match => ({
+          matches: toArray(data.matches).map((match) => ({
             ...match,
             player1href: simplify(match.player1href),
-            player2href: simplify(match.player2href)
-          }))
+            player2href: simplify(match.player2href),
+          })),
         })
       })
   })
@@ -430,7 +417,7 @@ function player({ url }) {
     osmosis
       .get(resolve(host, url))
       .set({
-        breadcrumbs: findBreadcrumbs(osmosis)
+        breadcrumbs: findBreadcrumbs(osmosis),
       })
       .find('#content')
       .set({
@@ -444,13 +431,13 @@ function player({ url }) {
           .find('table.result-set:nth(1) tr:first-child td a')
           .set('name')
           .set({
-            href: '@href'
+            href: '@href',
           }),
         teams: osmosis
           .find('table.result-set table.result-set tr:nth-child(2) > td')
           .set({
             name: 'a',
-            href: 'a@href'
+            href: 'a@href',
           }),
         balances: osmosis
           .find(
@@ -465,7 +452,7 @@ function player({ url }) {
             opponent: 'td:nth-child(3)',
             href: 'td:nth-child(3) a@href',
             classification: 'td:nth-child(4)',
-            sets: 'td:nth-child(6)'
+            sets: 'td:nth-child(6)',
           }),
         doubles: osmosis
           .find(
@@ -478,12 +465,12 @@ function player({ url }) {
             opponent1: 'td:nth-child(5) a:first',
             opponent2: 'td:nth-child(5) a:last',
             sets: 'td:nth-child(8)',
-            game: 'td:last-child'
+            game: 'td:last-child',
           }),
-        eloHref: 'ul.content-tabs > li:first-child a@href'
+        eloHref: 'ul.content-tabs > li:first-child a@href',
       })
       .error(error('player'))
-      .data(data => {
+      .data((data) => {
         res({
           ...data,
           name: splitTitle(data.title)[1],
@@ -492,22 +479,22 @@ function player({ url }) {
           seasons: arrayify(data.seasons).map(simplifyLinks),
           teams: arrayify(data.teams)
             .map(simplifyLinks)
-            .filter(t => t.href),
+            .filter((t) => t.href),
           balances: unique(
             arrayify(data.balances)
-              .map(b => b.balance)
+              .map((b) => b.balance)
               .join('\n')
               .split('\n')
-              .filter(str => str.trim())
-              .map(str => ({
+              .filter((str) => str.trim())
+              .map((str) => ({
                 team: str.substr(0, str.indexOf(':')).trim(),
-                data: str.substr(str.indexOf(':') + 1).trim()
+                data: str.substr(str.indexOf(':') + 1).trim(),
               }))
-              .filter(e => e.team.trim())
+              .filter((e) => e.team.trim())
           ),
           singles: toArray(data.singles).map(simplifyLinks),
           doubles: toArray(data.doubles).map(simplifyObject('partnerHref')),
-          eloHref: simplify(data.eloHref)
+          eloHref: simplify(data.eloHref),
         })
       })
   })
@@ -529,17 +516,17 @@ function elo({ url }) {
           myElo: 'td:nth-child(3)',
           opponentElo: 'td:nth-child(5)',
           won: 'td:nth-child(6):has(img)',
-          delta: 'td:last-child'
-        })
+          delta: 'td:last-child',
+        }),
       })
       .error(R.pipe(error('elo'), rej))
-      .data(data => {
+      .data((data) => {
         let current = parseInt(data.start)
         const start = current
         let result = []
         data.data
-          .filter(row => row.delta)
-          .forEach(row => {
+          .filter((row) => row.delta)
+          .forEach((row) => {
             current = current - parseFloat(row.delta.replace(',', '.'))
             result.push(current)
           })
@@ -547,9 +534,9 @@ function elo({ url }) {
         current = result[result.length - 1]
         // preview: elo values for both players, but no delta yet on click-tt
         data.data
-          .filter(row => !row.delta && row.myElo && row.opponentElo)
+          .filter((row) => !row.delta && row.myElo && row.opponentElo)
           .reverse()
-          .forEach(row => {
+          .forEach((row) => {
             current =
               current +
               eloDiff(row.myElo, row.opponentElo, row.won !== undefined)
@@ -560,7 +547,7 @@ function elo({ url }) {
           ...data,
           playerHref: simplify(data.playerHref),
           start,
-          data: result.map(x => Math.round(100 * x) / 100)
+          data: result.map((x) => Math.round(100 * x) / 100),
         })
       })
   })
@@ -576,7 +563,7 @@ function me({ url }) {
     osmosis
       .get(resolve(host, url))
       .set({
-        breadcrumbs: findBreadcrumbs(osmosis)
+        breadcrumbs: findBreadcrumbs(osmosis),
       })
       .find('#content')
       .set({
@@ -590,16 +577,16 @@ function me({ url }) {
           .find('table.result-set table.result-set tr:nth-child(2) > td')
           .set({
             name: 'a',
-            href: 'a@href'
+            href: 'a@href',
           }),
         balances: osmosis
           .find(
             'table.result-set table.result-set tr:last-child > td:last-child'
           )
-          .set('balance')
+          .set('balance'),
       })
       .error(R.pipe(error('club'), rej))
-      .data(data => {
+      .data((data) => {
         res({
           ...data,
           name: splitTitle(data.title)[1],
@@ -607,18 +594,18 @@ function me({ url }) {
           breadcrumbs: extractBreadcrumbs(data),
           teams: arrayify(data.teams)
             .map(simplifyLinks)
-            .filter(t => t.href),
+            .filter((t) => t.href),
           balance: unique(
             arrayify(data.balances)
-              .map(b => b.balance)
+              .map((b) => b.balance)
               .join('\n')
               .split('\n')
-              .filter(str => !!str.trim())
-              .map(str => ({
+              .filter((str) => !!str.trim())
+              .map((str) => ({
                 team: str.substr(0, str.indexOf(':')).trim(),
-                data: str.substr(str.indexOf(':') + 1).trim()
+                data: str.substr(str.indexOf(':') + 1).trim(),
               }))
-          )
+          ),
         })
       })
   })
@@ -631,22 +618,20 @@ function _searchBy(prop, term) {
         [prop]: term,
         WOSubmitAction: 'eloFilter',
         federation: 'STT',
-        rankingDate: '10.08.2019'
+        rankingDate: '10.08.2019',
       })
       .set({
         [prop]: osmosis.find('table.result-set > tbody > tr').set({
           name: 'td:first-child a',
           href: 'td:first-child a@href',
           club: 'td:nth-child(3)',
-          elo: 'td:nth-child(4)'
-        })
+          elo: 'td:nth-child(4)',
+        }),
       })
       .error(R.pipe(error('search'), rej))
-      .data(data =>
+      .data((data) =>
         res({
-          [prop]: arrayify(data[prop])
-            .filter(Boolean)
-            .map(simplifyLinks)
+          [prop]: arrayify(data[prop]).filter(Boolean).map(simplifyLinks),
         })
       )
   })
@@ -655,10 +640,10 @@ function _searchBy(prop, term) {
 function search(term) {
   return Promise.all([
     _searchBy('lastname', term),
-    _searchBy('firstname', term)
-  ]).then(values => ({
+    _searchBy('firstname', term),
+  ]).then((values) => ({
     ...values[0],
-    ...values[1]
+    ...values[1],
   }))
 }
 
@@ -674,5 +659,5 @@ module.exports = {
   player,
   elo,
   me,
-  search
+  search,
 }

@@ -8,14 +8,13 @@ import {
   subtract,
   compose,
   curry,
-  addIndex,
-  join
+  join,
 } from 'rambda'
 
 import { eloMin, getLabel } from '../../lib/elo'
 
-const max = arr => Math.max(...arr)
-const min = arr => Math.min(...arr)
+const max = (arr) => Math.max(...arr)
+const min = (arr) => Math.min(...arr)
 
 const shrink = multiply(0.98)
 const grow = multiply(1.02)
@@ -24,8 +23,8 @@ const x1 = pipe(map(head), min)
 const x2 = pipe(map(head), max)
 const y1 = pipe(map(last), min, shrink)
 const y2 = pipe(map(last), max, grow)
-const dx = p => subtract(x2(p), x1(p))
-const dy = p => subtract(y2(p), y1(p))
+const dx = (p) => subtract(x2(p), x1(p))
+const dy = (p) => subtract(y2(p), y1(p))
 
 const [vx1, vx2, vy1, vy2] = [30, 300, 0, 200]
 const vdy = vy2 - vy1
@@ -39,7 +38,7 @@ const projectY = curry((y, points) => {
 // returns the projection function based on current data
 const project = curry((points, [x, y]) => [
   projectX(x, points),
-  projectY(y, points)
+  projectY(y, points),
 ])
 
 const asString = compose(join(','), map(join(',')))
@@ -48,18 +47,17 @@ export default function EloChart({ data = [], startDate, endDate }) {
   if (!data || !data.length) {
     return
   }
-  const dataToPoints = addIndex(map)((y, i) => [i, y])
-  const points = dataToPoints(data)
+  const points = data.map((y, i) => [i, y])
   const process = map(project(points))
 
   const view = compose(asString, process)(points)
   const projectLines = map(({ label, y }) => ({
     label,
-    pos: projectY(y, points)
+    pos: projectY(y, points),
   }))
   let lines = eloMin.map((min, i) => ({
     label: getLabel(i),
-    y: min
+    y: min,
   }))
   lines = projectLines(lines)
   /* eslint-disable react/jsx-key */

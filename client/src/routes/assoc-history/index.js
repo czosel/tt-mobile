@@ -10,7 +10,7 @@ import CardList from '../../components/card-list'
 import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
 
-const hrefify = e => ({ ...e, href: clientHref(e.href) })
+const hrefify = (e) => ({ ...e, href: clientHref(e.href) })
 
 export default
 @wire('model', { data: ['api.assocHistory', 'step'] })

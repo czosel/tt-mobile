@@ -1,9 +1,9 @@
 import { getClass } from '../lib/elo'
 
-const safeSplit = v => (v.split ? v.split('\n') : [v])
-const safeTrim = v => (v.trim ? v.trim() : v)
+const safeSplit = (v) => (v.split ? v.split('\n') : [v])
+const safeTrim = (v) => (v.trim ? v.trim() : v)
 
-const getStyle = value => {
+const getStyle = (value) => {
   if (typeof value === 'number') {
     value = getClass(value)
   }
@@ -11,7 +11,7 @@ const getStyle = value => {
   return {
     'background-color': `hsl(${angle}, 100%, 40%)`,
     'font-weight': 'bold',
-    color: 'white'
+    color: 'white',
   }
 }
 
@@ -23,7 +23,7 @@ export default function EloScore({ value }) {
     <span>
       {safeSplit(value)
         .map(safeTrim)
-        .filter(v => !!v)
+        .filter((v) => !!v)
         .map((val, index) => (
           <span key={index} class="tag" style={getStyle(val)}>
             {getClass(val)}

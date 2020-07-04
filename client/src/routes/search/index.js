@@ -23,15 +23,15 @@ function debounce(callback, wait) {
 }
 
 export default class Search extends Component {
-  search = debounce(event => {
+  search = debounce((event) => {
     if (!event.target.value) {
       return this.setState({ results: {} })
     }
     fetch(`${API_ORIGIN}/search/${encodeURIComponent(event.target.value)}`)
-      .then(r => r.json())
-      .then(results => {
+      .then((r) => r.json())
+      .then((results) => {
         this.setState({
-          results
+          results,
         })
       })
   }, 300)
@@ -64,9 +64,9 @@ function Results({ results }) {
     <Table>
       <tbody>
         {results.lastname &&
-          results.lastname.map(data => <Result key={data.href} {...data} />)}
+          results.lastname.map((data) => <Result key={data.href} {...data} />)}
         {results.firstname &&
-          results.firstname.map(data => <Result key={data.href} {...data} />)}
+          results.firstname.map((data) => <Result key={data.href} {...data} />)}
       </tbody>
     </Table>
   )

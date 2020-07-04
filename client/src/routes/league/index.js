@@ -21,7 +21,7 @@ import Tab from '../../components/tab'
 export default
 @wire('model', { data: ['api.league', 'href'] })
 class League extends Component {
-  handleChange = tab => {
+  handleChange = (tab) => {
     route(clientHref(this.props.href, tab))
   }
 
@@ -80,7 +80,7 @@ function LeagueTable({ clubs, href }) {
           </tr>
         </thead>
         <tbody>
-          {clubs.map(club => (
+          {clubs.map((club) => (
             <LinkRow key={club.href} href={clientHref(club.href)}>
               <td class="right thin">{club.rank}</td>
               <td>{club.name}</td>

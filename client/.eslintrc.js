@@ -5,26 +5,27 @@ module.exports = {
     ecmaVersion: 2017,
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true
-    }
+      jsx: true,
+    },
   },
   env: {
-    browser: true
+    browser: true,
   },
   globals: {
-    process: true
+    process: true,
   },
   settings: {
     react: {
-      pragma: 'h'
-    }
+      pragma: 'h',
+      version: 'detect',
+    },
   },
   plugins: ['prettier'],
   extends: ['eslint:recommended', 'prettier', 'plugin:react/recommended'],
   rules: {
-    'react/react-in-jsx-scope': false,
-    'react/prop-types': false,
+    'react/react-in-jsx-scope': 0,
+    'react/prop-types': 0,
     'react/no-unknown-property': [2, { ignore: ['class'] }],
-    'prettier/prettier': ['error', { singleQuote: true, semi: false }]
-  }
+    'prettier/prettier': [2, { singleQuote: true, semi: false }],
+  },
 }

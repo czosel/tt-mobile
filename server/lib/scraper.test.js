@@ -21,7 +21,7 @@ function isDate(str) {
   return moment(str, 'DD.MM.YYYY').isValid()
 }
 
-test('class regex works', t => {
+test('class regex works', (t) => {
   t.ok(isClass('A20'))
   t.ok(isClass('D1'))
   t.notok(isClass('A00'))
@@ -32,13 +32,13 @@ test('class regex works', t => {
   t.end()
 })
 
-test('isSets', t => {
+test('isSets', (t) => {
   t.ok(isSets('2:3'))
   t.notok(isSets('3:3'))
   t.end()
 })
 
-test('isUrl', t => {
+test('isUrl', (t) => {
   t.ok(
     isUrl(
       '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2016%2F17&person=1714709&club=33123'
@@ -49,16 +49,16 @@ test('isUrl', t => {
   t.end()
 })
 
-test('arrayify', t => {
+test('arrayify', (t) => {
   t.deepEqual(scraper.arrayify(2), [2])
   t.deepEqual(scraper.arrayify([3]), [3])
   t.end()
 })
 
-test('player response', async t => {
+test('player response', async (t) => {
   const player = await scraper.player({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123',
   })
   t.ok(isClass(player.classification), 'classification')
   t.equal(typeof player.title, 'string', 'title')
@@ -81,11 +81,11 @@ test('player response', async t => {
   t.end()
 })
 
-test('elo response', async t => {
+test('elo response', async (t) => {
   const start = Date.now()
   const elo = await scraper.elo({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter?federation=STT&rankingDate=29.02.2020&ranking=356251305'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter?federation=STT&rankingDate=04.07.2020&ranking=356650015',
   })
   console.log('elo request ', Date.now() - start)
   t.equal(typeof elo.data[0], 'number', 'elo')
@@ -95,10 +95,10 @@ test('elo response', async t => {
   t.end()
 })
 
-test('short player response', async t => {
+test('short player response', async (t) => {
   const player = await scraper.me({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123',
   })
   t.ok(isClass(player.classification), 'classification')
   t.equal(typeof player.title, 'string', 'title')
@@ -112,11 +112,11 @@ test('short player response', async t => {
   t.end()
 })
 
-test('game', async t => {
+test('game', async (t) => {
   // Royal Bern
   const response = await scraper.game({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6409697&championship=MTTV+19%2F20&group=205664'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6409697&championship=MTTV+19%2F20&group=205664',
   })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.summary.game, 'string')
@@ -124,11 +124,11 @@ test('game', async t => {
   t.end()
 })
 
-test('typical league', async t => {
+test('typical league', async (t) => {
   // Nationalliga A
   const response = await scraper.league({
     url:
-      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+19%2F20&group=205604'
+      '/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+19%2F20&group=205604',
   })
   t.equal(typeof response.title, 'string')
   t.equal(typeof response.clubs[0].name, 'string')
@@ -139,11 +139,11 @@ test('typical league', async t => {
   t.end()
 })
 
-test.skip('limited league', async t => {
+test.skip('limited league', async (t) => {
   // Nati A Playoff 1/4 Final
   const response = await scraper.league({
     url:
-      'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=201044'
+      'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+16%2F17&group=201044',
   })
   t.deepEqual(response.clubs, [])
   t.equal(typeof response.chunks[0].games[0].home, 'string')
