@@ -1,4 +1,4 @@
-const DOCS_ORIGIN = process.env.PREACT_APP_DOCS
+const DOCS_ORIGIN = process.env.PREACT_APP_DOCS;
 
 export default function Embed({ param, url }) {
   return (
@@ -12,5 +12,5 @@ export default function Embed({ param, url }) {
         Einbetten
       </a>
     </p>
-  )
+  );
 }

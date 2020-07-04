@@ -1,5 +1,5 @@
-@import '../assets/css/fontello.css';
-@import '../../node_modules/bulma/sass/utilities/initial-variables';
+@import "../assets/css/fontello.css";
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
 // bulma customization
 $link: #607d8b;
 $primary: #455a64;
@@ -13,23 +13,23 @@ $desktop: 960px + (2 * $gap);
 $widescreen: 960px + (2 * $gap);
 $fullhd: 960px + (2 * $gap);
 
-@import '../../node_modules/bulma/sass/utilities/_all';
-@import '../../node_modules/bulma/sass/base/_all';
-@import '../../node_modules/bulma/sass/elements/container';
-@import '../../node_modules/bulma/sass/elements/content';
-@import '../../node_modules/bulma/sass/elements/table';
-@import '../../node_modules/bulma/sass/elements/button';
-@import '../../node_modules/bulma/sass/elements/tag';
-@import '../../node_modules/bulma/sass/elements/title';
-@import '../../node_modules/bulma/sass/layout/section';
-@import '../../node_modules/bulma/sass/layout/footer';
-@import '../../node_modules/bulma/sass/components/tabs';
-@import '../../node_modules/bulma/sass/components/navbar';
-@import '../../node_modules/bulma/sass/components/card';
-@import '../../node_modules/bulma/sass/form/shared';
-@import '../../node_modules/bulma/sass/form/input-textarea';
-@import '../../node_modules/bulma/sass/helpers/float.sass';
-@import '../../node_modules/bulma/sass/helpers/typography.sass';
+@import "../../node_modules/bulma/sass/utilities/_all";
+@import "../../node_modules/bulma/sass/base/_all";
+@import "../../node_modules/bulma/sass/elements/container";
+@import "../../node_modules/bulma/sass/elements/content";
+@import "../../node_modules/bulma/sass/elements/table";
+@import "../../node_modules/bulma/sass/elements/button";
+@import "../../node_modules/bulma/sass/elements/tag";
+@import "../../node_modules/bulma/sass/elements/title";
+@import "../../node_modules/bulma/sass/layout/section";
+@import "../../node_modules/bulma/sass/layout/footer";
+@import "../../node_modules/bulma/sass/components/tabs";
+@import "../../node_modules/bulma/sass/components/navbar";
+@import "../../node_modules/bulma/sass/components/card";
+@import "../../node_modules/bulma/sass/form/shared";
+@import "../../node_modules/bulma/sass/form/input-textarea";
+@import "../../node_modules/bulma/sass/helpers/float.sass";
+@import "../../node_modules/bulma/sass/helpers/typography.sass";
 
 html,
 body {
@@ -38,7 +38,7 @@ body {
   padding: 0;
   margin: 0;
   background: whitesmoke;
-  font-family: 'Helvetica Neue', arial, sans-serif;
+  font-family: "Helvetica Neue", arial, sans-serif;
   font-weight: 400;
   color: #444;
   -webkit-font-smoothing: antialiased;

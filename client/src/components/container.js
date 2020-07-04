@@ -3,5 +3,5 @@ export default function Container({ children }) {
     <section class="section">
       <div class="container">{children}</div>
     </section>
-  )
+  );
 }

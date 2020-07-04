@@ -1,6 +1,6 @@
-import Card from './card'
-import Table from './table'
-import LinkRow from './link-row'
+import Card from "./card";
+import Table from "./table";
+import LinkRow from "./link-row";
 
 export default function CardList({
   name,
@@ -23,5 +23,5 @@ export default function CardList({
         </tbody>
       </Table>
     </Card>
-  )
+  );
 }

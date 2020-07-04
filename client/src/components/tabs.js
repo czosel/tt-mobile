@@ -1,4 +1,4 @@
-import { Component, cloneElement } from 'preact'
+import { Component, cloneElement } from "preact";
 
 export default class Tabs extends Component {
   render({ children, active, onChange }) {
@@ -8,6 +8,6 @@ export default class Tabs extends Component {
           {children.map((child) => cloneElement(child, { active, onChange }))}
         </ul>
       </div>
-    )
+    );
   }
 }

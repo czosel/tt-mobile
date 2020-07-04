@@ -1,36 +1,36 @@
-import { h, Component } from 'preact'
-import { Router, route } from 'preact-router'
-import Helmet from 'preact-helmet'
+import { h, Component } from "preact";
+import { Router, route } from "preact-router";
+import Helmet from "preact-helmet";
 
 // eslint-disable-next-line no-unused-vars
-import debug from 'preact/debug'
+import debug from "preact/debug";
 
-import Provider from 'preact-context-provider'
-import model from '../lib/model.js'
+import Provider from "preact-context-provider";
+import model from "../lib/model.js";
 
-import Home from '../routes/home'
-import Search from '../routes/search'
-import Assoc from '../routes/assoc'
-import AssocHistory from '../routes/assoc-history'
-import League from '../routes/league'
-import Team from '../routes/team'
-import Club from '../routes/club'
-import Player from '../routes/player'
-import Game from '../routes/game'
-import About from '../routes/about'
+import Home from "../routes/home";
+import Search from "../routes/search";
+import Assoc from "../routes/assoc";
+import AssocHistory from "../routes/assoc-history";
+import League from "../routes/league";
+import Team from "../routes/team";
+import Club from "../routes/club";
+import Player from "../routes/player";
+import Game from "../routes/game";
+import About from "../routes/about";
 
 export default class App extends Component {
-  model = model()
+  model = model();
 
-  history = []
+  history = [];
 
   handleRoute = (e) => {
-    this.history.push(e.previous)
-  }
+    this.history.push(e.previous);
+  };
 
   goBack = () => {
-    history.length ? history.back() : route('/')
-  }
+    history.length ? history.back() : route("/");
+  };
 
   render() {
     return (
@@ -39,33 +39,33 @@ export default class App extends Component {
           <Helmet
             defaultTitle="TT-mobile | Die Tischtennis-App"
             titleTemplate="%s | TT-mobile"
-            htmlAttributes={{ lang: 'de' }}
+            htmlAttributes={{ lang: "de" }}
             link={[
               {
-                rel: 'apple-touch-icon',
-                href: '/assets/apple-touch-icon.png',
+                rel: "apple-touch-icon",
+                href: "/assets/apple-touch-icon.png",
               },
               {
-                rel: 'icon',
-                href: '/assets/favicon-32x32.png',
-                sizes: '32x32',
+                rel: "icon",
+                href: "/assets/favicon-32x32.png",
+                sizes: "32x32",
               },
               {
-                rel: 'icon',
-                href: '/assets/favicon-16x16.png',
-                sizes: '16x16',
+                rel: "icon",
+                href: "/assets/favicon-16x16.png",
+                sizes: "16x16",
               },
             ]}
             meta={[
               {
-                name: 'msapplication-config',
-                content: '/assets/browserconfig.xml',
+                name: "msapplication-config",
+                content: "/assets/browserconfig.xml",
               },
-              { name: 'theme-color', content: '#FF5252' },
+              { name: "theme-color", content: "#FF5252" },
               {
-                name: 'description',
+                name: "description",
                 content:
-                  'TT-mobile ist die App für Tischtennis-Ergebnisse in der Schweiz.',
+                  "TT-mobile ist die App für Tischtennis-Ergebnisse in der Schweiz.",
               },
             ]}
           />
@@ -83,6 +83,6 @@ export default class App extends Component {
           </Router>
         </div>
       </Provider>
-    )
+    );
   }
 }

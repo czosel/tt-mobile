@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'TtTable',
+  name: "TtTable",
   props: {
     url: String,
     highlight: String,
@@ -13,17 +13,17 @@ export default {
     this.url &&
       TTmobile.table(this.url, this.$el, {
         highlight: this.highlight,
-      })
+      });
   },
   watch: {
     url(url) {
-      url && TTmobile.table(url, this.$el, { highlight: this.highlight })
+      url && TTmobile.table(url, this.$el, { highlight: this.highlight });
     },
     highlight(highlight) {
-      this.url && TTmobile.table(this.url, this.$el, { highlight })
+      this.url && TTmobile.table(this.url, this.$el, { highlight });
     },
   },
-}
+};
 </script>
 
 <style scoped></style>

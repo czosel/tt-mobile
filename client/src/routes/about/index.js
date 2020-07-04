@@ -1,9 +1,9 @@
-import { h, Component } from 'preact'
-import style from './style'
+import { h, Component } from "preact";
+import style from "./style";
 
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import Container from '../../components/container'
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import Container from "../../components/container";
 
 export default class Home extends Component {
   render({ back }) {
@@ -16,10 +16,10 @@ export default class Home extends Component {
             <h2>TT-mobile</h2>
             <p>von Christian Zosel</p>
             <p>
-              E-Mail{' '}
+              E-Mail{" "}
               <a href="mailto:feedback@tt-mobile.ch">feedback@tt-mobile.ch</a>
               <br />
-              Twitter{' '}
+              Twitter{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -29,7 +29,7 @@ export default class Home extends Component {
               </a>
             </p>
             <p>
-              Code{' '}
+              Code{" "}
               <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -87,6 +87,6 @@ export default class Home extends Component {
         </Container>
         <Footer />
       </div>
-    )
+    );
   }
 }

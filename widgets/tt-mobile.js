@@ -1,17 +1,17 @@
-var TTmobile = (function(exports) {
-  'use strict'
+var TTmobile = (function (exports) {
+  "use strict";
 
   function renderTable(clubs, element, options) {
     const html = `
       <thead>${renderTableHead()}</thead>
       <tbody>
-        ${clubs.map(row => renderTableRow(row, options)).join('')}
-      </tbody>`
-    element.innerHTML = html
+        ${clubs.map((row) => renderTableRow(row, options)).join("")}
+      </tbody>`;
+    element.innerHTML = html;
   }
 
   function renderTableRow(row, options) {
-    const match = options.highlight && row.name.includes(options.highlight)
+    const match = options.highlight && row.name.includes(options.highlight);
     return `
       <tr>
         <td>${row.rank}</td>
@@ -26,11 +26,11 @@ var TTmobile = (function(exports) {
         <td>${row.games}</td>
         <td>${row.balance}</td>
         <td>${row.score}</td>
-      </tr>`
+      </tr>`;
   }
 
   function highlight(name) {
-    return '<strong>'.concat(name, '</strong>')
+    return "<strong>".concat(name, "</strong>");
   }
 
   function renderTableHead() {
@@ -41,15 +41,15 @@ var TTmobile = (function(exports) {
       <th>Spiele</th>
       <th>+/-</th>
       <th>Punkte</th>
-    </tr>`
+    </tr>`;
   }
 
   function renderTeam(clubs, element, options) {
     const html = `
       <tbody>
-        ${clubs.map(row => renderTeamRow(row, options)).join('')}
-      </tbody>`
-    element.innerHTML = html
+        ${clubs.map((row) => renderTeamRow(row, options)).join("")}
+      </tbody>`;
+    element.innerHTML = html;
   }
 
   function renderTeamRow(row, options) {
@@ -62,27 +62,27 @@ var TTmobile = (function(exports) {
         </td>
         <td>${row.classification}</td>
         <td>${row.balance}</td>
-      </tr>`
+      </tr>`;
   }
 
   function table(url, element, options = {}) {
-    fetch('https://api.tt-mobile.ch/league?url=' + encodeURIComponent(url))
-      .then(response => response.json())
-      .then(data => {
-        renderTable(data.clubs, element, options)
-      })
+    fetch("https://api.tt-mobile.ch/league?url=" + encodeURIComponent(url))
+      .then((response) => response.json())
+      .then((data) => {
+        renderTable(data.clubs, element, options);
+      });
   }
 
   function team(url, element, options = {}) {
-    fetch('https://api.tt-mobile.ch/team?url=' + encodeURIComponent(url))
-      .then(response => response.json())
-      .then(data => {
-        renderTeam(data.players, element, options)
-      })
+    fetch("https://api.tt-mobile.ch/team?url=" + encodeURIComponent(url))
+      .then((response) => response.json())
+      .then((data) => {
+        renderTeam(data.players, element, options);
+      });
   }
 
   return {
     table,
-    team
-  }
-})({})
+    team,
+  };
+})({});

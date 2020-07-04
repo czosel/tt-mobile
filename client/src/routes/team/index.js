@@ -1,29 +1,29 @@
-import { h, Component } from 'preact'
-import Helmet from 'preact-helmet'
-import wire from 'wiretie'
+import { h, Component } from "preact";
+import Helmet from "preact-helmet";
+import wire from "wiretie";
 
-import clientHref from '../../lib/link'
-import { icalHref } from '../../lib/model'
+import clientHref from "../../lib/link";
+import { icalHref } from "../../lib/model";
 
-import Header from '../../components/header'
-import Embed from '../../components/embed'
-import Footer from '../../components/footer'
-import Container from '../../components/container'
-import LoadingPage from '../../components/loading-page'
-import ErrorPage from '../../components/error-page'
-import LinkRow from '../../components/link-row'
-import Table from '../../components/table'
-import EloScore from '../../components/elo-score'
+import Header from "../../components/header";
+import Embed from "../../components/embed";
+import Footer from "../../components/footer";
+import Container from "../../components/container";
+import LoadingPage from "../../components/loading-page";
+import ErrorPage from "../../components/error-page";
+import LinkRow from "../../components/link-row";
+import Table from "../../components/table";
+import EloScore from "../../components/elo-score";
 
 export default
-@wire('model', { data: ['api.team', 'href'] })
+@wire("model", { data: ["api.team", "href"] })
 class Team extends Component {
   render({ pending, rejected, back, data, href }) {
-    if (pending) return <LoadingPage back={back} />
-    if (rejected) return <ErrorPage info={rejected} />
+    if (pending) return <LoadingPage back={back} />;
+    if (rejected) return <ErrorPage info={rejected} />;
 
-    const { club, clubId, players, location, name, games, breadcrumbs } = data
-    const link = 'https://maps.google.com/?q=' + location
+    const { club, clubId, players, location, name, games, breadcrumbs } = data;
+    const link = "https://maps.google.com/?q=" + location;
     return (
       <div>
         <Helmet title={name} />
@@ -114,7 +114,7 @@ class Team extends Component {
                       </span>
                     </div>
                   </td>
-                  <td class="result center">{result || '-:-'}</td>
+                  <td class="result center">{result || "-:-"}</td>
                   <td class="thin">
                     {result && <i class="icon-right-open" />}
                   </td>
@@ -125,6 +125,6 @@ class Team extends Component {
         </Container>
         <Footer />
       </div>
-    )
+    );
   }
 }
