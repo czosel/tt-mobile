@@ -82,7 +82,7 @@ import TtTable from './components/TtTable.vue'
 import TtTeam from './components/TtTeam.vue'
 
 function syncQueryParam(paramName) {
-  return newValue => {
+  return (newValue) => {
     const params = new URLSearchParams(window.location.search)
     params.set(paramName, newValue)
     const newRelativePathQuery =
@@ -106,11 +106,11 @@ export default {
   data: () => ({
     tableUrl: '',
     tableHighlight: '',
-    teamUrl: ''
+    teamUrl: '',
   }),
   components: {
     TtTable,
-    TtTeam
+    TtTeam,
   },
   computed: {
     tableCode() {
@@ -124,13 +124,13 @@ export default {
       /* eslint-disable no-useless-escape */
       return `<table class="myteam"></table>
 <script>TTmobile.team("${this.teamUrl}", document.querySelector(".myteam"));<\/script>`
-    }
+    },
   },
   watch: {
     tableHighlight: syncQueryParam('table-highlight'),
     tableUrl: syncQueryParam('table-url'),
-    teamUrl: syncQueryParam('team-url')
-  }
+    teamUrl: syncQueryParam('team-url'),
+  },
 }
 </script>
 

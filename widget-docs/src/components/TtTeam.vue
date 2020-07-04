@@ -6,7 +6,7 @@
 export default {
   name: 'TtTeam',
   props: {
-    url: String
+    url: String,
   },
   mounted() {
     this.url && TTmobile.team(this.url, this.$el)
@@ -14,8 +14,8 @@ export default {
   watch: {
     url(url) {
       url && TTmobile.team(url, this.$el)
-    }
-  }
+    },
+  },
 }
 </script>
 
