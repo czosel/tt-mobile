@@ -1,7 +1,18 @@
-
-.icon-left-open:before { content: '\e800'; } /* '' */
-.icon-right-open:before { content: '\e801'; } /* '' */
-.icon-location:before { content: '\e802'; } /* '' */
-.icon-cancel:before { content: '\e803'; } /* '' */
-.icon-link-ext:before { content: '\f08e'; } /* '' */
-.icon-code:before { content: '\f121'; } /* '' */
+.icon-left-open:before {
+  content: "\e800";
+} /* '' */
+.icon-right-open:before {
+  content: "\e801";
+} /* '' */
+.icon-location:before {
+  content: "\e802";
+} /* '' */
+.icon-cancel:before {
+  content: "\e803";
+} /* '' */
+.icon-link-ext:before {
+  content: "\f08e";
+} /* '' */
+.icon-code:before {
+  content: "\f121";
+} /* '' */

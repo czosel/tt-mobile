@@ -17,5 +17,5 @@ export default function Card({ name, children, closeable, onClose }) {
       </header>
       <div class="card-content">{children}</div>
     </div>
-  )
+  );
 }

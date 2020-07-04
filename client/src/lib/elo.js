@@ -1,4 +1,4 @@
-import { findIndex, reverse } from 'rambda'
+import { findIndex, reverse } from "rambda";
 
 export const eloMin = [
   0,
@@ -21,17 +21,17 @@ export const eloMin = [
   1540,
   1630,
   1730,
-]
+];
 
 export function getClass(elo) {
-  if (typeof elo !== 'number') {
-    return elo
+  if (typeof elo !== "number") {
+    return elo;
   }
-  const i = eloMin.length - findIndex((e) => elo >= e, reverse(eloMin))
-  return getLabel(i - 1)
+  const i = eloMin.length - findIndex((e) => elo >= e, reverse(eloMin));
+  return getLabel(i - 1);
 }
 
 export function getLabel(i) {
-  const letters = ['D', 'C', 'B', 'A']
-  return letters[Math.floor(i / 5)] + (i + 1)
+  const letters = ["D", "C", "B", "A"];
+  return letters[Math.floor(i / 5)] + (i + 1);
 }

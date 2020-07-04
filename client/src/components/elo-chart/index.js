@@ -1,4 +1,4 @@
-import { createElement as h } from 'preact/compat'
+import { createElement as h } from "preact/compat";
 import {
   multiply,
   pipe,
@@ -9,57 +9,57 @@ import {
   compose,
   curry,
   join,
-} from 'rambda'
+} from "rambda";
 
-import { eloMin, getLabel } from '../../lib/elo'
+import { eloMin, getLabel } from "../../lib/elo";
 
-const max = (arr) => Math.max(...arr)
-const min = (arr) => Math.min(...arr)
+const max = (arr) => Math.max(...arr);
+const min = (arr) => Math.min(...arr);
 
-const shrink = multiply(0.98)
-const grow = multiply(1.02)
+const shrink = multiply(0.98);
+const grow = multiply(1.02);
 
-const x1 = pipe(map(head), min)
-const x2 = pipe(map(head), max)
-const y1 = pipe(map(last), min, shrink)
-const y2 = pipe(map(last), max, grow)
-const dx = (p) => subtract(x2(p), x1(p))
-const dy = (p) => subtract(y2(p), y1(p))
+const x1 = pipe(map(head), min);
+const x2 = pipe(map(head), max);
+const y1 = pipe(map(last), min, shrink);
+const y2 = pipe(map(last), max, grow);
+const dx = (p) => subtract(x2(p), x1(p));
+const dy = (p) => subtract(y2(p), y1(p));
 
-const [vx1, vx2, vy1, vy2] = [30, 300, 0, 200]
-const vdy = vy2 - vy1
-const vdx = vx2 - vx1
+const [vx1, vx2, vy1, vy2] = [30, 300, 0, 200];
+const vdy = vy2 - vy1;
+const vdx = vx2 - vx1;
 
-const projectX = curry((x, points) => (x * vdx) / dx(points) + vx1)
+const projectX = curry((x, points) => (x * vdx) / dx(points) + vx1);
 const projectY = curry((y, points) => {
-  return Math.round(vy2 - (((y - y1(points)) * vdy) / dy(points) + vy1))
-})
+  return Math.round(vy2 - (((y - y1(points)) * vdy) / dy(points) + vy1));
+});
 
 // returns the projection function based on current data
 const project = curry((points, [x, y]) => [
   projectX(x, points),
   projectY(y, points),
-])
+]);
 
-const asString = compose(join(','), map(join(',')))
+const asString = compose(join(","), map(join(",")));
 
 export default function EloChart({ data = [], startDate, endDate }) {
   if (!data || !data.length) {
-    return
+    return;
   }
-  const points = data.map((y, i) => [i, y])
-  const process = map(project(points))
+  const points = data.map((y, i) => [i, y]);
+  const process = map(project(points));
 
-  const view = compose(asString, process)(points)
+  const view = compose(asString, process)(points);
   const projectLines = map(({ label, y }) => ({
     label,
     pos: projectY(y, points),
-  }))
+  }));
   let lines = eloMin.map((min, i) => ({
     label: getLabel(i),
     y: min,
-  }))
-  lines = projectLines(lines)
+  }));
+  lines = projectLines(lines);
   /* eslint-disable react/jsx-key */
   return (
     <svg width="100%" height="200px" viewBox="0 0 300 200" class="chart">
@@ -96,5 +96,5 @@ export default function EloChart({ data = [], startDate, endDate }) {
         {endDate}
       </text>
     </svg>
-  )
+  );
 }

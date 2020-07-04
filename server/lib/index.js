@@ -1,37 +1,37 @@
-const compression = require('compression')
-const express = require('express')
-const helmet = require('helmet')
-const cors = require('cors')
-const apicache = require('apicache')
-const { join } = require('path')
+const compression = require("compression");
+const express = require("express");
+const helmet = require("helmet");
+const cors = require("cors");
+const apicache = require("apicache");
+const { join } = require("path");
 
-const scraper = require('./scraper')
+const scraper = require("./scraper");
 
-require('dotenv').config()
+require("dotenv").config();
 
-const app = express()
+const app = express();
 
-const env = process.env.NODE_ENV
+const env = process.env.NODE_ENV;
 
-app.use(helmet())
-app.use(compression())
-app.use(cors())
+app.use(helmet());
+app.use(compression());
+app.use(cors());
 app.use(
-  apicache.options({ enabled: env !== 'development' }).middleware('10 minutes')
-)
+  apicache.options({ enabled: env !== "development" }).middleware("10 minutes")
+);
 
 const endpoints = [
-  'assocHistory',
-  'assoc',
-  'league',
-  'team',
-  'club',
-  'clubPreview',
-  'game',
-  'player',
-  'elo',
-  'me',
-]
+  "assocHistory",
+  "assoc",
+  "league",
+  "team",
+  "club",
+  "clubPreview",
+  "game",
+  "player",
+  "elo",
+  "me",
+];
 
 endpoints.forEach((path) => {
   app.get(`/${path}`, async (req, res) => {
@@ -39,44 +39,44 @@ endpoints.forEach((path) => {
       ...req.query,
       url:
         req.query.url &&
-        join('/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/', req.query.url),
-    }
+        join("/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/", req.query.url),
+    };
     try {
-      query.format === 'ics'
+      query.format === "ics"
         ? scraper[path](query, res)
-        : res.json(await scraper[path](query))
+        : res.json(await scraper[path](query));
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  })
-})
+  });
+});
 
-app.get('/club/:id', async ({ params }, res) => {
+app.get("/club/:id", async ({ params }, res) => {
   try {
-    res.json(await scraper.club(params.id))
+    res.json(await scraper.club(params.id));
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-})
+});
 
-app.get('/club-teams/:id', async ({ params }, res) => {
+app.get("/club-teams/:id", async ({ params }, res) => {
   try {
-    res.json(await scraper.clubTeams(params.id))
+    res.json(await scraper.clubTeams(params.id));
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-})
+});
 
-app.get('/search/:term', async ({ params }, res) => {
+app.get("/search/:term", async ({ params }, res) => {
   try {
-    res.json(await scraper.search(params.term))
+    res.json(await scraper.search(params.term));
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-})
+});
 
-const port = process.env.PORT || 3020
+const port = process.env.PORT || 3020;
 
 app.listen(port, function () {
-  console.log(`server listening on port ${port}`)
-})
+  console.log(`server listening on port ${port}`);
+});

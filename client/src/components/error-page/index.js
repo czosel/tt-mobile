@@ -1,12 +1,12 @@
-import Header from '../header'
-import Container from '../container'
+import Header from "../header";
+import Container from "../container";
 
 const reload = () => {
-  location.reload()
-}
+  location.reload();
+};
 
 export default function ErrorPage({ info }) {
-  const message = info && info.data && info.data.message
+  const message = info && info.data && info.data.message;
   return (
     <div>
       <Header />
@@ -23,5 +23,5 @@ export default function ErrorPage({ info }) {
         {message && <code>Fehlercode: {message}</code>}
       </Container>
     </div>
-  )
+  );
 }

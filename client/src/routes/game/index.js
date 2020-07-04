@@ -1,26 +1,26 @@
-import { h, Component } from 'preact'
-import Helmet from 'preact-helmet'
-import wire from 'wiretie'
+import { h, Component } from "preact";
+import Helmet from "preact-helmet";
+import wire from "wiretie";
 
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import LoadingPage from '../../components/loading-page'
-import ErrorPage from '../../components/error-page'
-import Container from '../../components/container'
-import Table from '../../components/table'
-import EloScore from '../../components/elo-score'
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import LoadingPage from "../../components/loading-page";
+import ErrorPage from "../../components/error-page";
+import Container from "../../components/container";
+import Table from "../../components/table";
+import EloScore from "../../components/elo-score";
 
 export default
-@wire('model', { data: ['api.game', 'href'] })
+@wire("model", { data: ["api.game", "href"] })
 class Game extends Component {
   render({ pending, rejected, back, data }) {
-    if (pending) return <LoadingPage back={back} />
-    if (rejected) return <ErrorPage info={rejected} />
+    if (pending) return <LoadingPage back={back} />;
+    if (rejected) return <ErrorPage info={rejected} />;
 
-    const { matches, summary, home, guest, league, date, time } = data
+    const { matches, summary, home, guest, league, date, time } = data;
     return (
       <div>
-        <Helmet title={home + ' - ' + guest} />
+        <Helmet title={home + " - " + guest} />
         <Header back={back} />
         <Container>
           <h1 class="title">
@@ -92,6 +92,6 @@ class Game extends Component {
         </Container>
         <Footer />
       </div>
-    )
+    );
   }
 }

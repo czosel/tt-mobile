@@ -1,12 +1,12 @@
-import { h } from 'preact'
+import { h } from "preact";
 
-import clientHref from '../../lib/link'
+import clientHref from "../../lib/link";
 
-import Loading from '../../components/loading'
-import LinkRow from '../../components/link-row/'
-import Table from '../../components/table'
-import EloChart from '../../components/elo-chart'
-import EloScore from '../../components/elo-score'
+import Loading from "../../components/loading";
+import LinkRow from "../../components/link-row/";
+import Table from "../../components/table";
+import EloChart from "../../components/elo-chart";
+import EloScore from "../../components/elo-score";
 
 export default function PlayerOverview({
   balances,
@@ -17,7 +17,7 @@ export default function PlayerOverview({
   teams,
   elo,
 }) {
-  const latestElo = elo && Math.round(elo.data[elo.data.length - 1])
+  const latestElo = elo && Math.round(elo.data[elo.data.length - 1]);
   return (
     <div>
       <Table>
@@ -98,5 +98,5 @@ export default function PlayerOverview({
         </tbody>
       </Table>
     </div>
-  )
+  );
 }

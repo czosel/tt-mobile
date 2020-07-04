@@ -1,23 +1,23 @@
-import { getClass } from '../lib/elo'
+import { getClass } from "../lib/elo";
 
-const safeSplit = (v) => (v.split ? v.split('\n') : [v])
-const safeTrim = (v) => (v.trim ? v.trim() : v)
+const safeSplit = (v) => (v.split ? v.split("\n") : [v]);
+const safeTrim = (v) => (v.trim ? v.trim() : v);
 
 const getStyle = (value) => {
-  if (typeof value === 'number') {
-    value = getClass(value)
+  if (typeof value === "number") {
+    value = getClass(value);
   }
-  const angle = (parseInt(value.substr(1)) / 20) * 360 + 180
+  const angle = (parseInt(value.substr(1)) / 20) * 360 + 180;
   return {
-    'background-color': `hsl(${angle}, 100%, 40%)`,
-    'font-weight': 'bold',
-    color: 'white',
-  }
-}
+    "background-color": `hsl(${angle}, 100%, 40%)`,
+    "font-weight": "bold",
+    color: "white",
+  };
+};
 
 export default function EloScore({ value }) {
-  if (value === undefined || value === '-') {
-    return
+  if (value === undefined || value === "-") {
+    return;
   }
   return (
     <span>
@@ -30,5 +30,5 @@ export default function EloScore({ value }) {
           </span>
         ))}
     </span>
-  )
+  );
 }

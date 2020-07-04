@@ -1,30 +1,30 @@
-import { h, Component } from 'preact'
-import Helmet from 'preact-helmet'
-import wire from 'wiretie'
+import { h, Component } from "preact";
+import Helmet from "preact-helmet";
+import wire from "wiretie";
 
-import clientHref from '../../lib/link'
+import clientHref from "../../lib/link";
 
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import Container from '../../components/container'
-import LoadingPage from '../../components/loading-page'
-import Loading from '../../components/loading'
-import ErrorPage from '../../components/error-page'
-import LinkRow from '../../components/link-row/'
-import Table from '../../components/table'
-import Schedule from '../../components/schedule'
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import Container from "../../components/container";
+import LoadingPage from "../../components/loading-page";
+import Loading from "../../components/loading";
+import ErrorPage from "../../components/error-page";
+import LinkRow from "../../components/link-row/";
+import Table from "../../components/table";
+import Schedule from "../../components/schedule";
 
 export default
-@wire('model', {
-  club: ['api.club', 'id'],
-  clubTeams: ['api.clubTeams', 'id'],
+@wire("model", {
+  club: ["api.club", "id"],
+  clubTeams: ["api.clubTeams", "id"],
 })
 class Club extends Component {
   render({ pending, rejected, back, club, clubTeams }) {
     if (pending && Object.keys(pending).length >= 2)
-      return <LoadingPage back={back} />
+      return <LoadingPage back={back} />;
     if (rejected && Object.keys(rejected).length > 0)
-      return <ErrorPage info={rejected} />
+      return <ErrorPage info={rejected} />;
 
     return (
       <div>
@@ -48,7 +48,7 @@ class Club extends Component {
         </Container>
         <Footer />
       </div>
-    )
+    );
   }
 }
 
@@ -82,4 +82,4 @@ const Teams = ({ name, teams }) => (
       </tbody>
     </Table>
   </div>
-)
+);

@@ -78,35 +78,35 @@
 </template>
 
 <script>
-import TtTable from './components/TtTable.vue'
-import TtTeam from './components/TtTeam.vue'
+import TtTable from "./components/TtTable.vue";
+import TtTeam from "./components/TtTeam.vue";
 
 function syncQueryParam(paramName) {
   return (newValue) => {
-    const params = new URLSearchParams(window.location.search)
-    params.set(paramName, newValue)
+    const params = new URLSearchParams(window.location.search);
+    params.set(paramName, newValue);
     const newRelativePathQuery =
-      window.location.pathname + '?' + params.toString()
-    history.replaceState(null, '', newRelativePathQuery)
-  }
+      window.location.pathname + "?" + params.toString();
+    history.replaceState(null, "", newRelativePathQuery);
+  };
 }
 
 export default {
-  name: 'app',
+  name: "app",
   mounted() {
-    const params = new URLSearchParams(window.location.search)
+    const params = new URLSearchParams(window.location.search);
     this.tableUrl =
-      params.get('table-url') ||
-      '/groupPage?championship=STT+19%2F20&group=205604'
-    this.tableHighlight = params.get('table-highlight') || ''
+      params.get("table-url") ||
+      "/groupPage?championship=STT+19%2F20&group=205604";
+    this.tableHighlight = params.get("table-highlight") || "";
     this.teamUrl =
-      params.get('team-url') ||
-      '/teamPortrait?teamtable=1663137&championship=STT+19%2F20&group=205604'
+      params.get("team-url") ||
+      "/teamPortrait?teamtable=1663137&championship=STT+19%2F20&group=205604";
   },
   data: () => ({
-    tableUrl: '',
-    tableHighlight: '',
-    teamUrl: '',
+    tableUrl: "",
+    tableHighlight: "",
+    teamUrl: "",
   }),
   components: {
     TtTable,
@@ -116,27 +116,27 @@ export default {
     tableCode() {
       /* eslint-disable no-useless-escape */
       const options =
-        this.tableHighlight && `, { highlight: "${this.tableHighlight}" }`
+        this.tableHighlight && `, { highlight: "${this.tableHighlight}" }`;
       return `<table class="mytable"></table>
-<script>TTmobile.table("${this.tableUrl}", document.querySelector(".mytable")${options});<\/script>`
+<script>TTmobile.table("${this.tableUrl}", document.querySelector(".mytable")${options});<\/script>`;
     },
     teamCode() {
       /* eslint-disable no-useless-escape */
       return `<table class="myteam"></table>
-<script>TTmobile.team("${this.teamUrl}", document.querySelector(".myteam"));<\/script>`
+<script>TTmobile.team("${this.teamUrl}", document.querySelector(".myteam"));<\/script>`;
     },
   },
   watch: {
-    tableHighlight: syncQueryParam('table-highlight'),
-    tableUrl: syncQueryParam('table-url'),
-    teamUrl: syncQueryParam('team-url'),
+    tableHighlight: syncQueryParam("table-highlight"),
+    tableUrl: syncQueryParam("table-url"),
+    teamUrl: syncQueryParam("team-url"),
   },
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
 
 code {

@@ -1,7 +1,7 @@
-import clientHref from '../../lib/link'
+import clientHref from "../../lib/link";
 
-import LinkRow from '../link-row'
-import Table from '../table'
+import LinkRow from "../link-row";
+import Table from "../table";
 
 export default function Schedule({ chunks }) {
   return (
@@ -19,7 +19,7 @@ export default function Schedule({ chunks }) {
                       <br />
                       {guest}
                     </td>
-                    <td class="result center">{result || '-:-'}</td>
+                    <td class="result center">{result || "-:-"}</td>
                     <td class="thin">
                       {href && <i class="icon-right-open" />}
                     </td>
@@ -30,5 +30,5 @@ export default function Schedule({ chunks }) {
           </div>
         ))}
     </div>
-  )
+  );
 }

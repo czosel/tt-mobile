@@ -1,5 +1,5 @@
-import Loading from './loading'
-import Header from './header'
+import Loading from "./loading";
+import Header from "./header";
 
 export default function LoadingPage({ back }) {
   return (
@@ -7,5 +7,5 @@ export default function LoadingPage({ back }) {
       <Loading center={true} />
       <Header loading={true} back={back} />
     </div>
-  )
+  );
 }

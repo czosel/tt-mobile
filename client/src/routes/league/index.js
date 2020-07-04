@@ -1,44 +1,44 @@
-import { h, Component } from 'preact'
-import wire from 'wiretie'
-import { route } from 'preact-router'
-import Helmet from 'preact-helmet'
-import style from './style'
+import { h, Component } from "preact";
+import wire from "wiretie";
+import { route } from "preact-router";
+import Helmet from "preact-helmet";
+import style from "./style";
 
-import clientHref from '../../lib/link'
+import clientHref from "../../lib/link";
 
-import Header from '../../components/header'
-import Embed from '../../components/embed'
-import Footer from '../../components/footer'
-import Container from '../../components/container'
-import Schedule from '../../components/schedule'
-import LoadingPage from '../../components/loading-page'
-import ErrorPage from '../../components/error-page'
-import LinkRow from '../../components/link-row/'
-import Table from '../../components/table'
-import Tabs from '../../components/tabs'
-import Tab from '../../components/tab'
+import Header from "../../components/header";
+import Embed from "../../components/embed";
+import Footer from "../../components/footer";
+import Container from "../../components/container";
+import Schedule from "../../components/schedule";
+import LoadingPage from "../../components/loading-page";
+import ErrorPage from "../../components/error-page";
+import LinkRow from "../../components/link-row/";
+import Table from "../../components/table";
+import Tabs from "../../components/tabs";
+import Tab from "../../components/tab";
 
 export default
-@wire('model', { data: ['api.league', 'href'] })
+@wire("model", { data: ["api.league", "href"] })
 class League extends Component {
   handleChange = (tab) => {
-    route(clientHref(this.props.href, tab))
-  }
+    route(clientHref(this.props.href, tab));
+  };
 
   render({ pending, rejected, back, data, tab, href }) {
-    if (pending) return <LoadingPage back={back} />
-    if (rejected) return <ErrorPage info={rejected} />
+    if (pending) return <LoadingPage back={back} />;
+    if (rejected) return <ErrorPage info={rejected} />;
 
-    const { league, clubs, chunks, breadcrumbs } = data
+    const { league, clubs, chunks, breadcrumbs } = data;
 
-    tab = clubs.length === 0 ? 'schedule' : tab || 'table'
+    tab = clubs.length === 0 ? "schedule" : tab || "table";
 
     const content =
-      tab === 'table' ? (
+      tab === "table" ? (
         <LeagueTable {...{ clubs, href }} />
       ) : (
         <Schedule {...{ chunks }} />
-      )
+      );
     return (
       <div class={style.profile}>
         <Helmet title={league} />
@@ -60,7 +60,7 @@ class League extends Component {
         </Container>
         <Footer />
       </div>
-    )
+    );
   }
 }
 
@@ -97,5 +97,5 @@ function LeagueTable({ clubs, href }) {
       </Table>
       <Embed param="table-url" url={href} />
     </>
-  )
+  );
 }

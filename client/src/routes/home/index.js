@@ -1,73 +1,73 @@
-import { Component } from 'preact'
-import wire from 'wiretie'
-import style from './style'
+import { Component } from "preact";
+import wire from "wiretie";
+import style from "./style";
 
-import clientHref from '../../lib/link'
+import clientHref from "../../lib/link";
 
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import Container from '../../components/container'
-import CardList from '../../components/card-list'
-import Card from '../../components/card'
-import LinkRow from '../../components/link-row/'
-import LoadingPage from '../../components/loading-page'
-import ErrorPage from '../../components/error-page'
-import Table from '../../components/table'
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import Container from "../../components/container";
+import CardList from "../../components/card-list";
+import Card from "../../components/card";
+import LinkRow from "../../components/link-row/";
+import LoadingPage from "../../components/loading-page";
+import ErrorPage from "../../components/error-page";
+import Table from "../../components/table";
 
-const spaceToPlus = (str) => str.replace(' ', '+')
+const spaceToPlus = (str) => str.replace(" ", "+");
 
-const seasons = ['18/19', '17/18', '16/17', '15/16', '14/15', '13/14', '12/13']
+const seasons = ["18/19", "17/18", "16/17", "15/16", "14/15", "13/14", "12/13"];
 
 const history = seasons.map((year, step) => ({
   name: `Season 20${year}`,
   href: `/assocHistory/${encodeURIComponent(step)}`,
-}))
+}));
 
 const assocNames = [
-  'STT',
-  'AGTT',
-  'ANJTT',
-  'ATTT',
-  'AVVF',
-  'MTTV',
-  'NWTTV',
-  'OTTV',
-  'TTVI',
-]
-const translations = { STT: 'Nationalliga' }
+  "STT",
+  "AGTT",
+  "ANJTT",
+  "ATTT",
+  "AVVF",
+  "MTTV",
+  "NWTTV",
+  "OTTV",
+  "TTVI",
+];
+const translations = { STT: "Nationalliga" };
 
 const trophyNames = [
-  'Schweizer Cup',
-  'AGTT Cup',
-  'ANJTT Cup',
-  'ATTT Cup',
-  'AVVF Coupe',
-  'NWTTV Cup',
-  'OTTV Cup',
-  'TTVI Cup',
-  'MTTV Cup',
-]
+  "Schweizer Cup",
+  "AGTT Cup",
+  "ANJTT Cup",
+  "ATTT Cup",
+  "AVVF Coupe",
+  "NWTTV Cup",
+  "OTTV Cup",
+  "TTVI Cup",
+  "MTTV Cup",
+];
 
 const addLinks = (name) => ({
   name,
   href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+19%2F20`),
-})
-const assocs = assocNames.map(addLinks)
-const trophies = trophyNames.map(addLinks)
+});
+const assocs = assocNames.map(addLinks);
+const trophies = trophyNames.map(addLinks);
 
 export default
-@wire('model', { data: ['api.me'], me: ['me'] })
+@wire("model", { data: ["api.me"], me: ["me"] })
 class Home extends Component {
   onClose = () => {
-    localStorage.removeItem('me')
+    localStorage.removeItem("me");
     this.setState({
       closed: true,
-    })
-  }
+    });
+  };
 
   render({ pending, rejected, data, me }, { closed }) {
-    if (pending) return <LoadingPage />
-    if (rejected) return <ErrorPage info={rejected} />
+    if (pending) return <LoadingPage />;
+    if (rejected) return <ErrorPage info={rejected} />;
 
     return (
       <div class={style.home}>
@@ -97,7 +97,7 @@ class Home extends Component {
         </Container>
         <Footer />
       </div>
-    )
+    );
   }
 }
 
@@ -127,5 +127,5 @@ function PlayerLinks({ club, clubId, teams, me }) {
         ))}
       </tbody>
     </Table>
-  )
+  );
 }

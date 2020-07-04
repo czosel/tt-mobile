@@ -1,84 +1,84 @@
-import { h, Component } from 'preact'
-import { route } from 'preact-router'
-import Helmet from 'preact-helmet'
+import { h, Component } from "preact";
+import { route } from "preact-router";
+import Helmet from "preact-helmet";
 
-import clientHref from '../../lib/link'
+import clientHref from "../../lib/link";
 
-import Header from '../../components/header'
-import Footer from '../../components/footer'
-import Container from '../../components/container'
-import Loading from '../../components/loading'
-import LinkRow from '../../components/link-row/'
-import Table from '../../components/table'
-import ErrorPage from '../../components/error-page'
-import Tabs from '../../components/tabs'
-import Tab from '../../components/tab'
-import EloScore from '../../components/elo-score'
-import PlayerOverview from '../../components/player-overview'
-import { get } from '../../lib/model'
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import Container from "../../components/container";
+import Loading from "../../components/loading";
+import LinkRow from "../../components/link-row/";
+import Table from "../../components/table";
+import ErrorPage from "../../components/error-page";
+import Tabs from "../../components/tabs";
+import Tab from "../../components/tab";
+import EloScore from "../../components/elo-score";
+import PlayerOverview from "../../components/player-overview";
+import { get } from "../../lib/model";
 
 export default class Player extends Component {
   setMe = () => {
-    localStorage.setItem('me', this.state.elo.playerHref)
-    route('/')
-  }
+    localStorage.setItem("me", this.state.elo.playerHref);
+    route("/");
+  };
 
   update(href) {
-    this.setState({ elo: null, pending: true })
-    if (href.includes('playerPortrait')) {
-      get('player')(href)
+    this.setState({ elo: null, pending: true });
+    if (href.includes("playerPortrait")) {
+      get("player")(href)
         .then((data) => {
-          this.setState({ data, pending: false, rejected: false })
-          return get('elo')(data.eloHref)
+          this.setState({ data, pending: false, rejected: false });
+          return get("elo")(data.eloHref);
         })
         .then((elo) => {
-          this.setState({ elo })
+          this.setState({ elo });
         })
         .catch((error) =>
           this.setState({
             pending: false,
             rejected: { data: error },
           })
-        )
+        );
     } else {
-      get('elo')(href)
+      get("elo")(href)
         .then((elo) => {
-          this.setState({ elo })
-          return get('player')(elo.playerHref)
+          this.setState({ elo });
+          return get("player")(elo.playerHref);
         })
         .then((data) => {
-          this.setState({ data, pending: false, rejected: false })
+          this.setState({ data, pending: false, rejected: false });
         })
         .catch((error) =>
           this.setState({
             pending: false,
             rejected: { data: error },
           })
-        )
+        );
     }
   }
 
   componentDidMount() {
-    this.setState({ me: localStorage.getItem('me') })
-    this.update(this.props.href)
+    this.setState({ me: localStorage.getItem("me") });
+    this.update(this.props.href);
   }
 
   componentDidUpdate({ href }) {
     if (href !== this.props.href) {
-      this.update(this.props.href)
+      this.update(this.props.href);
     }
   }
 
   render({ href, tab, back }, { pending = true, rejected, data, elo, me }) {
-    tab = tab || 'overview'
+    tab = tab || "overview";
     if (pending)
       return (
         <div>
           <Loading center={true} />
           <Wrapper tab={tab} href={href} back={back} />
         </div>
-      )
-    if (rejected) return <ErrorPage info={rejected} />
+      );
+    if (rejected) return <ErrorPage info={rejected} />;
 
     const {
       balances,
@@ -90,10 +90,10 @@ export default class Player extends Component {
       clubId,
       teams,
       name,
-    } = data
+    } = data;
 
     const content =
-      tab === 'overview' ? (
+      tab === "overview" ? (
         <PlayerOverview
           {...{
             balances,
@@ -107,11 +107,11 @@ export default class Player extends Component {
             elo,
           }}
         />
-      ) : tab === 'single' ? (
+      ) : tab === "single" ? (
         <Single {...{ singles }} />
       ) : (
         <Double {...{ doubles }} />
-      )
+      );
 
     return (
       <div>
@@ -128,14 +128,14 @@ export default class Player extends Component {
         </Wrapper>
         <Footer />
       </div>
-    )
+    );
   }
 }
 
 function Wrapper({ tab, href, back, children }) {
   const handleChange = (tab) => {
-    route(clientHref(href, tab), true)
-  }
+    route(clientHref(href, tab), true);
+  };
 
   return (
     <div>
@@ -149,7 +149,7 @@ function Wrapper({ tab, href, back, children }) {
         {children}
       </Container>
     </div>
-  )
+  );
 }
 
 function Single({ singles }) {
@@ -178,7 +178,7 @@ function Single({ singles }) {
         ))}
       </tbody>
     </Table>
-  )
+  );
 }
 
 function Double({ doubles }) {
@@ -205,5 +205,5 @@ function Double({ doubles }) {
         ))}
       </tbody>
     </Table>
-  )
+  );
 }

@@ -1,9 +1,9 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: "babel-eslint",
   parserOptions: {
     ecmaVersion: 2017,
-    sourceType: 'module',
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
@@ -16,16 +16,16 @@ module.exports = {
   },
   settings: {
     react: {
-      pragma: 'h',
-      version: 'detect',
+      pragma: "h",
+      version: "detect",
     },
   },
-  plugins: ['prettier'],
-  extends: ['eslint:recommended', 'prettier', 'plugin:react/recommended'],
+  plugins: ["prettier"],
+  extends: ["eslint:recommended", "prettier", "plugin:react/recommended"],
   rules: {
-    'react/react-in-jsx-scope': 0,
-    'react/prop-types': 0,
-    'react/no-unknown-property': [2, { ignore: ['class'] }],
-    'prettier/prettier': [2, { singleQuote: true, semi: false }],
+    "react/react-in-jsx-scope": 0,
+    "react/prop-types": 0,
+    "react/no-unknown-property": [2, { ignore: ["class"] }],
+    "prettier/prettier": 2,
   },
-}
+};
