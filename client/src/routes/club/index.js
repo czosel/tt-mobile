@@ -17,7 +17,7 @@ import Schedule from '../../components/schedule'
 export default
 @wire('model', {
   club: ['api.club', 'id'],
-  clubTeams: ['api.clubTeams', 'id']
+  clubTeams: ['api.clubTeams', 'id'],
 })
 class Club extends Component {
   render({ pending, rejected, back, club, clubTeams }) {
@@ -68,7 +68,7 @@ const Teams = ({ name, teams }) => (
         </tr>
       </thead>
       <tbody>
-        {teams.map(team => (
+        {teams.map((team) => (
           <LinkRow key={team.href} href={clientHref(team.href)}>
             <td>{team.name}</td>
             <td>{team.league}</td>

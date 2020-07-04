@@ -29,7 +29,7 @@ class Assoc extends Component {
           </h2>
           <Table>
             <tbody>
-              {leagues.map(league => (
+              {leagues.map((league) => (
                 <LinkRow
                   key={league.href}
                   href={`/league/${encodeURIComponent(league.href)}`}

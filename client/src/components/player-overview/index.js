@@ -15,7 +15,7 @@ export default function PlayerOverview({
   club,
   clubId,
   teams,
-  elo
+  elo,
 }) {
   const latestElo = elo && Math.round(elo.data[elo.data.length - 1])
   return (

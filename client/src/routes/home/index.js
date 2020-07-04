@@ -14,13 +14,13 @@ import LoadingPage from '../../components/loading-page'
 import ErrorPage from '../../components/error-page'
 import Table from '../../components/table'
 
-const spaceToPlus = str => str.replace(' ', '+')
+const spaceToPlus = (str) => str.replace(' ', '+')
 
 const seasons = ['18/19', '17/18', '16/17', '15/16', '14/15', '13/14', '12/13']
 
 const history = seasons.map((year, step) => ({
   name: `Season 20${year}`,
-  href: `/assocHistory/${encodeURIComponent(step)}`
+  href: `/assocHistory/${encodeURIComponent(step)}`,
 }))
 
 const assocNames = [
@@ -32,7 +32,7 @@ const assocNames = [
   'MTTV',
   'NWTTV',
   'OTTV',
-  'TTVI'
+  'TTVI',
 ]
 const translations = { STT: 'Nationalliga' }
 
@@ -45,12 +45,12 @@ const trophyNames = [
   'NWTTV Cup',
   'OTTV Cup',
   'TTVI Cup',
-  'MTTV Cup'
+  'MTTV Cup',
 ]
 
-const addLinks = name => ({
+const addLinks = (name) => ({
   name,
-  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+19%2F20`)
+  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+19%2F20`),
 })
 const assocs = assocNames.map(addLinks)
 const trophies = trophyNames.map(addLinks)
@@ -61,7 +61,7 @@ class Home extends Component {
   onClose = () => {
     localStorage.removeItem('me')
     this.setState({
-      closed: true
+      closed: true,
     })
   }
 

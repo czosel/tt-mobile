@@ -27,32 +27,32 @@ export default class Player extends Component {
     this.setState({ elo: null, pending: true })
     if (href.includes('playerPortrait')) {
       get('player')(href)
-        .then(data => {
+        .then((data) => {
           this.setState({ data, pending: false, rejected: false })
           return get('elo')(data.eloHref)
         })
-        .then(elo => {
+        .then((elo) => {
           this.setState({ elo })
         })
-        .catch(error =>
+        .catch((error) =>
           this.setState({
             pending: false,
-            rejected: { data: error }
+            rejected: { data: error },
           })
         )
     } else {
       get('elo')(href)
-        .then(elo => {
+        .then((elo) => {
           this.setState({ elo })
           return get('player')(elo.playerHref)
         })
-        .then(data => {
+        .then((data) => {
           this.setState({ data, pending: false, rejected: false })
         })
-        .catch(error =>
+        .catch((error) =>
           this.setState({
             pending: false,
-            rejected: { data: error }
+            rejected: { data: error },
           })
         )
     }
@@ -89,7 +89,7 @@ export default class Player extends Component {
       club,
       clubId,
       teams,
-      name
+      name,
     } = data
 
     const content =
@@ -104,7 +104,7 @@ export default class Player extends Component {
             teams,
             me,
             href,
-            elo
+            elo,
           }}
         />
       ) : tab === 'single' ? (
@@ -133,7 +133,7 @@ export default class Player extends Component {
 }
 
 function Wrapper({ tab, href, back, children }) {
-  const handleChange = tab => {
+  const handleChange = (tab) => {
     route(clientHref(href, tab), true)
   }
 

@@ -30,16 +30,16 @@ const endpoints = [
   'game',
   'player',
   'elo',
-  'me'
+  'me',
 ]
 
-endpoints.forEach(path => {
+endpoints.forEach((path) => {
   app.get(`/${path}`, async (req, res) => {
     const query = {
       ...req.query,
       url:
         req.query.url &&
-        join('/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/', req.query.url)
+        join('/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/', req.query.url),
     }
     try {
       query.format === 'ics'
@@ -77,6 +77,6 @@ app.get('/search/:term', async ({ params }, res) => {
 
 const port = process.env.PORT || 3020
 
-app.listen(port, function() {
+app.listen(port, function () {
   console.log(`server listening on port ${port}`)
 })

@@ -6,7 +6,7 @@ const map = {
   elo: 'player',
   groupMeetingReport: 'game',
   clubInfoDisplay: 'club',
-  clubMeetingReport: 'game'
+  clubMeetingReport: 'game',
 }
 
 /**
@@ -19,7 +19,7 @@ export default function clientHref(href, tab = '') {
     return undefined
   }
   if (typeof href === 'string') {
-    const route = map[Object.keys(map).find(key => href.includes(key))]
+    const route = map[Object.keys(map).find((key) => href.includes(key))]
     return `/${route}/${encodeURIComponent(href)}/${tab}`
   }
   if (href.clubId) {

@@ -24,7 +24,7 @@ export default class App extends Component {
 
   history = []
 
-  handleRoute = e => {
+  handleRoute = (e) => {
     this.history.push(e.previous)
   }
 
@@ -43,30 +43,30 @@ export default class App extends Component {
             link={[
               {
                 rel: 'apple-touch-icon',
-                href: '/assets/apple-touch-icon.png'
+                href: '/assets/apple-touch-icon.png',
               },
               {
                 rel: 'icon',
                 href: '/assets/favicon-32x32.png',
-                sizes: '32x32'
+                sizes: '32x32',
               },
               {
                 rel: 'icon',
                 href: '/assets/favicon-16x16.png',
-                sizes: '16x16'
-              }
+                sizes: '16x16',
+              },
             ]}
             meta={[
               {
                 name: 'msapplication-config',
-                content: '/assets/browserconfig.xml'
+                content: '/assets/browserconfig.xml',
               },
               { name: 'theme-color', content: '#FF5252' },
               {
                 name: 'description',
                 content:
-                  'TT-mobile ist die App für Tischtennis-Ergebnisse in der Schweiz.'
-              }
+                  'TT-mobile ist die App für Tischtennis-Ergebnisse in der Schweiz.',
+              },
             ]}
           />
           <Router onChange={this.handleRoute}>

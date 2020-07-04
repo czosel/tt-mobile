@@ -6,7 +6,7 @@ export default function CardList({
   name,
   content,
   translations = {},
-  nameAsKey = false
+  nameAsKey = false,
 }) {
   return (
     <Card name={name}>

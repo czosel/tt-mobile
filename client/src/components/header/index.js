@@ -6,21 +6,21 @@ import clientHref from '../../lib/link'
 
 const baseUrl = 'http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa'
 
-const getClickTTPath = path => {
+const getClickTTPath = (path) => {
   if (path.indexOf('/club/') > -1) {
     return path.replace('/club/', '/clubInfoDisplay?club=').slice(0, -1)
   }
-  return decodeURIComponent(path.split('/').filter(s => s.includes('%2F'))[0])
+  return decodeURIComponent(path.split('/').filter((s) => s.includes('%2F'))[0])
 }
 
 export default class Header extends Component {
   state = {
-    menuOpen: false
+    menuOpen: false,
   }
 
   toggleMenu = () => {
     this.setState({
-      menuOpen: !this.state.menuOpen
+      menuOpen: !this.state.menuOpen,
     })
   }
 

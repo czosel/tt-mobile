@@ -51,7 +51,7 @@ class Team extends Component {
                 </tr>
               </thead>
               <tbody>
-                {players.map(player => (
+                {players.map((player) => (
                   <LinkRow
                     key={player.href}
                     href={`/player/${encodeURIComponent(player.href)}`}
