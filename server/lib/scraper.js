@@ -313,6 +313,10 @@ function team({ url, format }, expressRes) {
           cal.events(
             toArray(data.games)
               .map(simplifyLinks)
+              .map((game) => ({
+                ...game,
+                isHome: !game.guest.includes(data.club),
+              }))
               .map((game) => {
                 const start = moment(
                   `${game.date} ${game.time}`,
