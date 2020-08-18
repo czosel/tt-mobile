@@ -3,6 +3,7 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const apicache = require("apicache");
+const moment = require("moment");
 const { join } = require("path");
 
 const scraper = require("./scraper");
@@ -70,6 +71,19 @@ app.get("/club-teams/:id", async ({ params }, res) => {
 app.get("/search/:term", async ({ params }, res) => {
   try {
     res.json(await scraper.search(params.term));
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+app.get("/regionSchedule/:championship", async ({ params, query }, res) => {
+  try {
+    res.json(
+      await scraper.regionSchedule({
+        championship: "MTTV 19/20",
+        date: moment(query.date),
+      })
+    );
   } catch (e) {
     console.error(e);
   }
