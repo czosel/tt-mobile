@@ -654,6 +654,47 @@ function search(term) {
   }));
 }
 
+function regionSchedule({ championship, date }) {
+  const monday = date.startOf("isoWeek");
+  const dayOfYear = monday.format("DDD");
+  const month = monday.format("M") - 1;
+
+  return new Promise((res, rej) => {
+    osmosis
+      .post(
+        resolve(
+          host,
+          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/regionMeetingFilter`
+        ),
+        {
+          championship,
+          dayOfYear,
+          month,
+          filterHomeGuestBackup: false,
+        }
+      )
+      .set({
+        games: osmosis
+          .find("table.result-set > tr:has(td:nth-child(11) a)")
+          .set({
+            name: "td:first-child a",
+            href: "td:first-child a@href",
+            date: "td:nth-child(2)",
+            time: "td:nth-child(3)",
+            league: "td:nth-child(6)",
+            home: "td:nth-child(7)",
+            guest: "td:nth-child(9)",
+            result: "td:nth-child(11)",
+          }),
+      })
+      .error(R.pipe(error("regionSchedule"), rej))
+      .data((data) => {
+        const chunks = asChunks(toArray(data.games).filter(Boolean));
+        return res({ chunks });
+      });
+  });
+}
+
 module.exports = {
   arrayify,
   assocHistory,
@@ -667,4 +708,5 @@ module.exports = {
   elo,
   me,
   search,
+  regionSchedule,
 };
