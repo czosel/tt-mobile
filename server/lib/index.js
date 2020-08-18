@@ -80,7 +80,7 @@ app.get("/regionSchedule/:championship", async ({ params, query }, res) => {
   try {
     res.json(
       await scraper.regionSchedule({
-        championship: "MTTV 19/20",
+        championship: params.championship,
         date: moment(query.date),
       })
     );
