@@ -76,11 +76,11 @@ app.get("/search/:term", async ({ params }, res) => {
   }
 });
 
-app.get("/regionSchedule/:championship", async ({ params, query }, res) => {
+app.get("/regionSchedule", async ({ query }, res) => {
   try {
     res.json(
       await scraper.regionSchedule({
-        championship: params.championship,
+        championship: query.championship,
         date: moment(query.date),
       })
     );
