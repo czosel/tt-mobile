@@ -1,6 +1,9 @@
 var TTmobile = (function (exports) {
   "use strict";
 
+  const host = "https://api.tt-mobile.ch/";
+  // const host = "http://localhost:3020/";
+
   function renderTable(clubs, element, options) {
     const html = `
       <thead>${renderTableHead()}</thead>
@@ -66,7 +69,7 @@ var TTmobile = (function (exports) {
   }
 
   function table(url, element, options = {}) {
-    fetch("https://api.tt-mobile.ch/league?url=" + encodeURIComponent(url))
+    fetch(`${host}league?url=${encodeURIComponent(url)}`)
       .then((response) => response.json())
       .then((data) => {
         renderTable(data.clubs, element, options);
@@ -74,7 +77,7 @@ var TTmobile = (function (exports) {
   }
 
   function team(url, element, options = {}) {
-    fetch("https://api.tt-mobile.ch/team?url=" + encodeURIComponent(url))
+    fetch(`${host}team?url=${encodeURIComponent(url)}`)
       .then((response) => response.json())
       .then((data) => {
         renderTeam(data.players, element, options);
