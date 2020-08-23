@@ -674,21 +674,45 @@ function regionSchedule({ championship, date }) {
         }
       )
       .set({
-        games: osmosis
-          .find("table.result-set > tr:has(td:nth-child(11) a)")
-          .set({
-            name: "td:first-child a",
-            href: "td:first-child a@href",
-            date: "td:nth-child(2)",
-            time: "td:nth-child(3)",
-            league: "td:nth-child(6)",
-            home: "td:nth-child(7)",
-            guest: "td:nth-child(9)",
-            result: "td:nth-child(11)",
-          }),
+        games: osmosis.find("table.result-set > tr:not(:first-child)").set({
+          date: "td:nth-child(2)",
+          time: "td:nth-child(3)",
+          col5: "td:nth-child(5)",
+          col6: "td:nth-child(6)",
+          col7: "td:nth-child(7)",
+          col8: "td:nth-child(8)",
+          col9: "td:nth-child(9)",
+          col10: "td:nth-child(10)",
+          col10href: "td:nth-child(10) a@href",
+          col11: "td:nth-child(11)",
+          col11href: "td:nth-child(11) a@href",
+        }),
       })
       .error(R.pipe(error("regionSchedule"), rej))
       .data((data) => {
+        data.games = data.games.map((game) => {
+          // sometimes the "Runde" column is missing
+          if (isNaN(game.col5)) {
+            return {
+              date: game.date,
+              time: game.time,
+              league: game.col5,
+              home: game.col6,
+              guest: game.col8,
+              result: game.col10,
+              resultHref: simplify(game.col10href),
+            };
+          }
+          return {
+            date: game.date,
+            time: game.time,
+            league: game.col6,
+            home: game.col7,
+            guest: game.col9,
+            result: game.col11,
+            resultHref: simplify(game.col11href),
+          };
+        });
         const chunks = asChunks(toArray(data.games).filter(Boolean));
         return res({ chunks });
       });
