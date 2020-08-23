@@ -526,7 +526,7 @@ function elo({ url }) {
       .data((data) => {
         let current = parseInt(data.start);
         const start = current;
-        let result = [];
+        let result = [start];
         data.data
           .filter((row) => row.delta)
           .forEach((row) => {
