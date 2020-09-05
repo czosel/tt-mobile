@@ -188,6 +188,13 @@ function league({ url }) {
   });
 }
 
+function decodeEmail(topLevelDomain, m1, domain, m2) {
+  if (m2 != "") {
+    return `${m1}.${m2}@${domain}.${topLevelDomain}`;
+  }
+  return `${m1}@${domain}.${topLevelDomain}`;
+}
+
 function club(id) {
   return new Promise((res, rej) => {
     osmosis
@@ -199,6 +206,9 @@ function club(id) {
       )
       .find("#content")
       .set({
+        name: "#content-row1 table:first tr:first td:first h1",
+        contact: "#content-row1 table:first tr:first td:first p[2]",
+        website: "#content-row1 table:first tr:first td:first p[2] a@href",
         lastMatches: osmosis
           .find(
             "#content-row1 table.result-set:first tr:has(td:nth-child(4) a)"
@@ -220,7 +230,44 @@ function club(id) {
       })
       .error(R.pipe(error("club"), rej))
       .data((data) => {
+        const contactData = data.contact.split("\n").filter(Boolean);
+
+        const emailStr = contactData.find((e) => e.includes("encodeEmail"));
+        const encodeEmailArgs = emailStr
+          .split("'")
+          .filter((a) => !a.includes("encodeEmail("))
+          .filter((a) => a !== ")")
+          .filter((a) => a !== ", ");
+
+        const phoneStr = contactData.find(
+          (e) => e.includes("Mobil ") || e.includes("Tel ")
+        );
+
+        const contact = {
+          name: contactData[0],
+          address: contactData[1].split(", "),
+          phone:
+            phoneStr &&
+            phoneStr.split(", ").reduce(
+              (res, s) => ({
+                ...res,
+                ...((s.includes("Mobil ") && {
+                  mobile: s.substring("Mobil ".length),
+                }) ||
+                  (s.includes("Tel ") && {
+                    landline: s.substring("Tel P ".length),
+                  })),
+              }),
+              {}
+            ),
+          email: decodeEmail(...encodeEmailArgs),
+          website: data.website,
+        };
+
+        const nameParts = data.name.split("\n");
         res({
+          name: nameParts[nameParts.length - 1].trim(),
+          contact,
           lastMatches: asChunks(arrayify(data.lastMatches).map(simplifyLinks)),
           nextMatches: asChunks(arrayify(data.nextMatches).map(simplifyLinks)),
           // deprecated

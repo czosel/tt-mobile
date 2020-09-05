@@ -14,6 +14,10 @@ import LinkRow from "../../components/link-row/";
 import Table from "../../components/table";
 import Schedule from "../../components/schedule";
 
+function stripProtocol(url) {
+  return url.replace(/(^\w+:|^)\/\//, "");
+}
+
 export default
 @wire("model", {
   club: ["api.club", "id"],
@@ -30,19 +34,29 @@ class Club extends Component {
       <div>
         <Header back={back} />
         <Container>
-          {pending && pending.clubTeams ? (
-            <Loading />
-          ) : (
-            <Teams {...clubTeams} />
-          )}
-          {pending && pending.club ? (
+          {pending || !club ? (
             <Loading />
           ) : (
             <div>
-              <h2>Spielplan (Rückschau)</h2>
-              <Schedule chunks={club && club.lastMatches} />
-              <h2>Spielplan (Vorschau)</h2>
-              <Schedule chunks={club && club.nextMatches} />
+              <Helmet title={name} />
+              <h1 class="title">{club.name}</h1>
+              <p class="mb-5">
+                {club.contact.name}
+                <br />
+                <a href={"mailto:" + club.contact.email}>
+                  {club.contact.email}
+                </a>
+                <br />
+                <a href={club.contact.website} target="_blank">
+                  {stripProtocol(club.contact.website)}
+                </a>
+              </p>
+              <h2 class="subtitle">Mannschaften</h2>
+              <Teams {...clubTeams} />
+              <h2 class="subtitle">Spielplan (Rückschau)</h2>
+              <Schedule chunks={club.lastMatches} />
+              <h2 class="subtitle">Spielplan (Vorschau)</h2>
+              <Schedule chunks={club.nextMatches} />
             </div>
           )}
         </Container>
@@ -54,9 +68,6 @@ class Club extends Component {
 
 const Teams = ({ name, teams }) => (
   <div>
-    <Helmet title={name} />
-    <h1 class="title">{name}</h1>
-    <h2 class="subtitle">Mannschaften</h2>
     <Table>
       <thead>
         <tr>
