@@ -18,6 +18,8 @@ import Table from "../../components/table";
 import Tabs from "../../components/tabs";
 import Tab from "../../components/tab";
 
+import { API_ORIGIN } from "../../lib/model";
+
 export default
 @wire("model", { data: ["api.league", "href"] })
 class League extends Component {
@@ -64,12 +66,21 @@ class League extends Component {
   }
 }
 
+function clubName(teamName) {
+  const parts = teamName.split(" ");
+  if (/[IV]+$/.test(parts[parts.length - 1])) {
+    return parts.slice(0, -1).join(" ");
+  }
+  return parts.join(" ");
+}
+
 function LeagueTable({ clubs, href }) {
   return (
     <>
       <Table>
         <thead>
           <tr>
+            <th class="optional-2" />
             <th />
             <th>Mannschaft</th>
             <th class="center optional">Beg.</th>
@@ -82,7 +93,13 @@ function LeagueTable({ clubs, href }) {
         <tbody>
           {clubs.map((club) => (
             <LinkRow key={club.href} href={clientHref(club.href)}>
-              <td class="right thin">{club.rank}</td>
+              <td class="optional-2">{club.rank}</td>
+              <td class="logo-col">
+                <img
+                  class="logo"
+                  src={`${API_ORIGIN}/logo/?name=${clubName(club.name)}`}
+                />
+              </td>
               <td>{club.name}</td>
               <td class="center optional">{club.nrOfGames}</td>
               <td class="center optional-2">{club.games}</td>

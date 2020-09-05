@@ -14,6 +14,8 @@ import LinkRow from "../../components/link-row/";
 import Table from "../../components/table";
 import Schedule from "../../components/schedule";
 
+import { API_ORIGIN } from "../../lib/model";
+
 export default
 @wire("model", {
   club: ["api.club", "id"],
@@ -55,8 +57,16 @@ class Club extends Component {
 const Teams = ({ name, teams }) => (
   <div>
     <Helmet title={name} />
-    <h1 class="title">{name}</h1>
-    <h2 class="subtitle">Mannschaften</h2>
+    <div class="logo-row mb-5">
+      <img
+        class="logo logo-lg is-pulled-left mr-3"
+        src={`${API_ORIGIN}/logo/?name=${name}`}
+      />
+      <div>
+        <h1 class="title">{name}</h1>
+        <h2 class="subtitle">Mannschaften</h2>
+      </div>
+    </div>
     <Table>
       <thead>
         <tr>

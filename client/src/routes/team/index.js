@@ -15,6 +15,8 @@ import LinkRow from "../../components/link-row";
 import Table from "../../components/table";
 import EloScore from "../../components/elo-score";
 
+import { API_ORIGIN } from "../../lib/model";
+
 export default
 @wire("model", { data: ["api.team", "href"] })
 class Team extends Component {
@@ -29,11 +31,21 @@ class Team extends Component {
         <Helmet title={name} />
         <Header breadcrumb={breadcrumbs[1]} back={back} />
         <Container>
-          <h1 class="title">{name}</h1>
-          <h2 class="subtitle">
-            <a href={clientHref(breadcrumbs[1].href)}>{breadcrumbs[1].name}</a>
-          </h2>
-          <p>
+          <div class="logo-row">
+            <img
+              class="logo logo-lg is-pulled-left mr-3"
+              src={`${API_ORIGIN}/logo/?name=${club}`}
+            />
+            <div>
+              <h1 class="title">{name}</h1>
+              <h2 class="subtitle">
+                <a href={clientHref(breadcrumbs[1].href)}>
+                  {breadcrumbs[1].name}
+                </a>
+              </h2>
+            </div>
+          </div>
+          <p class="mt-2">
             <a href={link}>
               <i class="icon-location" style="font-size:1.5em" />
               {location}

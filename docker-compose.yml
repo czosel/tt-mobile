@@ -1,17 +1,19 @@
 version: "3"
 services:
-  client:
-    build: ./client
-    volumes:
-      - ./client:/usr/src/app
-      - /usr/src/app/node_modules
+  db:
+    image: mariadb:10.2
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'ttmobile'
+      MYSQL_PASSWORD: 'ttmobile'
+      MYSQL_ROOT_PASSWORD: 'ttmobile'
     ports:
-     - "80:8080"
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
 
-  server:
-    build: ./server
-    volumes:
-      - ./server:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - "3020:3020"
+volumes:
+  my-db:

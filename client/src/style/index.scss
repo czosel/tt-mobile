@@ -30,6 +30,7 @@ $fullhd: 960px + (2 * $gap);
 @import "../../node_modules/bulma/sass/form/input-textarea";
 @import "../../node_modules/bulma/sass/helpers/float.sass";
 @import "../../node_modules/bulma/sass/helpers/typography.sass";
+@import "../../node_modules/bulma/sass/helpers/spacing.sass";
 
 html,
 body {
@@ -128,10 +129,24 @@ td.thin > i {
   }
 }
 
-td.right {
-  text-align: right;
-}
-
 tr.no-hover {
   background-color: transparent !important;
+}
+
+td.logo-col {
+  padding: 7px 0 0;
+}
+
+.logo {
+  width: 40px;
+  border-radius: 5px;
+}
+
+.logo-lg {
+  width: 60px;
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
 }
