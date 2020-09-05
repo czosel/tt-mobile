@@ -3,6 +3,7 @@ const util = require("util");
 const R = require("ramda");
 const ical = require("ical-generator");
 const moment = require("moment");
+const models = require("./models");
 
 const osmosis = require("osmosis");
 
@@ -175,7 +176,6 @@ function league({ url }) {
           .map(simplifyLinks)
           .map(formatTime)
           .map((game) => {
-            console.log(game);
             // Cup leagues have an extra column "Nr."
             if (isNaN(game.col6)) {
               return {
@@ -283,8 +283,15 @@ function clubTeams(id) {
       })
       .error(R.pipe(error("clubTeams"), rej))
       .data((data) => {
+        const name = splitTitle(data.title)[0];
+        models.Club.forge({ id })
+          .save({ name })
+          .catch(() => {
+            models.Club.forge().save({ id, name });
+          });
+
         res({
-          name: splitTitle(data.title)[0],
+          name,
           teams: toArray(data.teams).map(simplifyLinks),
         });
       });
