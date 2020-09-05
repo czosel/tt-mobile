@@ -221,10 +221,10 @@ function club(id) {
       .error(R.pipe(error("club"), rej))
       .data((data) => {
         res({
-          lastMatches: asChunks(toArray(data.lastMatches).map(simplifyLinks)),
-          nextMatches: asChunks(toArray(data.nextMatches).map(simplifyLinks)),
+          lastMatches: asChunks(arrayify(data.lastMatches).map(simplifyLinks)),
+          nextMatches: asChunks(arrayify(data.nextMatches).map(simplifyLinks)),
           // deprecated
-          chunks: asChunks(toArray(data.lastMatches).map(simplifyLinks)),
+          chunks: asChunks(arrayify(data.lastMatches).map(simplifyLinks)),
         });
       });
   });
