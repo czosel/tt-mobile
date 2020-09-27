@@ -1,4 +1,3 @@
-const outlet = document.querySelector(".outlet");
 const host = "https://api.tt-mobile.ch/";
 // const host = "http://localhost:3020/";
 
@@ -73,7 +72,8 @@ function regionSchedule(championship, element, options = {}, callback) {
     .then(() => callback && callback());
 }
 
-function renderBox(leagues, options = {}) {
+function renderBox(selector, leagues, options = {}) {
+  const outlet = document.querySelector(selector);
   outlet.innerHTML = "";
   leagues.forEach((league) => {
     const gameFilter = (game) => {
