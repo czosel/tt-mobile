@@ -6,5 +6,35 @@
     <div class="outlet"></div>
 
     <script src="region-schedule.js"></script>
+    <script>
+      const leagues = [
+        {
+          name: "National",
+          championship: "STT",
+          linkTo: "https://tt-mobile.ch",
+        },
+        { name: "NLA", championship: "STT", include: ["NLA"] },
+        { name: "NLB", championship: "STT", include: ["NLB"] },
+        { name: "NLC", championship: "STT", include: ["NLC"] },
+        {
+          name: "Regional",
+          championship: "MTTV",
+          exclude: ["NLA", "NLB", "NLC"],
+        },
+        { name: "1. Liga", championship: "MTTV", include: ["1. Liga"] },
+        { name: "2. Liga", championship: "MTTV", include: ["2. Liga"] },
+        { name: "3. Liga", championship: "MTTV", include: ["3. Liga"] },
+      ];
+
+      renderBox(leagues, {
+        showTitle: true,
+        showDate: true,
+        showTime: true,
+        showLeague: true,
+        showResult: true,
+        games: "all", // "all" / "upcoming" / "finished"
+        // date: "2020-10-12", // show schedule of specific date
+      });
+    </script>
   </body>
 </html>
