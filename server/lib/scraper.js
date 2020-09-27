@@ -705,7 +705,7 @@ function regionSchedule({ championship, date }) {
           }
           return {
             date: game.date,
-            time: game.time,
+            time: game.time.match(/[0-9]{2}:[0-9]{2}/)[0],
             league: game.col6,
             home: game.col7,
             guest: game.col9,
