@@ -16,11 +16,18 @@
         },
         { name: "NLA", championship: "STT", include: ["NLA"] },
         { name: "NLB", championship: "STT", include: ["NLB"] },
+        { name: "Damen NLB", championship: "STT", include: ["DA NLB"] },
+        { name: "Herren NLB", championship: "STT", include: ["HE NLB"] },
         { name: "NLC", championship: "STT", include: ["NLC"] },
         {
           name: "Regional",
           championship: "MTTV",
           exclude: ["NLA", "NLB", "NLC"],
+        },
+        {
+          name: "Schweizer Cup Regional",
+          championship: "MTTV",
+          include: ["SC"],
         },
         { name: "1. Liga", championship: "MTTV", include: ["1. Liga"] },
         { name: "2. Liga", championship: "MTTV", include: ["2. Liga"] },
@@ -33,8 +40,9 @@
         showTime: true,
         showLeague: true,
         showResult: true,
-        games: "all", // "all" / "upcoming" / "finished"
-        // date: "2020-10-12", // show schedule of specific date
+        games: "finished", // "all" / "upcoming" / "finished"
+        limit: 5, // limit number of games
+        date: "2020-09-12", // show schedule of specific date
       });
     </script>
   </body>

@@ -2,10 +2,17 @@ const host = "https://api.tt-mobile.ch/";
 // const host = "http://localhost:3020/";
 
 function renderRegion(chunks, element, options) {
-  const fallback = `<tr><td colspan="4">Keine Spiele gefunden</td></tr>`;
-  const rows =
-    chunks.map((chunk) => renderRegionChunk(chunk, options)).join("") ||
-    fallback;
+  let offset = 0;
+  let rows = "";
+
+  for (chunk of chunks.reverse()) {
+    const info = renderRegionChunk(chunk, options, offset);
+    rows = info.title + info.games.join("") + rows;
+    offset += info.games.length;
+  }
+  if (!rows) {
+    rows = `<tr><td colspan="4">Keine Spiele gefunden</td></tr>`;
+  }
   const title = options.showTitle
     ? options.linkTo
       ? `<h2><a href="${options.linkTo}">${options.name}</a></h2>`
@@ -21,9 +28,9 @@ function renderRegion(chunks, element, options) {
   element.insertAdjacentHTML("beforeend", html);
 }
 
-function renderRegionChunk(chunk, options) {
+function renderRegionChunk(chunk, options, offset = 0) {
   const gameStateFilter = () => {
-    if (options.games == "all") {
+    if (!options.games || options.games == "all") {
       return (game) => game;
     }
     return (game) => (options.games == "upcoming") ^ !!game.result;
@@ -32,19 +39,21 @@ function renderRegionChunk(chunk, options) {
     options.gameFilter = (x) => x;
   }
 
-  const games = chunk.games
+  const _games = chunk.games
     .filter(gameStateFilter())
-    .filter(options.gameFilter)
-    .map((game) => renderRegionRow(game, options))
-    .join("");
+    .filter(options.gameFilter);
+
+  const games = _games
+    .slice(Math.max(0, _games.length - options.limit + offset), _games.length)
+    .map((game) => renderRegionRow(game, options));
 
   // only render title if there are games
   const title =
-    games && options.showDate
+    games.length && options.showDate
       ? `<tr><td colspan="4">${chunk.date}</td><tr>`
       : "";
 
-  return title + games;
+  return { title, games };
 }
 
 function renderRegionRow(row, options) {
