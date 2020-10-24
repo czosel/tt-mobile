@@ -39,6 +39,10 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.0.8 (24.10.2020)
+            <ul>
+              <li>Bugfix: Pokalspiele werden korrekt dargestellt</li>
+            </ul>
             v1.0.7 (4.7.2020)
             <ul>
               <li>App für neue Spielsaison angepasst</li>
