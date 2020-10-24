@@ -145,10 +145,14 @@ function league({ url }) {
           .set({
             date: "td:nth-child(2)",
             time: "td:nth-child(3)",
-            home: "td:nth-child(6)",
-            guest: "td:nth-child(8)",
-            result: "td:nth-child(10)",
-            href: "td:nth-child(10) a@href",
+            col6: "td:nth-child(6)",
+            col7: "td:nth-child(7)",
+            col8: "td:nth-child(8)",
+            col9: "td:nth-child(9)",
+            col10: "td:nth-child(10)",
+            col10href: "td:nth-child(10) a@href",
+            col11: "td:nth-child(11)",
+            col11href: "td:nth-child(11) a@href",
           }),
         clubs: osmosis
           .find(
@@ -167,7 +171,31 @@ function league({ url }) {
       .error(R.pipe(error("league"), rej))
       .data((data) => {
         const titleParts = splitTitle(data.title);
-        const games = toArray(data.games).map(simplifyLinks).map(formatTime);
+        const games = toArray(data.games)
+          .map(simplifyLinks)
+          .map(formatTime)
+          .map((game) => {
+            console.log(game);
+            // Cup leagues have an extra column "Nr."
+            if (isNaN(game.col6)) {
+              return {
+                date: game.date,
+                time: game.time,
+                home: game.col6,
+                guest: game.col8,
+                result: game.col10,
+                href: simplify(game.col10href),
+              };
+            }
+            return {
+              date: game.date,
+              time: game.time,
+              home: game.col7,
+              guest: game.col9,
+              result: game.col11,
+              href: simplify(game.col11href),
+            };
+          });
 
         res({
           assoc: titleParts[0],
