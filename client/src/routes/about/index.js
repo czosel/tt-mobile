@@ -39,6 +39,17 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.0 (13.12.2020)
+            <ul>
+              <li>
+                Feature: Clublogos
+                <br />
+                Falls das Falls das Logo deines Vereins noch fehlt, sende es
+                bitte per Mail an{" "}
+                <a href="mailto:feedback@tt-mobile.ch">feedback@tt-mobile.ch</a>
+                .
+              </li>
+            </ul>
             v1.0.8 (24.10.2020)
             <ul>
               <li>Bugfix: Pokalspiele werden korrekt dargestellt</li>
