@@ -109,6 +109,9 @@ app.get("/logo/:id?", async ({ params, query }, res) => {
     const club = await models.Club.forge(
       params.id ? { id: parseInt(params.id) } : { name: query.name }
     ).fetch();
+    if (!club.get("logo")) {
+      throw "no logo found";
+    }
     res.sendFile(club.get("logo"), { root: join(__dirname, "../logos") });
   } catch (e) {
     res.writeHead(200, {
