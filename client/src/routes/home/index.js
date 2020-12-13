@@ -82,6 +82,13 @@ class Home extends Component {
       <div class={style.home}>
         <Header />
         <Container>
+          <Card name="Neu: Clublogos">
+            TT-Mobile unterstützt neu Clublogos! Falls das Logo deines Vereins
+            noch fehlt, sende es bitte per Mail an{" "}
+            <a href="mailto:feedback@tt-mobile.ch">feedback@tt-mobile.ch</a>.
+            <br />
+          </Card>
+          <br />
           {data && !closed ? (
             <Card name={data.name} closeable="true" onClose={this.onClose}>
               <PlayerLinks {...data} me={me} />
