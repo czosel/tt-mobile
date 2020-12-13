@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.2.34-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.16  Distrib 10.2.36-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: db
 -- ------------------------------------------------------
--- Server version	10.2.34-MariaDB-1:10.2.34+maria~bionic
+-- Server version	10.2.36-MariaDB-1:10.2.36+maria~bionic
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,7 +26,8 @@ CREATE TABLE `club` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `logo` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -36,7 +37,7 @@ CREATE TABLE `club` (
 
 LOCK TABLES `club` WRITE;
 /*!40000 ALTER TABLE `club` DISABLE KEYS */;
-INSERT INTO `club` VALUES (32987,'La Chaux-de-Fonds',NULL),(33033,'Rio-Star Muttenz','muttenz.png'),(33132,'Thun',NULL),(33165,'Meyrin','meyrin.jpeg'),(33175,'ZZ-Lancy','lancy.jpg'),(33203,'Wil SG','wil.png'),(33244,'Neuhausen','neuhausen.png');
+INSERT INTO `club` VALUES (32987,'La Chaux-de-Fonds',NULL),(33033,'Rio-Star Muttenz','muttenz.png'),(33080,'Bulle','bulle.jpeg'),(33089,'Aarberg','aarberg.png'),(33090,'Belp','belp.png'),(33091,'Bern','bern.png'),(33093,'Brügg','bruegg.png'),(33094,'Burgdorf','burgdorf.jpg'),(33095,'Düdingen','duedingen.png'),(33099,'Grenchen',NULL),(33100,'Grossaffoltern','grossaffoltern.png'),(33101,'Heimberg',NULL),(33102,'Herzogenbuchsee',NULL),(33104,'Huttwil',NULL),(33105,'Interlaken',NULL),(33108,'Kirchberg',NULL),(33109,'Köniz','koeniz.png'),(33110,'Langenthal',NULL),(33111,'Langnau','langnau.png'),(33112,'Lyss','lyss.png'),(33113,'Grauholz','grauholz.png'),(33115,'Münchenbuchsee','muenchenbuchsee.png'),(33116,'Münsingen',NULL),(33119,'Niederscherli','niederscherli.png'),(33122,'Port','port.jpg'),(33123,'Royal Bern',NULL),(33124,'SC Informatik Swisscom Wabern',NULL),(33125,'Schmitten',NULL),(33126,'Schwarzenburg','schwarzenburg.png'),(33127,'Solothurn','solothurn.png'),(33128,'Steffisburg','steffisburg.jpg'),(33129,'Stettlen','stettlen.jpg'),(33131,'Thörishaus','thoerishaus.jpg'),(33132,'Thun','thun.svg'),(33135,'Wichtrach',NULL),(33136,'Wohlensee','wohlensee.png'),(33137,'Worb',NULL),(33138,'Wynigen',NULL),(33156,'bls Spiez',NULL),(33165,'Meyrin','meyrin.jpeg'),(33174,'Veyrier','veyrier.png'),(33175,'ZZ-Lancy','lancy.jpg'),(33197,'Wädenswil','wädenswil.png'),(33203,'Wil SG','wil.png'),(33244,'Neuhausen','neuhausen.png'),(33282,'Ostermundigen',NULL);
 /*!40000 ALTER TABLE `club` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,4 +100,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-31 15:58:46
+-- Dump completed on 2020-12-13 17:03:31
