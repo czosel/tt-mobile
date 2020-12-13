@@ -135,15 +135,19 @@ tr.no-hover {
 
 td.logo-col {
   padding: 7px 0 0;
+  height: 54px;
+  text-align: center !important;
 }
 
 .logo {
-  width: 40px;
+  max-width: 40px;
+  max-height: 40px;
   border-radius: 5px;
 }
 
 .logo-lg {
-  width: 60px;
+  max-width: 80px;
+  max-height: 80px;
 }
 
 .logo-row {

@@ -7,6 +7,7 @@ module.exports = {
       database: "db",
       user: "ttmobile",
       password: "ttmobile",
+      charset: "utf8",
     },
     migrations: {
       tableName: "knex_migrations",
