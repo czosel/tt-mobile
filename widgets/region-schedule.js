@@ -66,7 +66,17 @@ function renderRegionRow(row, options) {
     ${options.showLeague ? `<td>${row.league}</td>` : ""}
     ${options.showTime ? `<td>${row.time}</td>` : ""}
     <td style="text-align: right;">${row.home}</td>
+    ${
+      options.showLogos
+        ? `<td><img src="${host}logo/?name=${row.home}"></td>`
+        : ""
+    }
     ${options.showResult ? `<td>${result}</td>` : ""}
+    ${
+      options.showLogos
+        ? `<td><img src="${host}logo/?name=${row.guest}"></td>`
+        : ""
+    }
     <td>${row.guest}</td>
   </tr>`;
 }

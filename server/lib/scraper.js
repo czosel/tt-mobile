@@ -725,7 +725,7 @@ function regionSchedule({ championship, date }) {
       })
       .error(R.pipe(error("regionSchedule"), rej))
       .data((data) => {
-        data.games = data.games.map((game) => {
+        data.games = (data.games || []).map((game) => {
           // sometimes the "Runde" column is missing
           if (isNaN(game.col5)) {
             return {
