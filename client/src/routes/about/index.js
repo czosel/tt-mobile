@@ -39,6 +39,13 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.1 (28.12.2020)
+            <ul>
+              <li>
+                Bugfix: Clublogos wurden bei bestimmten Teams falsch dargestellt
+              </li>
+              <li>Softwarepflege</li>
+            </ul>
             v1.1.0 (13.12.2020)
             <ul>
               <li>
