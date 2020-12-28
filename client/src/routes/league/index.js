@@ -68,7 +68,7 @@ class League extends Component {
 
 function clubName(teamName) {
   const parts = teamName.split(" ");
-  if (/[IV]+$/.test(parts[parts.length - 1])) {
+  if (/[IVX]+$/.test(parts[parts.length - 1])) {
     return parts.slice(0, -1).join(" ");
   }
   return parts.join(" ");
