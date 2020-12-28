@@ -114,10 +114,10 @@ app.get("/logo/:id?", async ({ params, query }, res) => {
     }
     res.sendFile(club.get("logo"), { root: join(__dirname, "../logos") });
   } catch (e) {
-    res.writeHead(200, {
-      "Content-Type": "image/svg+xml",
-    });
-    res.end(jdenticon.toSvg(params.id || query.name, 200));
+    res
+      .set("Content-Type", "image/svg+xml")
+      .status(200)
+      .send(jdenticon.toSvg(params.id || query.name, 200));
   }
 });
 
