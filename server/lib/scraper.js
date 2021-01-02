@@ -69,7 +69,8 @@ const asChunks = (games) => {
   return chunks;
 };
 
-const getClubId = (clubHref) => Number(parse(clubHref, true).query.club);
+const getClubId = (clubHref) =>
+  clubHref && Number(parse(clubHref, true).query.club);
 
 function assocHistory({ step }) {
   const url =
@@ -566,7 +567,8 @@ function elo({ url }) {
         let current = parseInt(data.start);
         const start = current;
         let result = [start];
-        data.data
+
+        arrayify(data.data)
           .filter((row) => row.delta)
           .forEach((row) => {
             current = current - parseFloat(row.delta.replace(",", "."));
@@ -575,7 +577,7 @@ function elo({ url }) {
         result.reverse();
         current = result[result.length - 1];
         // preview: elo values for both players, but no delta yet on click-tt
-        data.data
+        arrayify(data.data)
           .filter((row) => !row.delta && row.myElo && row.opponentElo)
           .reverse()
           .forEach((row) => {
