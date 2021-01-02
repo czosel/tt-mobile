@@ -133,7 +133,7 @@ export default {
         this.tableLogoSize && `logoSize: "${this.tableLogoSize}"`;
       const options =
         (highlightOption || logoSizeOption) &&
-        `{ ${[highlightOption, logoSizeOption].filter(Boolean).join(", ")}}`;
+        `, { ${[highlightOption, logoSizeOption].filter(Boolean).join(", ")}}`;
       return `<table class="mytable"></table>
 <script>TTmobile.table("${this.tableUrl}", document.querySelector(".mytable")${options});<\/script>`;
     },
