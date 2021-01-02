@@ -44,7 +44,7 @@
           ><code class="html"></code></pre>
           <p>
             Interaktives Beispiel auf
-            <a href="https://jsfiddle.net/czosel/g5on1yhL/">JSfiddle</a>
+            <a href="https://jsfiddle.net/czosel/g5on1yhL/4/">JSfiddle</a>
           </p>
         </div>
         <div class="column">
@@ -77,7 +77,7 @@
           ><code class="html"></code></pre>
           <p>
             Interaktives Beispiel auf
-            <a href="https://jsfiddle.net/czosel/hwptsr21/">JSfiddle</a>
+            <a href="https://jsfiddle.net/czosel/hwptsr21/3/">JSfiddle</a>
           </p>
         </div>
         <div class="column">
