@@ -13,11 +13,25 @@ var TTmobile = (function (exports) {
     element.innerHTML = html;
   }
 
+  function clubName(teamName) {
+    const parts = teamName.split(" ");
+    if (/[IVX]+$/.test(parts[parts.length - 1])) {
+      return parts.slice(0, -1).join(" ");
+    }
+    return parts.join(" ");
+  }
+
   function renderTableRow(row, options) {
     const match = options.highlight && row.name.includes(options.highlight);
+    const logoSize = options.logoSize || "50px";
     return `
       <tr>
         <td>${row.rank}</td>
+          <td>
+            <img class="tt-mobile-logo"
+              style="max-width: ${logoSize}; max-height: ${logoSize}; border-radius: 5px;"
+              src="${host}logo/?name=${clubName(row.name)}" />
+        </td>
         <td>
           <a target="_blank" href="https://tt-mobile.ch/team/${encodeURIComponent(
             row.href
@@ -38,6 +52,7 @@ var TTmobile = (function (exports) {
 
   function renderTableHead() {
     return `<tr>
+      <th></th>
       <th></th>
       <th>Mannschaft</th>
       <th>Beg.</th>

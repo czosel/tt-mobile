@@ -6,7 +6,7 @@
       <pre
         v-highlightjs
         class="content"
-      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.0.0/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.1.1/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 
       <h2 class="subtitle">Tabelle</h2>
       <div class="columns is-desktop">
@@ -31,6 +31,12 @@
               />
             </div>
           </div>
+          <div class="field">
+            <label class="label">Grösse der Logos</label>
+            <div class="control">
+              <input class="input" v-model="tableLogoSize" placeholder="50px" />
+            </div>
+          </div>
           <label class="label">Code</label>
           <pre
             v-highlightjs="tableCode"
@@ -42,7 +48,12 @@
           </p>
         </div>
         <div class="column">
-          <TtTable class="box" :url="tableUrl" :highlight="tableHighlight" />
+          <TtTable
+            class="box"
+            :url="tableUrl"
+            :highlight="tableHighlight"
+            :logoSize="tableLogoSize"
+          />
         </div>
       </div>
 
@@ -106,6 +117,7 @@ export default {
   data: () => ({
     tableUrl: "",
     tableHighlight: "",
+    tableLogoSize: "",
     teamUrl: "",
   }),
   components: {
@@ -115,8 +127,13 @@ export default {
   computed: {
     tableCode() {
       /* eslint-disable no-useless-escape */
+      const highlightOption =
+        this.tableHighlight && `highlight: "${this.tableHighlight}"`;
+      const logoSizeOption =
+        this.tableLogoSize && `logoSize: "${this.tableLogoSize}"`;
       const options =
-        this.tableHighlight && `, { highlight: "${this.tableHighlight}" }`;
+        (highlightOption || logoSizeOption) &&
+        `{ ${[highlightOption, logoSizeOption].filter(Boolean).join(", ")}}`;
       return `<table class="mytable"></table>
 <script>TTmobile.table("${this.tableUrl}", document.querySelector(".mytable")${options});<\/script>`;
     },
