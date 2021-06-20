@@ -34,5 +34,8 @@
     "moment": "^2.24.0",
     "mysql": "^2.18.1",
     "ramda": "^0.27.0"
+  },
+  "resolutions": {
+    "libxmljs-dom": "czosel/libxmljs-dom#8af9ad688b4bd4a302107ef9864d0d6d0d42569a"
   }
 }
