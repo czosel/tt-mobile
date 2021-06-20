@@ -140,6 +140,19 @@ function league({ url }) {
       .find("#content")
       .set({
         title: "#content-col1 h1",
+        clubs: osmosis
+          .find(
+            'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)'
+          )
+          .set({
+            rank: "td:nth-child(2)",
+            name: "td:nth-child(3)",
+            href: "td:nth-child(3) a@href",
+            nrOfGames: "td:nth-child(4)",
+            games: "td:nth-child(8)",
+            balance: "td:nth-child(9)",
+            score: "td:last-child",
+          }),
         games: osmosis
           .find(
             'h2:contains("Spielplan") ~ table.result-set:first tr:not(:first-child)'
@@ -155,19 +168,6 @@ function league({ url }) {
             col10href: "td:nth-child(10) a@href",
             col11: "td:nth-child(11)",
             col11href: "td:nth-child(11) a@href",
-          }),
-        clubs: osmosis
-          .find(
-            'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)'
-          )
-          .set({
-            rank: "td:nth-child(2)",
-            name: "td:nth-child(3)",
-            href: "td:nth-child(3) a@href",
-            nrOfGames: "td:nth-child(4)",
-            games: "td:nth-child(8)",
-            balance: "td:nth-child(9)",
-            score: "td:last-child",
           }),
       })
       .error(R.pipe(error("league"), rej))
