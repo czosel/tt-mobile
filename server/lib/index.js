@@ -2,19 +2,30 @@ const compression = require("compression");
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+const path = require("path");
 const apicache = require("apicache");
 const moment = require("moment");
+const multer = require("multer");
 const { join } = require("path");
 const models = require("./models");
 const jdenticon = require("jdenticon");
+const sharp = require("sharp");
+const fs = require("fs");
 
 const scraper = require("./scraper");
 
-require("dotenv").config();
+const upload = multer({ dest: "logos/" });
+
+require("dotenv").config({ path: "../.env" });
 
 const app = express();
 
 const env = process.env.NODE_ENV;
+const UPLOAD_PASSWORD = process.env.UPLOAD_PASSWORD;
+
+if (!UPLOAD_PASSWORD) {
+  throw "UPLOAD_PASSWORD env variable is missing";
+}
 
 jdenticon.configure({
   hues: [6],
@@ -119,6 +130,31 @@ app.get("/logo/:id?", async ({ params, query }, res) => {
       .status(200)
       .send(jdenticon.toSvg(params.id || query.name, 200));
   }
+});
+
+app.post("/upload", upload.single("logo"), async function (req, res, next) {
+  const { password, id, name } = req.body;
+  if (password != process.env.UPLOAD_PASSWORD) {
+    res.sendStatus(401);
+    return;
+  }
+
+  const { filename: image } = req.file;
+
+  const buffer = await sharp(req.file.path)
+    .resize(200, 200, {
+      fit: "contain",
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    })
+    .png()
+    .toBuffer();
+
+  sharp(buffer).toFile(`logos/${id}.png`);
+  fs.unlinkSync(req.file.path);
+
+  await models.Club.forge({ id, name, logo: `${id}.png` }).save();
+
+  res.sendStatus(200);
 });
 
 const port = process.env.PORT || 3020;
