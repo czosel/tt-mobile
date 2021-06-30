@@ -2,7 +2,6 @@ import { h, Component } from "preact";
 import Helmet from "preact-helmet";
 import wire from "wiretie";
 
-import clientHref from "../../lib/link";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import Container from "../../components/container";
