@@ -14,6 +14,7 @@ import Assoc from "../routes/assoc";
 import AssocHistory from "../routes/assoc-history";
 import League from "../routes/league";
 import Team from "../routes/team";
+import Logo from "../routes/logo";
 import Club from "../routes/club";
 import Player from "../routes/player";
 import Game from "../routes/game";
@@ -76,6 +77,7 @@ export default class App extends Component {
             <AssocHistory path="/assocHistory/:step" />
             <League path="/league/:href/:tab?" back={this.goBack} />
             <Team path="/team/:href" back={this.goBack} />
+            <Logo path="/club/:id/logo" />
             <Club path="/club/:id" back={this.goBack} />
             <Player path="/player/:href/:tab?" back={this.goBack} />
             <Game path="/game/:href?" back={this.goBack} />

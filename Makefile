@@ -11,12 +11,12 @@ help: ## Show the help messages
 
 .PHONY: dump
 dump:
-	docker-compose exec db mysqldump --password=$(MYSQL_PASSWORD) db > dump.sql
+	docker-compose exec db mysqldump --password=$(DB_PASSWORD) db > dump.sql
 
 .PHONY: load
 load:
-	cat dump.sql | docker exec -i tt-mobile_db_1 mysql --password=$(MYSQL_PASSWORD) db
+	cat dump.sql | docker exec -i tt-mobile_db_1 mysql --password=$(DB_PASSWORD) db
 
 .PHONY: dbshell
 dbshell:
-	docker-compose exec db mysql -u ttmobile --password=$(MYSQL_PASSWORD) db
+	docker-compose exec db mysql -u ttmobile --password=$(DB_PASSWORD) db
