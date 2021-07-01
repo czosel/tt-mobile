@@ -1,13 +1,13 @@
--- MySQL dump 10.16  Distrib 10.2.36-MariaDB, for debian-linux-gnu (x86_64)
+-- MariaDB dump 10.18  Distrib 10.4.17-MariaDB, for Linux (x86_64)
 --
--- Host: localhost    Database: db
+-- Host: localhost    Database: ttmobile
 -- ------------------------------------------------------
--- Server version	10.2.36-MariaDB-1:10.2.36+maria~bionic
+-- Server version	10.4.17-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -37,7 +37,7 @@ CREATE TABLE `club` (
 
 LOCK TABLES `club` WRITE;
 /*!40000 ALTER TABLE `club` DISABLE KEYS */;
-INSERT INTO `club` VALUES (32987,'La Chaux-de-Fonds',NULL),(33033,'Rio-Star Muttenz','muttenz.png'),(33080,'Bulle','bulle.jpeg'),(33089,'Aarberg','aarberg.png'),(33090,'Belp','belp.png'),(33091,'Bern','bern.png'),(33093,'Brügg','bruegg.png'),(33094,'Burgdorf','burgdorf.jpg'),(33095,'Düdingen','duedingen.png'),(33099,'Grenchen',NULL),(33100,'Grossaffoltern','grossaffoltern.png'),(33101,'Heimberg',NULL),(33102,'Herzogenbuchsee','herzogenbuchsee.png'),(33104,'Huttwil',NULL),(33105,'Interlaken',NULL),(33108,'Kirchberg','kirchberg.png'),(33109,'Köniz','koeniz.png'),(33110,'Langenthal',NULL),(33111,'Langnau','langnau.png'),(33112,'Lyss','lyss.png'),(33113,'Grauholz','grauholz.png'),(33115,'Münchenbuchsee','muenchenbuchsee.png'),(33116,'Münsingen',NULL),(33119,'Niederscherli','niederscherli.png'),(33122,'Port','port.jpg'),(33123,'Royal Bern','royal.png'),(33124,'SC Informatik Swisscom Wabern',NULL),(33125,'Schmitten',NULL),(33126,'Schwarzenburg','schwarzenburg.png'),(33127,'Solothurn','solothurn.png'),(33128,'Steffisburg','steffisburg.jpg'),(33129,'Stettlen','stettlen.jpg'),(33131,'Thörishaus','thoerishaus.jpg'),(33132,'Thun','thun.svg'),(33135,'Wichtrach',NULL),(33136,'Wohlensee','wohlensee.png'),(33137,'Worb',NULL),(33138,'Wynigen',NULL),(33156,'bls Spiez',NULL),(33165,'Meyrin','meyrin.jpeg'),(33174,'Veyrier','veyrier.png'),(33175,'ZZ-Lancy','lancy.jpg'),(33192,'Triesen','triesen.jpg'),(33197,'Wädenswil','wädenswil.png'),(33203,'Wil SG','wil.png'),(33244,'Neuhausen','neuhausen.png'),(33282,'Ostermundigen','ostermundigen.png');
+INSERT INTO `club` VALUES (32987,'La Chaux-de-Fonds',NULL),(33001,'Lugano',NULL),(33022,'Menziken',NULL),(33033,'Rio-Star Muttenz','muttenz.png'),(33039,'Baden-Wettingen',NULL),(33080,'Bulle','bulle.jpeg'),(33089,'Aarberg','aarberg.png'),(33090,'Belp','belp.png'),(33091,'Bern','bern.png'),(33093,'Brügg','bruegg.png'),(33094,'Burgdorf','burgdorf.jpg'),(33095,'Düdingen','duedingen.png'),(33099,'Grenchen',NULL),(33100,'Grossaffoltern','grossaffoltern.png'),(33101,'Heimberg',NULL),(33102,'Herzogenbuchsee','herzogenbuchsee.png'),(33104,'Huttwil',NULL),(33105,'Interlaken',NULL),(33108,'Kirchberg','kirchberg.png'),(33109,'Köniz','koeniz.png'),(33110,'Langenthal',NULL),(33111,'Langnau','langnau.png'),(33112,'Lyss','lyss.png'),(33113,'Grauholz','grauholz.png'),(33115,'Münchenbuchsee','muenchenbuchsee.png'),(33116,'Münsingen',NULL),(33119,'Niederscherli','niederscherli.png'),(33122,'Port','port.jpg'),(33123,'Royal Bern','royal.png'),(33124,'SC Informatik Swisscom Wabern',NULL),(33125,'Schmitten',NULL),(33126,'Schwarzenburg','schwarzenburg.png'),(33127,'Solothurn','solothurn.png'),(33128,'Steffisburg','steffisburg.jpg'),(33129,'Stettlen','stettlen.jpg'),(33131,'Thörishaus','thoerishaus.jpg'),(33132,'Thun','thun.svg'),(33134,'Utzenstorf',NULL),(33135,'Wichtrach',NULL),(33136,'Wohlensee','wohlensee.png'),(33137,'Worb',NULL),(33138,'Wynigen',NULL),(33142,'Bremgarten',NULL),(33146,'BW Rupperswil',NULL),(33151,'Fortuna Hausen',NULL),(33156,'bls Spiez',NULL),(33165,'Meyrin','meyrin.jpeg'),(33174,'Veyrier','veyrier.png'),(33175,'ZZ-Lancy','lancy.jpg'),(33183,'Binningen',NULL),(33186,'Sihltal',NULL),(33192,'Triesen','triesen.jpg'),(33195,'Uster',NULL),(33197,'Wädenswil','wädenswil.png'),(33203,'Wil SG','wil.png'),(33209,'Young Stars ZH',NULL),(33211,'Zürich-Affoltern',NULL),(33212,'Affoltern A/A','33212.png'),(33218,'BW-Wollishofen',NULL),(33222,'Dübendorf-Volketswil',NULL),(33236,'Horn',NULL),(33237,'Imperial Winterthur',NULL),(33238,'Kloten',NULL),(33244,'Neuhausen','neuhausen.png'),(33247,'Oberriet',NULL),(33249,'Pinguin Zürich',NULL),(33269,'Rapid Luzern',NULL),(33282,'Ostermundigen','ostermundigen.png'),(33431,'Steckborn-Homburg',NULL);
 /*!40000 ALTER TABLE `club` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,4 +100,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-27  9:10:39
+-- Dump completed on 2021-07-01 20:13:51

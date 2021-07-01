@@ -1,7 +1,6 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env"});
 
 module.exports = {
-  development: {
     client: "mysql",
     connection: {
       database: process.env.DB_NAME || "db",
@@ -12,5 +11,4 @@ module.exports = {
     migrations: {
       tableName: "knex_migrations",
     },
-  },
 };
