@@ -58,7 +58,7 @@ test("arrayify", (t) => {
 test("player response", async (t) => {
   const player = await scraper.player({
     url:
-      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123",
+      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&person=1714709&club=33123",
   });
   t.ok(isClass(player.classification), "classification");
   t.equal(typeof player.title, "string", "title");
@@ -98,7 +98,7 @@ test("elo response", async (t) => {
 test("short player response", async (t) => {
   const player = await scraper.me({
     url:
-      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&season=2019%2F20&person=1714709&club=33123",
+      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/playerPortrait?federation=STT&person=1714709&club=33123",
   });
   t.ok(isClass(player.classification), "classification");
   t.equal(typeof player.title, "string", "title");
@@ -116,7 +116,7 @@ test("game", async (t) => {
   // Royal Bern
   const response = await scraper.game({
     url:
-      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6409697&championship=MTTV+19%2F20&group=205664",
+      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupMeetingReport?meeting=6456522&championship=MTTV+21%2F22&group=208325",
   });
   t.equal(typeof response.title, "string");
   t.equal(typeof response.summary.game, "string");
@@ -125,10 +125,10 @@ test("game", async (t) => {
 });
 
 test("typical league", async (t) => {
-  // Nationalliga A
+  // MTTV 2. Liga Gruppe 1
   const response = await scraper.league({
     url:
-      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=STT+19%2F20&group=205604",
+      "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/groupPage?championship=MTTV+21%2F22&group=208325",
   });
   t.equal(typeof response.title, "string");
   t.equal(typeof response.clubs[0].name, "string");
