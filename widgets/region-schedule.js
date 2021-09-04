@@ -110,6 +110,10 @@ function renderBox(selector, leagues, options = {}) {
       name: league.name,
       linkTo: league.linkTo,
     };
-    regionSchedule(league.championship + "%2020/21", outlet, _options);
+    const afterSummer = new Date().getMonth() >= 7;
+    const startYear = new Date().getFullYear() - (afterSummer ? 0 : 1);
+    const endYear = (startYear + 1).toString().substring(2);
+    const season = options.season || `${startYear}/${endYear}`;
+    regionSchedule(`${league.championship}%${season}`, outlet, _options);
   });
 }
