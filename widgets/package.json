@@ -1,6 +1,6 @@
 {
   "name": "tt-mobile-widgets",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Client-side widgets for embedding TT-mobile",
   "main": "tt-mobile.js",
   "scripts": {

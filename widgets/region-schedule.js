@@ -20,7 +20,7 @@ function renderRegion(chunks, element, options) {
     : "";
 
   const html = `
-    <table>
+    <table class="tt-region-schedule">
       <tbody>
         ${title + rows}
       </tbody>
@@ -50,10 +50,18 @@ function renderRegionChunk(chunk, options, offset = 0) {
   // only render title if there are games
   const title =
     games.length && options.showDate
-      ? `<tr><td colspan="4">${chunk.date}</td><tr>`
+      ? `<tr class="tt-date-row"><td colspan="4">${chunk.date}</td><tr>`
       : "";
 
   return { title, games };
+}
+
+function clubName(teamName) {
+  const parts = teamName.split(" ");
+  if (/[IVX]+$/.test(parts[parts.length - 1])) {
+    return parts.slice(0, -1).join(" ");
+  }
+  return parts.join(" ");
 }
 
 function renderRegionRow(row, options) {
@@ -62,22 +70,27 @@ function renderRegionRow(row, options) {
         row.resultHref
       )}">${row.result}</a>`
     : "-:-";
-  return `<tr>
-    ${options.showLeague ? `<td>${row.league}</td>` : ""}
-    ${options.showTime ? `<td>${row.time}</td>` : ""}
-    <td style="text-align: right;">${row.home}</td>
+
+  return `<tr class="tt-game">
+    ${options.showLeague ? `<td class="tt-league">${row.league}</td>` : ""}
+    ${options.showTime ? `<td class="tt-time">${row.time}</td>` : ""}
+    <td class="tt-home" style="text-align: right;">${row.home}</td>
     ${
       options.showLogos
-        ? `<td><img src="${host}logo/?name=${row.home}"></td>`
+        ? `<td class="tt-logo tt-logo-home"><img src="${host}logo/?name=${clubName(
+            row.home
+          )}"></td>`
         : ""
     }
-    ${options.showResult ? `<td>${result}</td>` : ""}
+    ${options.showResult ? `<td class="tt-result">${result}</td>` : ""}
     ${
       options.showLogos
-        ? `<td><img src="${host}logo/?name=${row.guest}"></td>`
+        ? `<td class="tt-logo tt-logo-guest"><img src="${host}logo/?name=${clubName(
+            row.guest
+          )}"></td>`
         : ""
     }
-    <td>${row.guest}</td>
+    <td class="tt-guest">${row.guest}</td>
   </tr>`;
 }
 
