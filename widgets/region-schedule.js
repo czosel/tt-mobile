@@ -11,7 +11,7 @@ function renderRegion(chunks, element, options) {
     offset += info.games.length;
   }
   if (!rows) {
-    rows = `<tr><td colspan="4">Keine Spiele gefunden</td></tr>`;
+    rows = `<p class="">Keine Spiele gefunden</p>`;
   }
   const title = options.showTitle
     ? options.linkTo
@@ -19,13 +19,11 @@ function renderRegion(chunks, element, options) {
       : `<h2>${options.name}</h2>`
     : "";
 
-  const html = `
-    <table class="tt-region-schedule">
-      <tbody>
-        ${title + rows}
-      </tbody>
-    </table>`;
-  element.insertAdjacentHTML("beforeend", html);
+  return `
+    ${title}
+    <div class="tt-region-schedule">
+      ${rows}
+    </div>`;
 }
 
 function renderRegionChunk(chunk, options, offset = 0) {
@@ -50,7 +48,7 @@ function renderRegionChunk(chunk, options, offset = 0) {
   // only render title if there are games
   const title =
     games.length && options.showDate
-      ? `<tr class="tt-date-row"><td colspan="4">${chunk.date}</td><tr>`
+      ? `<p class="tt-date">${chunk.date}</p>`
       : "";
 
   return { title, games };
@@ -65,33 +63,52 @@ function clubName(teamName) {
 }
 
 function renderRegionRow(row, options) {
+  const scoreHome = row.result ? row.result.split(":")[0] : "-";
+  const scoreGuest = row.result ? row.result.split(":")[1] : "-";
+  const wrapResult = (href, content) =>
+    `<a target="_blank" href="https://tt-mobile.ch/game/${encodeURIComponent(
+      href
+    )}">${content}</a>`;
   const result = row.result
-    ? `<a target="_blank" href="https://tt-mobile.ch/game/${encodeURIComponent(
-        row.resultHref
-      )}">${row.result}</a>`
-    : "-:-";
+    ? `<div class="tt-result">
+        ${wrapResult(row.resultHref, row.result)}
+      </div>
+      <div class="tt-result-home ${
+        scoreHome > scoreGuest ? "tt-win" : ""
+      }">${wrapResult(row.resultHref, scoreHome)}</div>
+      <div class="tt-result-guest ${
+        scoreHome < scoreGuest ? "tt-win" : ""
+      }">${wrapResult(row.resultHref, scoreGuest)}</div>`
+    : `<div class="tt-result">-:-</div>
+      <div class="tt-result-home">-</div>
+      <div class="tt-result-guest">-</div>
+    `;
 
-  return `<tr class="tt-game">
-    ${options.showLeague ? `<td class="tt-league">${row.league}</td>` : ""}
-    ${options.showTime ? `<td class="tt-time">${row.time}</td>` : ""}
-    <td class="tt-home" style="text-align: right;">${row.home}</td>
+  return `<div class="tt-game">
+    ${options.showLeague ? `<div class="tt-league">${row.league}</div>` : ""}
+    ${options.showTime ? `<div class="tt-time">${row.time}</div>` : ""}
+    <div class="tt-home ${scoreHome > scoreGuest ? "tt-win" : ""}">${
+    row.home
+  }</div>
     ${
       options.showLogos
-        ? `<td class="tt-logo tt-logo-home"><img src="${host}logo/?name=${clubName(
+        ? `<div class="tt-logo tt-logo-home"><img src="${host}logo/?name=${clubName(
             row.home
-          )}"></td>`
+          )}"></div>`
         : ""
     }
-    ${options.showResult ? `<td class="tt-result">${result}</td>` : ""}
+    ${result}
     ${
       options.showLogos
-        ? `<td class="tt-logo tt-logo-guest"><img src="${host}logo/?name=${clubName(
+        ? `<div class="tt-logo tt-logo-guest"><img src="${host}logo/?name=${clubName(
             row.guest
-          )}"></td>`
+          )}"></div>`
         : ""
     }
-    <td class="tt-guest">${row.guest}</td>
-  </tr>`;
+    <div class="tt-guest ${scoreHome < scoreGuest ? "tt-win" : ""}">${
+    row.guest
+  }</div>
+  </div>`;
 }
 
 function regionSchedule(championship, element, options = {}, callback) {
@@ -99,14 +116,64 @@ function regionSchedule(championship, element, options = {}, callback) {
   fetch(`${host}regionSchedule?championship=${championship}${dateParam}`)
     .then((response) => response.json())
     .then((data) => {
-      renderRegion(data.chunks, element, options);
+      return renderRegion(data.chunks, element, options);
     })
-    .then(() => callback && callback());
+    .then((data) => callback && callback(data));
 }
 
 function renderBox(selector, leagues, options = {}) {
   const outlet = document.querySelector(selector);
-  outlet.innerHTML = "";
+  outlet.innerHTML = `
+  <style type="text/css">
+    .tt-win { font-weight: bold; }
+    .tt-logo img { width: 40px; }
+    .tt-game div { align-self: center; }
+    .tt-logo { justify-self: end }
+    .tt-result { text-align: center; }
+    .tt-result-home { text-align: right; }
+    .tt-result-guest { text-align: right; }
+    .tt-time { display: none; }
+    .tt-result { display: none; }
+
+    .tt-league { grid-area: league; }
+    .tt-time { grid-area: time; }
+    .tt-home { grid-area: home; }
+    .tt-logo-home { grid-area: logo-home; }
+    .tt-result { grid-area: result; }
+    .tt-result-home { grid-area: result-home; }
+    .tt-result-guest { grid-area: result-guest; }
+    .tt-logo-guest { grid-area: logo-guest; }
+    .tt-guest { grid-area: guest; }
+
+    .tt-game {
+      display: grid;
+      grid-template-columns: ${options.showLeague ? "2fr" : ""} 40px 3fr 1fr;
+      grid-template-areas:
+        "${options.showLeague ? "league" : ""} logo-home  home  result-home"
+        "${options.showLeague ? "league" : ""} logo-guest guest result-guest";
+      grid-gap: 4px;
+      margin-bottom: 1rem;
+    }
+
+    @media screen and (min-width: ${options.breakpoint || "500px"}) {
+      .tt-time { display: block; }
+      .tt-result { display: block; }
+      .tt-result-home { display: none; }
+      .tt-result-guest { display: none; }
+
+      .tt-home { text-align: right; }
+      .tt-game {
+        grid-template-columns: ${
+          options.showLeague ? "2fr" : ""
+        } 0.5fr 3fr 40px 0.5fr 40px 3fr;
+        grid-template-areas:
+          "${
+            options.showLeague ? "league" : ""
+          } time home logo-home result logo-guest guest"
+      }
+    }
+  </style>`;
+
   leagues.forEach((league) => {
     const gameFilter = (game) => {
       if (league.include) {
@@ -127,6 +194,13 @@ function renderBox(selector, leagues, options = {}) {
     const startYear = new Date().getFullYear() - (afterSummer ? 0 : 1);
     const endYear = (startYear + 1).toString().substring(2);
     const season = options.season || `${startYear}/${endYear}`;
-    regionSchedule(`${league.championship}%${season}`, outlet, _options);
+    regionSchedule(
+      `${league.championship}%${season}`,
+      outlet,
+      _options,
+      (data) => {
+        outlet.insertAdjacentHTML("beforeend", data);
+      }
+    );
   });
 }
