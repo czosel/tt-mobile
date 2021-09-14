@@ -11,7 +11,7 @@ function renderRegion(chunks, element, options) {
     offset += info.games.length;
   }
   if (!rows) {
-    rows = `<p class="">Keine Spiele gefunden</p>`;
+    rows = `<p class="">Keine Spiele für die aktuelle Woche gefunden</p>`;
   }
   const title = options.showTitle
     ? options.linkTo
