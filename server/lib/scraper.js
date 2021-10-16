@@ -1,5 +1,5 @@
 const { parse, resolve } = require("url");
-const util = require("util");
+
 const R = require("ramda");
 const ical = require("ical-generator");
 const moment = require("moment");
@@ -230,7 +230,7 @@ function club(id) {
       .set({
         lastMatches: osmosis
           .find(
-            "#content-row1 table.result-set:first tr:has(td:nth-child(4) a)"
+            "#content-row2 table.result-set:first tr:has(td:nth-child(4) a)"
           )
           .set({
             date: "td:nth-child(2)",
@@ -240,7 +240,7 @@ function club(id) {
             result: "td:nth-child(11)",
           }),
         nextMatches: osmosis
-          .find("#content-row1 table.result-set:last tr:not(th)")
+          .find("#content-row2 table.result-set:last tr:not(th)")
           .set({
             date: "td:nth-child(2)",
             home: "td:nth-child(7)",
