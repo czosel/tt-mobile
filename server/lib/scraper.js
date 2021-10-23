@@ -210,6 +210,8 @@ function league({ url }) {
               score: club.score.startsWith("zurückgezogen")
                 ? "-:-"
                 : club.score,
+              games: club.games || "",
+              balance: club.balance || "",
             }))
             .map(simplifyLinks),
         });
