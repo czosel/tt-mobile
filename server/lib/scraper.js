@@ -445,7 +445,7 @@ function game({ url }) {
           league: split[1],
           home: lastParts[0],
           guest: lastParts[1],
-          date: lastParts[2].split(",")[1],
+          date: lastParts[2]?.split(",")[1],
           time: lastParts[3],
           matches: toArray(data.matches).map((match) => ({
             ...match,
