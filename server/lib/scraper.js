@@ -61,7 +61,7 @@ const splitTitle = (title) => {
 const asChunks = (games) => {
   const chunks = [];
   games.forEach((g) => {
-    if (g.date !== "") {
+    if (g.date !== "" || !chunks.length) {
       chunks.push({ date: g.date, games: [] });
     }
     chunks[chunks.length - 1].games.push(g);
