@@ -39,6 +39,15 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.4 (11.12.2021)
+            <ul>
+              <li>Softwarepflege</li>
+            </ul>
+            v1.1.3 (23.10.2021)
+            <ul>
+              <li>Bugfix: Spielplan Vorschau/Rückschau (danke, Tobi!)</li>
+              <li>Softwarepflege</li>
+            </ul>
             v1.1.2 (30.06.2021)
             <ul>
               <li>App für neue Spielsaison angepasst</li>
