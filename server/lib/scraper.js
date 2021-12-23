@@ -242,18 +242,23 @@ function club(id) {
             result: "td:nth-child(11)",
           }),
         nextMatches: osmosis
-          .find("#content-row2 table.result-set:last tr:not(th)")
+          .find("#content-row2 table.result-set:last tr:has(td:nth-child(4) a)")
           .set({
             date: "td:nth-child(2)",
             home: "td:nth-child(7)",
             guest: "td:nth-child(9)",
+            result: "td:nth-child(11)",
           }),
       })
       .error(R.pipe(error("club"), rej))
       .data((data) => {
         res({
           lastMatches: asChunks(arrayify(data.lastMatches).map(simplifyLinks)),
-          nextMatches: asChunks(arrayify(data.nextMatches).map(simplifyLinks)),
+          nextMatches: asChunks(
+            arrayify(data.nextMatches.filter((m) => !m.result)).map(
+              simplifyLinks
+            )
+          ),
           // deprecated
           chunks: asChunks(arrayify(data.lastMatches).map(simplifyLinks)),
         });
