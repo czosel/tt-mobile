@@ -6,7 +6,7 @@ import Table from "../table";
 export default function Schedule({ chunks }) {
   return (
     <div>
-      {Array.isArray(chunks) &&
+      {chunks?.length ? (
         chunks.map(({ date, games }) => (
           <div key={date}>
             {date && <p class="is-size-7">{date}</p>}
@@ -28,7 +28,10 @@ export default function Schedule({ chunks }) {
               </tbody>
             </Table>
           </div>
-        ))}
+        ))
+      ) : (
+        <p>-</p>
+      )}
     </div>
   );
 }
