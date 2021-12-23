@@ -39,6 +39,13 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.5 (23.12.2021)
+            <ul>
+              <li>
+                Bugfix: Spielplan Vorschau hat teilweise vergangene Spiele
+                angezeigt
+              </li>
+            </ul>
             v1.1.4 (11.12.2021)
             <ul>
               <li>Softwarepflege</li>

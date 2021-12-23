@@ -4,7 +4,7 @@ export default function Footer() {
       <div class="content has-text-centered">
         <p>
           <strong>TT-mobile</strong> <br />
-          <a href="/about">Version 1.1.4 (11.12.2021)</a>
+          <a href="/about">Version 1.1.5 (23.12.2021)</a>
         </p>
       </div>
     </footer>
