@@ -1,5 +1,5 @@
 # Table of contents
 
 * [TT-mobile](README.md)
-* [widget-docs](widget-docs/README.md)
-  * [Subpage test](widget-docs/subpage-test.md)
+* [Top level page test](top-level-page-test.md)
+* [widget-docs](widget-docs.md)
