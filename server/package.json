@@ -32,7 +32,7 @@
     "ical-generator": "^3.1.0",
     "jdenticon": "^3.1.1",
     "knex": "^0.95.14",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "multer": "^1.4.4",
     "mysql": "^2.18.1",
     "ramda": "^0.27.0",
