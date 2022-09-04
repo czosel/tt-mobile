@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon exec babel-node lib/index.js",
+    "start-prod": "node dist/index.js",
     "debug": "NODE_ENV=development node --inspect lib/index.js",
     "build": "babel lib -d dist",
     "test": "node ./lib/*.test.js"
