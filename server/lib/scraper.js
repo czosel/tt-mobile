@@ -352,6 +352,7 @@ function team({ url, format }, expressRes) {
       .data((data) => {
         if (format === "ics") {
           const cal = ical({ domain: "tt-mobile.ch", name: data.club });
+          const league = `(${extractBreadcrumbs(data)[1]?.name || ""})`;
           cal.events(
             toArray(data.games)
               .map(simplifyLinks)
@@ -367,7 +368,7 @@ function team({ url, format }, expressRes) {
                 return {
                   start: start.toDate(),
                   end: start.add(3, "h").toDate(),
-                  summary: `${game.home} - ${game.guest}`,
+                  summary: `${game.home} - ${game.guest} ${league}`,
                   description: game.isHome ? "Heimspiel" : "Auswärtsspiel",
                 };
               })

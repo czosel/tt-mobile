@@ -151,3 +151,11 @@ test.skip("limited league", async (t) => {
   t.ok(isUrl(response.chunks[0].games[0].href));
   t.end();
 });
+
+test("team", async t => {
+  // Royal Bern 1. Herren
+  const response = await scraper.team({
+    url: "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/teamPortrait?teamtable=1690784&championship=MTTV+22%2F23&group=210386"
+  })
+  t.equal(typeof response.breadcrumbs[1].name, "string");
+})
