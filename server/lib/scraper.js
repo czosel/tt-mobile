@@ -236,10 +236,10 @@ function club(id) {
           )
           .set({
             date: "td:nth-child(2)",
-            home: "td:nth-child(6)",
-            guest: "td:nth-child(8)",
-            href: "td:nth-child(10) a@href",
-            result: "td:nth-child(10)",
+            home: "td:nth-child(7)",
+            guest: "td:nth-child(9)",
+            href: "td:nth-child(11) a@href",
+            result: "td:nth-child(11)",
           }),
         nextMatches: osmosis
           .find("#content-row2 table.result-set:last tr:has(td:nth-child(4) a)")
