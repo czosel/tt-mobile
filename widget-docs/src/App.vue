@@ -6,7 +6,7 @@
       <pre
         v-highlightjs
         class="content"
-      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.1.1/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.1/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 
       <h2 class="subtitle">Tabelle</h2>
       <div class="columns is-desktop">
@@ -176,8 +176,8 @@ export default {
     },
     scheduleCode() {
       /* eslint-disable no-useless-escape */
-      return `<table class="myclub"></table>
-<script>TTmobile.schedule("${this.clubId}", document.querySelector(".myclub"));<\/script>`;
+      return `<div class="schedule"></div>
+<script>TTmobile.schedule("${this.clubId}", document.querySelector(".schedule"));<\/script>`;
     },
   },
   watch: {

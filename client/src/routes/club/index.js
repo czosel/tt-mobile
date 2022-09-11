@@ -5,6 +5,7 @@ import wire from "wiretie";
 import clientHref from "../../lib/link";
 
 import Header from "../../components/header";
+import Embed from "../../components/embed";
 import Footer from "../../components/footer";
 import Container from "../../components/container";
 import LoadingPage from "../../components/loading-page";
@@ -22,7 +23,7 @@ export default
   clubTeams: ["api.clubTeams", "id"],
 })
 class Club extends Component {
-  render({ pending, rejected, back, club, clubTeams }) {
+  render({ pending, rejected, back, club, clubTeams, id }) {
     if (pending && Object.keys(pending).length >= 2)
       return <LoadingPage back={back} />;
     if (rejected && Object.keys(rejected).length > 0)
@@ -45,6 +46,7 @@ class Club extends Component {
               <Schedule chunks={club && club.lastMatches} />
               <h2>Spielplan (Vorschau)</h2>
               <Schedule chunks={club && club.nextMatches} />
+              <Embed param="club-id" url={id} />
             </div>
           )}
         </Container>
