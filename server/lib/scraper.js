@@ -38,6 +38,12 @@ const simplifyObject = (prop) => (obj) => ({
 });
 const simplifyLinks = simplifyObject("href");
 
+const _extractTime = (time) => time.match(/\d+:\d+/)?.[0];
+const extractTime = (obj) => ({
+  ...obj,
+  time: _extractTime(obj.time),
+});
+
 const formatTime = (obj) => ({
   ...obj,
   time: obj.time.split(" ")[0],
@@ -236,6 +242,8 @@ function club(id) {
           )
           .set({
             date: "td:nth-child(2)",
+            time: "td:nth-child(3)",
+            league: "td:nth-child(6)",
             home: "td:nth-child(7)",
             guest: "td:nth-child(9)",
             href: "td:nth-child(11) a@href",
@@ -245,18 +253,22 @@ function club(id) {
           .find("#content-row2 table.result-set:last tr:has(td:nth-child(4) a)")
           .set({
             date: "td:nth-child(2)",
+            time: "td:nth-child(3)",
+            league: "td:nth-child(6)",
             home: "td:nth-child(7)",
             guest: "td:nth-child(9)",
-            result: "td:nth-child(11)",
           }),
       })
       .error(R.pipe(error("club"), rej))
       .data((data) => {
         res({
-          lastMatches: asChunks(toArray(data.lastMatches).map(simplifyLinks)),
-          nextMatches: asChunks(toArray(data.nextMatches).filter((m) => !m.result).map(
-              simplifyLinks
-            )
+          lastMatches: asChunks(
+            toArray(data.lastMatches).map(simplifyLinks).map(extractTime)
+          ),
+          nextMatches: asChunks(
+            toArray(data.nextMatches)
+              .filter((m) => !m.result)
+              .map(extractTime)
           ),
           // deprecated
           chunks: asChunks(arrayify(data.lastMatches).map(simplifyLinks)),

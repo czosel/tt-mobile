@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta charset="utf-8">
     <title>TT-Ergebnisse</title>
   </head>
   <body>
@@ -8,6 +9,9 @@
 
     <h2>Bilanzen</h2>
     <table class="club"></table>
+
+    <h2>Spielplan</h2>
+    <div class="schedule"></div>
 
     <script src="tt-mobile.js"></script>
     <script>
@@ -18,6 +22,10 @@
       TTmobile.team(
         "teamPortrait?teamtable=1663530&championship=MTTV+19%2F20&group=205664",
         document.querySelector(".club")
+      );
+      TTmobile.schedule(
+        "33127",
+        document.querySelector(".schedule")
       );
     </script>
   </body>

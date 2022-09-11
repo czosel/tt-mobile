@@ -84,6 +84,34 @@
           <TtTeam class="box" :url="teamUrl" />
         </div>
       </div>
+
+      <h2 class="subtitle">Vereinsspielplan</h2>
+      <div class="columns is-desktop">
+        <div class="column">
+          <pre
+            v-highlightjs
+            class="content"
+          ><code class="javascript">TTmobile.schedule(url, element)</code></pre>
+          <div class="field">
+            <label class="label">Club ID</label>
+            <div class="control">
+              <input class="input" v-model="clubId" />
+            </div>
+          </div>
+          <label class="label">Code</label>
+          <pre
+            v-highlightjs="scheduleCode"
+            class="content"
+          ><code class="html"></code></pre>
+          <!--<p>
+            Interaktives Beispiel auf
+            <a href="https://jsfiddle.net/czosel/hwptsr21/3/">JSfiddle</a>
+          </p>-->
+        </div>
+        <div class="column">
+          <TtSchedule class="box" :clubId="clubId" />
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -91,6 +119,7 @@
 <script>
 import TtTable from "./components/TtTable.vue";
 import TtTeam from "./components/TtTeam.vue";
+import TtSchedule from "./components/TtSchedule.vue";
 
 function syncQueryParam(paramName) {
   return (newValue) => {
@@ -113,16 +142,19 @@ export default {
     this.teamUrl =
       params.get("team-url") ||
       "/teamPortrait?teamtable=1663137&championship=STT+19%2F20&group=205604";
+    this.clubId = params.get("club-id") || "33101";
   },
   data: () => ({
     tableUrl: "",
     tableHighlight: "",
     tableLogoSize: "",
     teamUrl: "",
+    clubId: "",
   }),
   components: {
     TtTable,
     TtTeam,
+    TtSchedule,
   },
   computed: {
     tableCode() {
@@ -142,11 +174,17 @@ export default {
       return `<table class="myteam"></table>
 <script>TTmobile.team("${this.teamUrl}", document.querySelector(".myteam"));<\/script>`;
     },
+    scheduleCode() {
+      /* eslint-disable no-useless-escape */
+      return `<table class="myclub"></table>
+<script>TTmobile.schedule("${this.clubId}", document.querySelector(".myclub"));<\/script>`;
+    },
   },
   watch: {
     tableHighlight: syncQueryParam("table-highlight"),
     tableUrl: syncQueryParam("table-url"),
     teamUrl: syncQueryParam("team-url"),
+    clubId: syncQueryParam("club-id"),
   },
 };
 </script>
