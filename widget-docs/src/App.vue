@@ -103,10 +103,10 @@
             v-highlightjs="scheduleCode"
             class="content"
           ><code class="html"></code></pre>
-          <!--<p>
+          <p>
             Interaktives Beispiel auf
-            <a href="https://jsfiddle.net/czosel/hwptsr21/3/">JSfiddle</a>
-          </p>-->
+            <a href="https://jsfiddle.net/czosel/dyt21hn5/3/">JSfiddle</a>
+          </p>
         </div>
         <div class="column">
           <TtSchedule class="box" :clubId="clubId" />
