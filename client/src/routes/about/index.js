@@ -39,6 +39,12 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.6 (18.09.2022)
+            <ul>
+              <li>
+                Vereinsspielplann kann auf Vereinswebsites eingebettet werden
+              </li>
+            </ul>
             v1.1.5 (23.12.2021)
             <ul>
               <li>
