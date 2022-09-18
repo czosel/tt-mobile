@@ -160,6 +160,8 @@ export default {
       params.get("team-url") ||
       "/teamPortrait?teamtable=1663137&championship=STT+19%2F20&group=205604";
     this.clubId = params.get("club-id") || "33101";
+    this.limitPrevious = params.get("limitPrevious") || "";
+    this.limitNext = params.get("limitNext") || "";
   },
   data: () => ({
     tableUrl: "",
