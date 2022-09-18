@@ -6,7 +6,7 @@
       <pre
         v-highlightjs
         class="content"
-      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.2/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.3/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 
       <h2 class="subtitle">Tabelle</h2>
       <div class="columns is-desktop">
@@ -110,6 +110,22 @@
               <input class="input" type="number" v-model="limitNext" />
             </div>
           </div>
+          <div class="field">
+            <label class="label">Darstellung</label>
+            <div class="control select">
+              <select v-model="variant">
+                <option value="responsive">Responsive</option>
+                <option value="mobile">Mobile</option>
+                <option value="desktop">Desktop</option>
+              </select>
+            </div>
+          </div>
+          <div v-if="variant == 'responsive'" class="field">
+            <label class="label">Breakpoint</label>
+            <div class="control">
+              <input class="input" v-model="breakpoint" />
+            </div>
+          </div>
           <label class="label">Code</label>
           <pre
             v-highlightjs="scheduleCode"
@@ -126,6 +142,8 @@
             :clubId="clubId"
             :limitPrevious="limitPrevious ? parseInt(limitPrevious) : undefined"
             :limitNext="limitNext ? parseInt(limitNext) : undefined"
+            :variant="variant"
+            :breakpoint="breakpoint"
           />
         </div>
       </div>
@@ -162,6 +180,8 @@ export default {
     this.clubId = params.get("club-id") || "33101";
     this.limitPrevious = params.get("limitPrevious") || "";
     this.limitNext = params.get("limitNext") || "";
+    this.variant = params.get("variant") || "responsive";
+    this.breakpoint = params.get("breakpoint") || "500px";
   },
   data: () => ({
     tableUrl: "",
@@ -171,6 +191,8 @@ export default {
     clubId: "",
     limitPrevious: undefined,
     limitNext: undefined,
+    variant: "",
+    breakpoint: "",
   }),
   components: {
     TtTable,
@@ -201,9 +223,25 @@ export default {
         this.limitPrevious && `limitPrevious: "${this.limitPrevious}"`;
       const limitNextOption =
         this.limitNext && `limitNext: "${this.limitNext}"`;
+      const variantOption =
+        this.variant &&
+        this.variant !== "responsive" &&
+        `variant: "${this.variant}"`;
+      const breakpointOption =
+        this.breakpoint &&
+        this.breakpoint !== "500px" &&
+        `breakpoint: "${this.breakpoint}"`;
       const options =
-        (limitPreviousOption || limitNextOption) &&
-        `, { ${[limitPreviousOption, limitNextOption]
+        (limitPreviousOption ||
+          limitNextOption ||
+          variantOption ||
+          breakpointOption) &&
+        `, { ${[
+          limitPreviousOption,
+          limitNextOption,
+          variantOption,
+          breakpointOption,
+        ]
           .filter(Boolean)
           .join(", ")}}`;
       return `<div class="schedule"></div>
@@ -219,6 +257,8 @@ export default {
     clubId: syncQueryParam("club-id"),
     limitPrevious: syncQueryParam("limitPrevious"),
     limitNext: syncQueryParam("limitNext"),
+    variant: syncQueryParam("variant"),
+    breakpoint: syncQueryParam("breakpoint"),
   },
 };
 </script>

@@ -84,19 +84,76 @@ var TTmobile = (function (exports) {
   }
 
   function renderSchedule(data, element, options) {
+    if (
+      options.variant == "responsive" &&
+      !("container" in document.documentElement.style)
+    ) {
+      import("https://unpkg.com/container-query-polyfill@^0.2.0");
+    }
+
+    const mobileStyles = `
+      .tt-time { display: none; }
+      .tt-result { display: none; }
+      .tt-game {
+        display: grid;
+        grid-template-columns: 2fr 40px 3fr 1fr;
+        grid-template-areas:
+          "league logo-home  home  result-home"
+          "league logo-guest guest result-guest";
+        grid-gap: 4px;
+        margin-bottom: 1rem;
+      }`;
+
+    const desktopStyles = `
+      .tt-time { display: block; }
+      .tt-result { width: 45px; display: block; }
+      .tt-result-home { display: none; }
+      .tt-result-guest { display: none; }
+
+      .tt-home { text-align: right; }
+      .tt-game {
+        display: grid;
+        grid-template-columns: 2fr 0.5fr 3fr 40px 0.5fr 40px 3fr;
+        grid-template-areas:
+          "league time home logo-home result logo-guest guest"
+      }`;
+
+    const containerQuery = `@container (min-width: ${options.breakpoint})`;
+    const responsiveStyles = `
+      ${containerQuery} {
+        ${desktopStyles}
+      }`;
+
+    const lastMatches =
+      options.limitPrevious === undefined || options.limitPrevious > 0
+        ? `<p><strong>Rückschau</strong></p>
+          ${data.lastMatches
+            .slice(-1 * options.limitPrevious)
+            .map((chunk) => renderScheduleChunk(chunk, options))
+            .join("")}`
+        : "";
+
+    const nextMatches =
+      options.limitNext === undefined || options.limitNext > 0
+        ? `<p><strong>Vorschau</strong></p>
+          ${data.nextMatches
+            .slice(0, options.limitNext)
+            .map((chunk) => renderScheduleChunk(chunk, options))
+            .join("")}`
+        : "";
+
     const html = `
       <style type="text/css">
         .tt-win { font-weight: bold; }
-        .tt-logo img { width: 40px; }
+        .tt-logo img { height: 40px; }
         .tt-game div { align-self: center; }
         .tt-logo { justify-self: end }
         .tt-result { text-align: center; }
+        .tt-date { font-weight: bold; margin-bottom: 0 }
         .tt-result-home { text-align: right; }
         .tt-result-guest { text-align: right; }
-        .tt-date { font-weight: bold; margin-bottom: 0 }
-        .tt-time { display: none; }
-        .tt-result { display: none; }
 
+        ${options.variant != "desktop" ? mobileStyles : ""}
         .tt-league { grid-area: league; }
         .tt-time { grid-area: time; }
         .tt-home { grid-area: home; }
@@ -107,41 +164,14 @@ var TTmobile = (function (exports) {
         .tt-logo-guest { grid-area: logo-guest; }
         .tt-guest { grid-area: guest; }
 
-        .tt-game {
-          display: grid;
-          grid-template-columns: 2fr 40px 3fr 1fr;
-          grid-template-areas:
-            "league logo-home  home  result-home"
-            "league logo-guest guest result-guest";
-          grid-gap: 4px;
-          margin-bottom: 1rem;
-        }
-
-        @media screen and (min-width: 500px) {
-          .tt-time { display: block; }
-          .tt-result { display: block; }
-          .tt-result-home { display: none; }
-          .tt-result-guest { display: none; }
-
-          .tt-home { text-align: right; }
-          .tt-game {
-            grid-template-columns: 2fr 0.5fr 3fr 40px 0.5fr 40px 3fr;
-            grid-template-areas:
-              "league time home logo-home result logo-guest guest"
-          }
-        }
+        .tt-container { container-type: inline-size; }
+        ${options.variant == "desktop" ? desktopStyles : ""}
+        ${options.variant == "responsive" ? responsiveStyles : ""}
       </style>
-      <p><strong>Rückschau</strong></p>
-      ${data.lastMatches
-        .slice(-1 * options.limitPrevious)
-        .map((chunk) => renderScheduleChunk(chunk, options))
-        .join("")}
-      <p><strong>Vorschau</strong></p>
-      ${data.nextMatches
-        .slice(0, options.limitNext)
-        .map((chunk) => renderScheduleChunk(chunk, options))
-        .join("")}
-    </tbody>`;
+      <div class="tt-container">
+        ${lastMatches}
+        ${nextMatches}
+      </div>`;
     element.innerHTML = html;
   }
 
