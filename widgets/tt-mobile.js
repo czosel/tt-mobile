@@ -133,10 +133,12 @@ var TTmobile = (function (exports) {
       </style>
       <p><strong>Rückschau</strong></p>
       ${data.lastMatches
+        .slice(-1 * options.limitPrevious)
         .map((chunk) => renderScheduleChunk(chunk, options))
         .join("")}
       <p><strong>Vorschau</strong></p>
       ${data.nextMatches
+        .slice(0, options.limitNext)
         .map((chunk) => renderScheduleChunk(chunk, options))
         .join("")}
     </tbody>`;

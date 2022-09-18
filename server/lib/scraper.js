@@ -237,9 +237,7 @@ function club(id) {
       .find("#content")
       .set({
         lastMatches: osmosis
-          .find(
-            "#content-row2 table.result-set:first tr:has(td:nth-child(4) a)"
-          )
+          .find("#content-row2 table.result-set:first tr")
           .set({
             date: "td:nth-child(2)",
             time: "td:nth-child(3)",
@@ -250,7 +248,7 @@ function club(id) {
             result: "td:nth-child(11)",
           }),
         nextMatches: osmosis
-          .find("#content-row2 table.result-set:last tr:has(td:nth-child(4) a)")
+          .find("#content-row2 table.result-set:last tr")
           .set({
             date: "td:nth-child(2)",
             time: "td:nth-child(3)",
@@ -263,11 +261,14 @@ function club(id) {
       .data((data) => {
         res({
           lastMatches: asChunks(
-            toArray(data.lastMatches).map(simplifyLinks).map(extractTime)
+            toArray(data.lastMatches)
+              .filter((m) => m.time)
+              .map(simplifyLinks)
+              .map(extractTime)
           ),
           nextMatches: asChunks(
             toArray(data.nextMatches)
-              .filter((m) => !m.result)
+              .filter((m) => !m.result && m.time)
               .map(extractTime)
           ),
           // deprecated

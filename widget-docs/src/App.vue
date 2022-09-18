@@ -6,7 +6,7 @@
       <pre
         v-highlightjs
         class="content"
-      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.1/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.2/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 
       <h2 class="subtitle">Tabelle</h2>
       <div class="columns is-desktop">
@@ -98,6 +98,18 @@
               <input class="input" v-model="clubId" />
             </div>
           </div>
+          <div class="field">
+            <label class="label">Max. Anzahl Spieltage Rückschau</label>
+            <div class="control">
+              <input class="input" type="number" v-model="limitPrevious" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Max. Anzahl Spieltage Vorschau</label>
+            <div class="control">
+              <input class="input" type="number" v-model="limitNext" />
+            </div>
+          </div>
           <label class="label">Code</label>
           <pre
             v-highlightjs="scheduleCode"
@@ -109,7 +121,12 @@
           </p>
         </div>
         <div class="column">
-          <TtSchedule class="box" :clubId="clubId" />
+          <TtSchedule
+            class="box"
+            :clubId="clubId"
+            :limitPrevious="limitPrevious ? parseInt(limitPrevious) : undefined"
+            :limitNext="limitNext ? parseInt(limitNext) : undefined"
+          />
         </div>
       </div>
     </div>
@@ -150,6 +167,8 @@ export default {
     tableLogoSize: "",
     teamUrl: "",
     clubId: "",
+    limitPrevious: undefined,
+    limitNext: undefined,
   }),
   components: {
     TtTable,
@@ -176,8 +195,19 @@ export default {
     },
     scheduleCode() {
       /* eslint-disable no-useless-escape */
+      const limitPreviousOption =
+        this.limitPrevious && `limitPrevious: "${this.limitPrevious}"`;
+      const limitNextOption =
+        this.limitNext && `limitNext: "${this.limitNext}"`;
+      const options =
+        (limitPreviousOption || limitNextOption) &&
+        `, { ${[limitPreviousOption, limitNextOption]
+          .filter(Boolean)
+          .join(", ")}}`;
       return `<div class="schedule"></div>
-<script>TTmobile.schedule("${this.clubId}", document.querySelector(".schedule"));<\/script>`;
+<script>TTmobile.schedule("${
+        this.clubId
+      }", document.querySelector(".schedule")${options || ""});<\/script>`;
     },
   },
   watch: {
@@ -185,6 +215,8 @@ export default {
     tableUrl: syncQueryParam("table-url"),
     teamUrl: syncQueryParam("team-url"),
     clubId: syncQueryParam("club-id"),
+    limitPrevious: syncQueryParam("limitPrevious"),
+    limitNext: syncQueryParam("limitNext"),
   },
 };
 </script>
