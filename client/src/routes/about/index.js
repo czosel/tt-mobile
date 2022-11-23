@@ -39,6 +39,14 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.7 (24.11.2022)
+            <ul>
+              <li>
+                Bugfix: Alle Mannschaftseinsätze werden angezeigt (statt nur
+                einem)
+              </li>
+              <li>Softwarepflege</li>
+            </ul>
             v1.1.6 (18.09.2022)
             <ul>
               <li>
