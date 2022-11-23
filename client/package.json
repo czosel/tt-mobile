@@ -23,7 +23,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "if-env": "^1.0.4",
-    "node-sass": "^6.0.1",
+    "node-sass": "^8.0.0",
     "preact-cli": "^3.3.2",
     "preact-cli-plugin-env-vars": "^1.2.1",
     "prettier": "^2.5.1",
@@ -35,9 +35,9 @@
     "preact-context-provider": "^2.0.0-preactx.2",
     "preact-helmet": "^4.0.0-alpha-3",
     "preact-render-to-string": "^5.1.2",
-    "preact-router": "^3.1.0",
-    "rambda": "^6.9.0",
-    "react-spinners": "^0.11.0",
+    "preact-router": "^4.1.0",
+    "rambda": "^7.4.0",
+    "react-spinners": "^0.13.6",
     "wiretie": "^1.1.0"
   },
   "//": [
