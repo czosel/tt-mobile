@@ -6,13 +6,11 @@ import clientHref from "../../lib/link";
 
 const baseUrl = "http://click-tt.ch/cgi-bin/WebObjects/nuLigaTTCH.woa/wa";
 
-const getClickTTPath = (path) => {
-  if (path.indexOf("/club/") > -1) {
-    return path.replace("/club/", "/clubInfoDisplay?club=").slice(0, -1);
+const getClickTTPath = (url) => {
+  if (url.indexOf("/club/") > -1) {
+    return url.replace("/club/", "/clubInfoDisplay?club=").slice(0, -1);
   }
-  return decodeURIComponent(
-    path.split("/").filter((s) => s.includes("%2F"))[0]
-  );
+  return decodeURIComponent(url.split("/").filter((s) => s.includes("%2F"))[0]);
 };
 
 export default class Header extends Component {
@@ -71,8 +69,8 @@ export default class Header extends Component {
                 Spielersuche
               </Link>
               <Match>
-                {({ path }) => {
-                  const clickTTPath = getClickTTPath(path);
+                {({ url }) => {
+                  const clickTTPath = getClickTTPath(url);
                   return (
                     clickTTPath.length > 10 && (
                       <a

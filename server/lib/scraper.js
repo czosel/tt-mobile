@@ -237,7 +237,9 @@ function club(id) {
       .find("#content")
       .set({
         lastMatches: osmosis
-          .find("#content-row2 table.result-set:first tr")
+          .find(
+            "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Rückschau')]) > 0]//tr"
+          )
           .set({
             date: "td:nth-child(2)",
             time: "td:nth-child(3)",
@@ -248,7 +250,9 @@ function club(id) {
             result: "td:nth-child(11)",
           }),
         nextMatches: osmosis
-          .find("#content-row2 table.result-set:last tr")
+          .find(
+            "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Vorschau')]) > 0]//tr"
+          )
           .set({
             date: "td:nth-child(2)",
             time: "td:nth-child(3)",
@@ -257,7 +261,7 @@ function club(id) {
             guest: "td:nth-child(9)",
           }),
       })
-      .error(R.pipe(error("club"), rej))
+      .error(error("scraping error in /club, continuing anyway"))
       .data((data) => {
         res({
           lastMatches: asChunks(
