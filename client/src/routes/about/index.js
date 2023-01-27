@@ -39,6 +39,13 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.8 (28.01.2023)
+            <ul>
+              <li>
+                Auf/Absteiger werden in Tabelle angezeigt (auf breiten
+                Bildschirmen)
+              </li>
+            </ul>
             v1.1.7 (24.11.2022)
             <ul>
               <li>
