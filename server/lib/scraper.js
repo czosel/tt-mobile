@@ -78,6 +78,13 @@ const asChunks = (games) => {
 const getClubId = (clubHref) =>
   clubHref && Number(parse(clubHref, true).query.club);
 
+const parsePromotion = (promotion) => {
+  return {
+    Aufsteiger: "up",
+    Absteiger: "down",
+  }[promotion];
+};
+
 function assocHistory({ step }) {
   const url =
     "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/championshipArchive?federation=STT";
@@ -151,6 +158,7 @@ function league({ url }) {
             'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)'
           )
           .set({
+            promotion: "td:nth-child(1) img@title",
             rank: "td:nth-child(2)",
             name: "td:nth-child(3)",
             href: "td:nth-child(3) a@href",
@@ -216,6 +224,7 @@ function league({ url }) {
               score: club.score.startsWith("zurückgezogen")
                 ? "-:-"
                 : club.score,
+              promotion: parsePromotion(club.promotion),
               games: club.games || "",
               balance: club.balance || "",
             }))

@@ -10,6 +10,12 @@
 .icon-cancel:before {
   content: "\e803";
 } /* '' */
+.icon-up-dir:before {
+  content: "\e804";
+} /* '' */
+.icon-down-dir:before {
+  content: "\e805";
+} /* '' */
 .icon-link-ext:before {
   content: "\f08e";
 } /* '' */

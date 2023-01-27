@@ -80,39 +80,52 @@ function LeagueTable({ clubs, href }) {
       <Table>
         <thead>
           <tr>
-            <th class="optional-2" />
+            <th class="optional-3" />
             <th />
             <th>Mannschaft</th>
             <th class="center optional">Beg.</th>
-            <th class="center optional-2">Spiele</th>
-            <th class="center optional-3">+/-</th>
+            <th class="center optional-3">Spiele</th>
+            <th class="center optional-4">+/-</th>
             <th>Punkte</th>
             <th />
           </tr>
         </thead>
         <tbody>
           {clubs.map((club) => (
-            <LinkRow key={club.href} href={clientHref(club.href)}>
-              <td class="optional-2">{club.rank}</td>
-              <td class="logo-col">
-                <img
-                  class="logo"
-                  src={`${API_ORIGIN}/logo/?name=${clubName(club.name)}`}
-                />
-              </td>
-              <td>{club.name}</td>
-              <td class="center optional">{club.nrOfGames}</td>
-              <td class="center optional-2">{club.games}</td>
-              <td class="center optional-3">{club.balance}</td>
-              <td class="result center">{club.score}</td>
-              <td class="thin">
-                <i class="icon-right-open" />
-              </td>
-            </LinkRow>
+            <LeagueRow key={club.href} club={club} />
           ))}
         </tbody>
       </Table>
       <Embed param="table-url" url={href} />
     </>
+  );
+}
+
+function LeagueRow({ club }) {
+  let promotionIcon = "";
+  if (club.promotion) {
+    promotionIcon = <i className={`icon-${club.promotion}-dir`} />;
+  }
+  return (
+    <LinkRow href={clientHref(club.href)}>
+      <td className={`optional-3 ${style.rankCell}`}>
+        {club.rank}
+        {promotionIcon}
+      </td>
+      <td class="logo-col">
+        <img
+          class="logo"
+          src={`${API_ORIGIN}/logo/?name=${clubName(club.name)}`}
+        />
+      </td>
+      <td>{club.name}</td>
+      <td class="center optional">{club.nrOfGames}</td>
+      <td class="center optional-3">{club.games}</td>
+      <td class="center optional-4">{club.balance}</td>
+      <td class="result center">{club.score}</td>
+      <td class="thin">
+        <i class="icon-right-open" />
+      </td>
+    </LinkRow>
   );
 }
