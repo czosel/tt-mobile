@@ -24,21 +24,26 @@ class Logo extends Component {
   };
 
   submit = async () => {
-    console.log(this.props);
     const data = new FormData();
     data.append("logo", this.state.file);
     data.append("password", this.state.password);
     data.append("id", this.props.id);
 
-    await fetch(`${API_ORIGIN}/upload`, {
+    const response = await fetch(`${API_ORIGIN}/upload`, {
       method: "POST",
       body: data,
     });
 
+    if (!response.ok) {
+      const text = await response.text();
+      this.setState({ error: `${response.status} ${text}` });
+      return;
+    }
+
     location.reload();
   };
 
-  render({ pending, rejected, back, data }) {
+  render({ pending, rejected, back, data }, { error, file }) {
     if (pending) return <LoadingPage back={back} />;
     if (rejected) return <ErrorPage info={rejected} />;
 
@@ -67,9 +72,7 @@ class Logo extends Component {
             <span class="file-cta">
               <span class="file-label">Choose a file</span>
             </span>
-            {this.state.file && (
-              <span class="file-name">{this.state.file.name}</span>
-            )}
+            {file && <span class="file-name">{file.name}</span>}
           </label>
           <div class="field">
             <label class="label">Password</label>
@@ -84,6 +87,9 @@ class Logo extends Component {
               </button>
             </div>
           </div>
+          {error && (
+            <p class="has-text-danger">Error while uploading file: {error}</p>
+          )}
         </Container>
         <Footer />
       </div>
