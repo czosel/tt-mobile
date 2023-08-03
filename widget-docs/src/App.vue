@@ -6,7 +6,7 @@
       <pre
         v-highlightjs
         class="content"
-      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.3/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.4/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 
       <h2 class="subtitle">Tabelle</h2>
       <div class="columns is-desktop">
