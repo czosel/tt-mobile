@@ -11,6 +11,7 @@ export default {
     limitNext: Number,
     variant: String,
     breakpoint: String,
+    fallback: String,
   },
   mounted() {
     this.clubId &&
@@ -19,6 +20,7 @@ export default {
         limitNext: this.limitNext,
         variant: this.variant,
         breakpoint: this.breakpoint,
+        fallback: this.fallback,
       });
   },
   watch: {
@@ -29,6 +31,7 @@ export default {
           limitNext: this.limitNext,
           variant: this.variant,
           breakpoint: this.breakpoint,
+          fallback: this.fallback,
         });
     },
     limitPrevious(limitPrevious) {
@@ -37,6 +40,7 @@ export default {
         limitNext: this.limitNext,
         variant: this.variant,
         breakpoint: this.breakpoint,
+        fallback: this.fallback,
       });
     },
     limitNext(limitNext) {
@@ -45,6 +49,7 @@ export default {
         limitPrevious: this.limitPrevious,
         variant: this.variant,
         breakpoint: this.breakpoint,
+        fallback: this.fallback,
       });
     },
     variant(variant) {
@@ -53,6 +58,7 @@ export default {
         limitPrevious: this.limitPrevious,
         variant,
         breakpoint: this.breakpoint,
+        fallback: this.fallback,
       });
     },
     breakpoint(breakpoint) {
@@ -61,6 +67,16 @@ export default {
         limitPrevious: this.limitPrevious,
         variant: this.variant,
         breakpoint,
+        fallback: this.fallback,
+      });
+    },
+    fallback(fallback) {
+      TTmobile.schedule(this.clubId, this.$el, {
+        limitNext: this.limitNext,
+        limitPrevious: this.limitPrevious,
+        variant: this.variant,
+        breakpoint: this.breakpoint,
+        fallback,
       });
     },
   },

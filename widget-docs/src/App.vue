@@ -126,6 +126,10 @@
               <input class="input" v-model="breakpoint" />
             </div>
           </div>
+          <label class="label">Fallback</label>
+          <div class="control">
+            <input class="input" v-model="fallback" />
+          </div>
           <label class="label">Code</label>
           <pre
             v-highlightjs="scheduleCode"
@@ -144,6 +148,7 @@
             :limitNext="limitNext ? parseInt(limitNext) : undefined"
             :variant="variant"
             :breakpoint="breakpoint"
+            :fallback="fallback"
           />
         </div>
       </div>
@@ -182,6 +187,7 @@ export default {
     this.limitNext = params.get("limitNext") || "";
     this.variant = params.get("variant") || "responsive";
     this.breakpoint = params.get("breakpoint") || "500px";
+    this.fallback = params.get("fallback") || "";
   },
   data: () => ({
     tableUrl: "",
@@ -193,6 +199,7 @@ export default {
     limitNext: undefined,
     variant: "",
     breakpoint: "",
+    fallback: "",
   }),
   components: {
     TtTable,
@@ -231,6 +238,10 @@ export default {
         this.breakpoint &&
         this.breakpoint !== "500px" &&
         `breakpoint: "${this.breakpoint}"`;
+      const fallbackOption =
+        this.fallback &&
+        this.fallback !== "keine Spiele gefunden" &&
+        `fallback: "${this.fallback}"`;
       const options =
         (limitPreviousOption ||
           limitNextOption ||
@@ -241,6 +252,7 @@ export default {
           limitNextOption,
           variantOption,
           breakpointOption,
+          fallbackOption,
         ]
           .filter(Boolean)
           .join(", ")}}`;
