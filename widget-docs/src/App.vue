@@ -126,7 +126,7 @@
               <input class="input" v-model="breakpoint" />
             </div>
           </div>
-          <label class="label">Fallback</label>
+          <label class="label">Fallback (falls keine Spiele gefunden)</label>
           <div class="control">
             <input class="input" v-model="fallback" />
           </div>
