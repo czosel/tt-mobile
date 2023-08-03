@@ -39,6 +39,14 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.9 (03.08.2023)
+            <ul>
+              <li>App für neue Spielsaison angepasst</li>
+              <li>
+                Einbetten-Funktion für Vereinsspielplan: Option "Fallback"
+                ergänzt
+              </li>
+            </ul>
             v1.1.8 (28.01.2023)
             <ul>
               <li>
