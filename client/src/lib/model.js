@@ -11,7 +11,6 @@ export const get = (endpoint) => async (href) => {
   if (response.ok) {
     return await response.json();
   }
-  console.warn(response);
   throw new Error(await response.text());
 };
 
