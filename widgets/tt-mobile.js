@@ -124,22 +124,27 @@ var TTmobile = (function (exports) {
         ${desktopStyles}
       }`;
 
+    const fallback = `<p>${options.fallback || "keine Spiele gefunden"}</p>`;
     const lastMatches =
       options.limitPrevious === undefined || options.limitPrevious > 0
         ? `<p><strong>Rückschau</strong></p>
-          ${data.lastMatches
-            .slice(-1 * options.limitPrevious)
-            .map((chunk) => renderScheduleChunk(chunk, options))
-            .join("")}`
+          ${
+            data.lastMatches
+              .slice(-1 * options.limitPrevious)
+              .map((chunk) => renderScheduleChunk(chunk, options))
+              .join("") || fallback
+          }`
         : "";
 
     const nextMatches =
       options.limitNext === undefined || options.limitNext > 0
         ? `<p><strong>Vorschau</strong></p>
-          ${data.nextMatches
-            .slice(0, options.limitNext)
-            .map((chunk) => renderScheduleChunk(chunk, options))
-            .join("")}`
+          ${
+            data.nextMatches
+              .slice(0, options.limitNext)
+              .map((chunk) => renderScheduleChunk(chunk, options))
+              .join("") || fallback
+          }`
         : "";
 
     const html = `
