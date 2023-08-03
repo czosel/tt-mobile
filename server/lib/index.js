@@ -61,7 +61,7 @@ const endpoints = [
 ];
 
 endpoints.forEach((path) => {
-  app.get(`/${path}`, async (req, res) => {
+  app.get(`/${path}`, async (req, res, next) => {
     const query = {
       ...req.query,
       url:
@@ -73,7 +73,7 @@ endpoints.forEach((path) => {
         ? scraper[path](query, res)
         : res.json(await scraper[path](query));
     } catch (e) {
-      console.error(e);
+      next(e);
     }
   });
 });
@@ -158,7 +158,10 @@ app.post("/upload", upload.single("logo"), async function (req, res, next) {
 });
 
 const port = process.env.PORT || 3020;
-
+// custom error handler to send errors as plain text (no HTML)
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).send(err);
+});
 app.listen(port, function () {
   console.log(`server listening on port ${port}`);
 });

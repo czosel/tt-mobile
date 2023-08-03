@@ -4,10 +4,16 @@ const asJson = (r) => r.json();
 const isBrowser = () => typeof window !== "undefined";
 const me = () => isBrowser() && localStorage.getItem("me");
 
-export const get = (endpoint) => (href) =>
-  fetch(`${API_ORIGIN}/${endpoint}?url=${encodeURIComponent(href)}`).then(
-    asJson
+export const get = (endpoint) => async (href) => {
+  const response = await fetch(
+    `${API_ORIGIN}/${endpoint}?url=${encodeURIComponent(href)}`
   );
+  if (response.ok) {
+    return await response.json();
+  }
+  console.warn(response);
+  throw new Error(await response.text());
+};
 
 export const icalHref = (href) =>
   `${API_ORIGIN}/team?format=ics&url=${encodeURIComponent(href)}`;

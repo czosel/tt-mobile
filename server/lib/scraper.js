@@ -184,7 +184,7 @@ function league({ url }) {
             col11href: "td:nth-child(11) a@href",
           }),
       })
-      .error(R.pipe(error("league"), rej))
+      .error(error("scraping error in /league, continuing anyway"))
       .data((data) => {
         const titleParts = splitTitle(data.title);
         const games = toArray(data.games)
@@ -314,7 +314,7 @@ function clubTeams(id) {
             points: "td:nth-child(5)",
           }),
       })
-      .error(R.pipe(error("clubTeams"), rej))
+      .error(error("scraping error in /clubTeams, continuing anyway"))
       .data((data) => {
         const name = splitTitle(data.title)[0];
         models.Club.forge({ id })
@@ -374,7 +374,7 @@ function team({ url, format }, expressRes) {
             }),
         })
       )
-      .error(error("club"))
+      .error(error("scraping error in /team, continuing anyway"))
       .data((data) => {
         if (format === "ics") {
           const cal = ical({ domain: "tt-mobile.ch", name: data.club });
@@ -465,7 +465,7 @@ function game({ url }) {
           game: "td:last",
         }),
       })
-      .error(R.pipe(error("game"), rej))
+      .error(error("scraping error in /game, continuing anyway"))
       .data((data) => {
         const split = data.title.split("<br>").map((i) => i.trim());
         const lastParts = splitTitle(split[2]);
@@ -545,7 +545,7 @@ function player({ url }) {
           }),
         eloHref: "ul.content-tabs > li:first-child a@href",
       })
-      .error(error("player"))
+      .error(error("scraping error in /player, continuing anyway"))
       .data((data) => {
         res({
           ...data,
@@ -595,7 +595,7 @@ function elo({ url }) {
           delta: "td:last-child",
         }),
       })
-      .error(R.pipe(error("elo"), rej))
+      .error(error("scraping error in /elo, continuing anyway"))
       .data((data) => {
         let current = parseInt(data.start);
         const start = current;
@@ -662,7 +662,7 @@ function me({ url }) {
           )
           .set("balance"),
       })
-      .error(R.pipe(error("club"), rej))
+      .error(error("scraping error in /me, continuing anyway"))
       .data((data) => {
         res({
           ...data,
@@ -758,7 +758,7 @@ function regionSchedule({ championship, date }) {
           col11href: "td:nth-child(11) a@href",
         }),
       })
-      .error(R.pipe(error("regionSchedule"), rej))
+      .error(error("scraping error in /regionSchedule, continuing anyway"))
       .data((data) => {
         data.games = (data.games || []).map((game) => {
           // sometimes the "Runde" column is missing
