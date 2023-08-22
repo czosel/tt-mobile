@@ -344,7 +344,7 @@ function team({ url, format }, expressRes) {
           title: "#content-row1 h1",
           club: "#content-row1 table.result-set tr:first-child td a",
           clubHref: "#content-row1 table.result-set tr:first-child td a@href",
-          location:
+          locations:
             "#content-row1 table.result-set tr:first-child td:last-child:html",
         }),
         osmosis.set({
@@ -414,7 +414,7 @@ function team({ url, format }, expressRes) {
         res({
           ...data,
           games,
-          location: splitTitle(data.location)[3].split("<br>").join(", "),
+          locations: extractLocations(data.locations),
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
           name: splitTitle(data.title)[2],
@@ -423,6 +423,17 @@ function team({ url, format }, expressRes) {
         });
       });
   });
+}
+
+function extractLocations(html) {
+  const rows = splitTitle(html);
+  const result = [];
+  for (const [i, row] of rows.entries()) {
+    if (row.includes("Matchlocation")) {
+      result.push(rows[i + 1]);
+    }
+  }
+  return result.map((row) => row.split("<br>").join(", "));
 }
 
 const player1Lens = R.lensProp("player1");

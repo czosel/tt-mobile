@@ -12,6 +12,7 @@ import Container from "../../components/container";
 import LoadingPage from "../../components/loading-page";
 import ErrorPage from "../../components/error-page";
 import LinkRow from "../../components/link-row";
+import Location from "../../components/location";
 import Table from "../../components/table";
 import EloScore from "../../components/elo-score";
 
@@ -24,8 +25,7 @@ class Team extends Component {
     if (pending) return <LoadingPage back={back} />;
     if (rejected) return <ErrorPage info={rejected} />;
 
-    const { club, clubId, players, location, name, games, breadcrumbs } = data;
-    const link = "https://maps.google.com/?q=" + location;
+    const { club, clubId, players, locations, name, games, breadcrumbs } = data;
     return (
       <div>
         <Helmet title={name} />
@@ -46,10 +46,9 @@ class Team extends Component {
             </div>
           </div>
           <p class="mt-2">
-            <a href={link}>
-              <i class="icon-location" style="font-size:1.5em" />
-              {location}
-            </a>
+            {locations.map((l) => (
+              <Location key={l} name={l} />
+            ))}
           </p>
           {players.length > 0 && (
             <Table>
