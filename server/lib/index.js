@@ -11,6 +11,9 @@ const models = require("./models");
 const jdenticon = require("jdenticon");
 const sharp = require("sharp");
 const fs = require("fs");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 
 const scraper = require("./scraper");
 
@@ -88,7 +91,7 @@ app.get("/club/:id", async ({ params }, res) => {
 
 app.get("/club-teams/:id", async ({ params }, res) => {
   try {
-    res.json(await scraper.clubTeams(params.id));
+    res.json(await scraper.clubTeams(parseInt(params.id)));
   } catch (e) {
     console.error(e);
   }
@@ -133,7 +136,8 @@ app.get("/logo/:id?", async ({ params, query }, res) => {
 });
 
 app.post("/upload", upload.single("logo"), async function (req, res, next) {
-  const { password, id, name } = req.body;
+  let { password, id } = req.body;
+  id = parseInt(id);
   if (password != process.env.UPLOAD_PASSWORD) {
     res.sendStatus(401);
     return;
@@ -152,7 +156,12 @@ app.post("/upload", upload.single("logo"), async function (req, res, next) {
   sharp(buffer).toFile(`logos/${id}.png`);
   fs.unlinkSync(req.file.path);
 
-  await models.Club.forge({ id, name, logo: `${id}.png` }).save();
+  const logo = `${id}.png`;
+  await models.Club.forge({ id, logo }).save();
+  await prisma.club.update({
+    where: { id },
+    data: { logo },
+  });
 
   res.sendStatus(200);
 });

@@ -3,9 +3,12 @@ const { parse, resolve } = require("url");
 const R = require("ramda");
 const ical = require("ical-generator");
 const moment = require("moment");
+const { PrismaClient } = require("@prisma/client");
 const models = require("./models");
 
 const osmosis = require("osmosis");
+
+const prisma = new PrismaClient();
 
 const host = "https://click-tt.ch";
 
@@ -315,13 +318,18 @@ function clubTeams(id) {
           }),
       })
       .error(error("scraping error in /clubTeams, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         const name = splitTitle(data.title)[0];
         models.Club.forge({ id })
           .save({ name })
           .catch(() => {
             models.Club.forge().save({ id, name });
           });
+        await prisma.club.upsert({
+          where: { id },
+          update: { name },
+          create: { id, name },
+        });
 
         res({
           name,

@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Club {
+  id      Int      @id
+  name    String
+  logo    String?
+  players Player[]
+  @@map("club")
+}
+
+model Player {
+  id        Int    @id
+  firstName String
+  lastName  String
+  clubId    Int?
+  club      Club?  @relation(fields: [clubId], references: [id])
+  @@map("player")
+}
