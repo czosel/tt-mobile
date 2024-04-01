@@ -565,11 +565,27 @@ function player({ url }) {
         eloHref: "ul.content-tabs > li:first-child a@href",
       })
       .error(error("scraping error in /player, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
+        const id = Number(parse(url, true).query.person);
+        const name = splitTitle(data.title)[1];
+        const [firstName, lastName] = name.split(",").map((s) => s.trim());
+        const clubId = getClubId(data.clubHref);
+
+        await prisma.club.upsert({
+          where: { id: clubId },
+          update: { name: data.club },
+          create: { id: clubId, name: data.club },
+        });
+        await prisma.player.upsert({
+          where: { id },
+          update: { firstName, lastName, clubId },
+          create: { id, firstName, lastName, clubId },
+        });
+
         res({
           ...data,
-          name: splitTitle(data.title)[1],
-          clubId: getClubId(data.clubHref),
+          name,
+          clubId,
           breadcrumbs: extractBreadcrumbs(data),
           seasons: arrayify(data.seasons).map(simplifyLinks),
           teams: arrayify(data.teams)
