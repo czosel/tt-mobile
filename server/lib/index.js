@@ -47,7 +47,7 @@ app.use(helmet());
 app.use(compression());
 app.use(cors());
 app.use(
-  apicache.options({ enabled: env !== "development" }).middleware("10 minutes")
+  apicache.options({ enabled: env !== "development" }).middleware("10 minutes"),
 );
 
 const endpoints = [
@@ -83,7 +83,7 @@ endpoints.forEach((path) => {
 
 app.get("/club/:id", async ({ params }, res) => {
   try {
-    res.json(await scraper.club(params.id));
+    res.json(await scraper.clubNew(params.id));
   } catch (e) {
     console.error(e);
   }
@@ -111,7 +111,7 @@ app.get("/regionSchedule", async ({ query }, res) => {
       await scraper.regionSchedule({
         championship: query.championship,
         date: moment(query.date),
-      })
+      }),
     );
   } catch (e) {
     console.error(e);
@@ -121,7 +121,7 @@ app.get("/regionSchedule", async ({ query }, res) => {
 app.get("/logo/:id?", async ({ params, query }, res) => {
   try {
     const club = await models.Club.forge(
-      params.id ? { id: parseInt(params.id) } : { name: query.name }
+      params.id ? { id: parseInt(params.id) } : { name: query.name },
     ).fetch();
     if (!club.get("logo")) {
       throw "no logo found";

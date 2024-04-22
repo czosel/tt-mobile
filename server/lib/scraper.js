@@ -1,4 +1,5 @@
 const { parse, resolve } = require("url");
+const libxmljs = require("libxmljs2");
 
 const R = require("ramda");
 const ical = require("ical-generator");
@@ -7,6 +8,7 @@ const { PrismaClient } = require("@prisma/client");
 const models = require("./models");
 
 const osmosis = require("osmosis");
+const axios = require("axios");
 
 const prisma = new PrismaClient();
 
@@ -17,7 +19,7 @@ function unique(arr) {
     (entry, index, self) =>
       self.findIndex((t) => {
         return t.data === entry.data && t.team === entry.team;
-      }) === index
+      }) === index,
   );
 }
 
@@ -158,7 +160,7 @@ function league({ url }) {
         title: "#content-col1 h1",
         clubs: osmosis
           .find(
-            'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)'
+            'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)',
           )
           .set({
             promotion: "td:nth-child(1) img@title",
@@ -172,7 +174,7 @@ function league({ url }) {
           }),
         games: osmosis
           .find(
-            'h2:contains("Spielplan") ~ table.result-set:first tr:not(:first-child)'
+            'h2:contains("Spielplan") ~ table.result-set:first tr:not(:first-child)',
           )
           .set({
             date: "td:nth-child(2)",
@@ -237,20 +239,74 @@ function league({ url }) {
   });
 }
 
+function objectMap(obj, fn) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([k, v], i) => [k, fn(v, k, i)]),
+  );
+}
+
+// map a list of DOM nodes to selectors
+function selectMap(data, mapping) {
+  return data.map((row) =>
+    objectMap(mapping, (selector) => content(row.find(selector))),
+  );
+}
+
+// read text from element nodes, or value of attribute nodes.
+function content([node]) {
+  if (node?.type() == "element") {
+    return node.text().trim();
+  } else if (node?.type() == "attribute") {
+    return node.value().trim();
+  }
+  return "";
+}
+
+async function clubNew(id) {
+  const res = await axios.get(
+    resolve(
+      host,
+      `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/clubInfoDisplay?club=${id}`,
+    ),
+  );
+  const doc = libxmljs.parseHtmlString(res.data);
+  const lastMatchesRows = doc.find(
+    "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Rückschau')]) > 0]//tr",
+  );
+  debugger;
+
+  const lastMatches = selectMap(lastMatchesRows, {
+    date: "td[2]",
+    time: "td[3]",
+    league: "td[6]",
+    home: "td[7]",
+    guest: "td[9]",
+    href: "td[11]//a/@href",
+    result: "td[11]",
+  })
+    .filter((m) => m.time)
+    .map(simplifyLinks)
+    .map(extractTime);
+
+  return {
+    lastMatches,
+  };
+}
+
 function club(id) {
   return new Promise((res, rej) => {
     osmosis
       .get(
         resolve(
           host,
-          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/clubInfoDisplay?club=${id}`
-        )
+          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/clubInfoDisplay?club=${id}`,
+        ),
       )
       .find("#content")
       .set({
         lastMatches: osmosis
           .find(
-            "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Rückschau')]) > 0]//tr"
+            "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Rückschau')]) > 0]//tr",
           )
           .set({
             date: "td:nth-child(2)",
@@ -263,7 +319,7 @@ function club(id) {
           }),
         nextMatches: osmosis
           .find(
-            "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Vorschau')]) > 0]//tr"
+            "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Vorschau')]) > 0]//tr",
           )
           .set({
             date: "td:nth-child(2)",
@@ -280,12 +336,12 @@ function club(id) {
             toArray(data.lastMatches)
               .filter((m) => m.time)
               .map(simplifyLinks)
-              .map(extractTime)
+              .map(extractTime),
           ),
           nextMatches: asChunks(
             toArray(data.nextMatches)
               .filter((m) => !m.result && m.time)
-              .map(extractTime)
+              .map(extractTime),
           ),
           // deprecated
           chunks: asChunks(arrayify(data.lastMatches).map(simplifyLinks)),
@@ -300,8 +356,8 @@ function clubTeams(id) {
       .get(
         resolve(
           host,
-          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/clubTeams?club=${id}`
-        )
+          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/clubTeams?club=${id}`,
+        ),
       )
       .find("#content")
       .set({
@@ -370,7 +426,7 @@ function team({ url, format }, expressRes) {
           games: osmosis
             .find(
               `#content-row2 table.result-set:nth(1) tr:not(:first-child),
-             #content-row2 table.result-set:nth(0) tr:not(:first-child)`
+             #content-row2 table.result-set:nth(0) tr:not(:first-child)`,
             )
             .set({
               date: "td:nth-child(2)",
@@ -380,7 +436,7 @@ function team({ url, format }, expressRes) {
               result: "td:nth-child(10)",
               href: "td:nth-child(10) a@href",
             }),
-        })
+        }),
       )
       .error(error("scraping error in /team, continuing anyway"))
       .data((data) => {
@@ -397,7 +453,7 @@ function team({ url, format }, expressRes) {
               .map((game) => {
                 const start = moment(
                   `${game.date} ${game.time}`,
-                  "DD.MM.YYYY H:m"
+                  "DD.MM.YYYY H:m",
                 );
                 return {
                   start: start.toDate(),
@@ -405,7 +461,7 @@ function team({ url, format }, expressRes) {
                   summary: `${game.home} - ${game.guest} ${league}`,
                   description: game.isHome ? "Heimspiel" : "Auswärtsspiel",
                 };
-              })
+              }),
           );
 
           return cal.serve(expressRes);
@@ -448,7 +504,7 @@ const player1Lens = R.lensProp("player1");
 const matchesLens = R.lensProp("matches");
 const trimPlayers = R.over(
   matchesLens,
-  R.map(R.over(player1Lens, R.toUpper()))
+  R.map(R.over(player1Lens, R.toUpper())),
 );
 
 function game({ url }) {
@@ -536,12 +592,12 @@ function player({ url }) {
           }),
         balances: osmosis
           .find(
-            "table.result-set table.result-set tr:last-child > td:last-child"
+            "table.result-set table.result-set tr:last-child > td:last-child",
           )
           .set("balance"),
         singles: osmosis
           .find(
-            "#content-row1 > table.result-set:nth(2) tr:has(td:nth-child(3) a)"
+            "#content-row1 > table.result-set:nth(2) tr:has(td:nth-child(3) a)",
           )
           .set({
             opponent: "td:nth-child(3)",
@@ -551,7 +607,7 @@ function player({ url }) {
           }),
         doubles: osmosis
           .find(
-            "#content-row1 > table.result-set:nth(3) tr:has(td:nth-child(3) a)"
+            "#content-row1 > table.result-set:nth(3) tr:has(td:nth-child(3) a)",
           )
           .set({
             partner: "td:nth-child(3)",
@@ -601,7 +657,7 @@ function player({ url }) {
                 team: str.substr(0, str.indexOf(":")).trim(),
                 data: str.substr(str.indexOf(":") + 1).trim(),
               }))
-              .filter((e) => e.team.trim())
+              .filter((e) => e.team.trim()),
           ),
           singles: toArray(data.singles).map(simplifyLinks),
           doubles: toArray(data.doubles).map(simplifyObject("partnerHref")),
@@ -693,7 +749,7 @@ function me({ url }) {
           }),
         balances: osmosis
           .find(
-            "table.result-set table.result-set tr:last-child > td:last-child"
+            "table.result-set table.result-set tr:last-child > td:last-child",
           )
           .set("balance"),
       })
@@ -716,7 +772,7 @@ function me({ url }) {
               .map((str) => ({
                 team: str.substr(0, str.indexOf(":")).trim(),
                 data: str.substr(str.indexOf(":") + 1).trim(),
-              }))
+              })),
           ),
         });
       });
@@ -744,7 +800,7 @@ function _searchBy(prop, term) {
       .data((data) =>
         res({
           [prop]: arrayify(data[prop]).filter(Boolean).map(simplifyLinks),
-        })
+        }),
       );
   });
 }
@@ -769,14 +825,14 @@ function regionSchedule({ championship, date }) {
       .post(
         resolve(
           host,
-          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/regionMeetingFilter`
+          `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/regionMeetingFilter`,
         ),
         {
           championship,
           dayOfYear,
           month,
           filterHomeGuestBackup: false,
-        }
+        },
       )
       .set({
         games: osmosis.find("table.result-set > tr:not(:first-child)").set({
@@ -831,6 +887,7 @@ module.exports = {
   league,
   team,
   club,
+  clubNew,
   clubTeams,
   game,
   player,
