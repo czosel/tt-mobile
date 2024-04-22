@@ -78,8 +78,11 @@ const asChunks = (games) => {
   return chunks;
 };
 
-const getClubId = (clubHref) =>
-  clubHref && Number(parse(clubHref, true).query.club);
+const getClubId = (href) => href && Number(parse(href, true).query.club);
+
+const getTeamId = (href) => href && Number(parse(href, true).query.teamtable);
+
+const getGameId = (href) => href && Number(parse(href, true).query.meeting);
 
 const parsePromotion = (promotion) => {
   return {
@@ -188,7 +191,7 @@ function league({ url }) {
           }),
       })
       .error(error("scraping error in /league, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         const titleParts = splitTitle(data.title);
         const games = toArray(data.games)
           .map(simplifyLinks)
@@ -215,24 +218,48 @@ function league({ url }) {
             };
           });
 
+        function findClubByName(clubs, search) {
+          return clubs.find(({ name }) => name === search);
+        }
+
+        const clubs = toArray(data.clubs)
+          .map((club) => ({
+            ...club,
+            score: club.score.startsWith("zurückgezogen") ? "-:-" : club.score,
+            promotion: parsePromotion(club.promotion),
+            games: club.games || "",
+            balance: club.balance || "",
+          }))
+          .map(simplifyLinks);
+
         res({
           assoc: titleParts[0],
           league: titleParts[1],
           title: data.title,
           breadcrumbs: extractBreadcrumbs(data),
           chunks: asChunks(games),
-          clubs: toArray(data.clubs)
-            .map((club) => ({
-              ...club,
-              score: club.score.startsWith("zurückgezogen")
-                ? "-:-"
-                : club.score,
-              promotion: parsePromotion(club.promotion),
-              games: club.games || "",
-              balance: club.balance || "",
-            }))
-            .map(simplifyLinks),
+          clubs,
         });
+
+        Promise.allSettled(
+          games.map(async (game) => {
+            const id = getGameId(game.href);
+            debugger;
+            const homeId = getTeamId(findClubByName(clubs, game.home).href);
+            const guestId = getTeamId(findClubByName(clubs, game.guest).href);
+            const data = {
+              homeId,
+              guestId,
+              result: game.result,
+              date: new Date(),
+            };
+            await prisma.game.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
       });
   });
 }
@@ -383,7 +410,7 @@ function team({ url, format }, expressRes) {
         })
       )
       .error(error("scraping error in /team, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         if (format === "ics") {
           const cal = ical({ domain: "tt-mobile.ch", name: data.club });
           const league = `(${extractBreadcrumbs(data)[1]?.name || ""})`;
@@ -419,14 +446,29 @@ function team({ url, format }, expressRes) {
             opponent: game.guest.includes(data.club) ? game.home : game.guest,
             isHome: !game.guest.includes(data.club),
           }));
+
+        const id = getTeamId(url);
+        const name = splitTitle(data.title)[2];
+        const clubId = getClubId(data.clubHref);
+
+        try {
+          await prisma.team.upsert({
+            where: { id },
+            update: { name, clubId },
+            create: { id, name, clubId },
+          });
+        } catch (e) {
+          console.log("club", clubId, "doesn't exist yet...");
+        }
+
         res({
           ...data,
           games,
           locations: extractLocations(data.locations),
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
-          name: splitTitle(data.title)[2],
-          clubId: getClubId(data.clubHref),
+          name,
+          clubId,
           players: toArray(data.players).map(simplifyLinks),
         });
       });

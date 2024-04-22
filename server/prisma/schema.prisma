@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["relationJoins"]
 }
 
@@ -13,7 +13,20 @@ model Club {
   name    String
   logo    String?
   players Player[]
+  teams   Team[]
+
   @@map("club")
+}
+
+model Team {
+  id         Int    @id
+  name       String
+  clubId     Int
+  club       Club   @relation(fields: [clubId], references: [id])
+  homeGames  Game[] @relation("HomeGames")
+  guestGames Game[] @relation("GuestGames")
+
+  @@map("team")
 }
 
 model Player {
@@ -22,5 +35,18 @@ model Player {
   lastName  String
   clubId    Int?
   club      Club?  @relation(fields: [clubId], references: [id])
+
   @@map("player")
+}
+
+model Game {
+  id      Int      @id
+  homeId  Int
+  guestId Int
+  result  String
+  date    DateTime @db.Date
+  home    Team     @relation("HomeGames", fields: [homeId], references: [id])
+  guest   Team     @relation("GuestGames", fields: [guestId], references: [id])
+
+  @@map("game")
 }
