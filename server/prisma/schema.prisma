@@ -18,11 +18,22 @@ model Club {
   @@map("club")
 }
 
+model League {
+  id      Int      @id
+  name    String
+  teams   Team[]
+
+  @@map("league")
+}
+
 model Team {
   id         Int    @id
-  name       String
-  clubId     Int
-  club       Club   @relation(fields: [clubId], references: [id])
+  name       String?
+  shortName  String?
+  clubId     Int?
+  club       Club?   @relation(fields: [clubId], references: [id])
+  leagueId    Int
+  league      League   @relation(fields: [leagueId], references: [id])
   homeGames  Game[] @relation("HomeGames")
   guestGames Game[] @relation("GuestGames")
 
@@ -30,11 +41,13 @@ model Team {
 }
 
 model Player {
-  id        Int    @id
-  firstName String
-  lastName  String
-  clubId    Int?
-  club      Club?  @relation(fields: [clubId], references: [id])
+  id           Int     @id
+  firstName    String
+  lastName     String
+  clubId       Int?
+  club         Club?   @relation(fields: [clubId], references: [id])
+  homeMatches  Match[] @relation("HomeMatches")
+  guestMatches Match[] @relation("GuestMatches")
 
   @@map("player")
 }
@@ -47,6 +60,26 @@ model Game {
   date    DateTime @db.Date
   home    Team     @relation("HomeGames", fields: [homeId], references: [id])
   guest   Team     @relation("GuestGames", fields: [guestId], references: [id])
+  matches Match[]
 
   @@map("game")
+}
+
+model Match {
+  id        String @id
+  gameId    Int
+  game      Game @relation(fields: [gameId], references: [id])
+  player1Id Int
+  player2Id Int
+  player1   Player @relation("HomeMatches", fields: [player1Id], references: [id])
+  player2   Player @relation("GuestMatches", fields: [player2Id], references: [id])
+  s1        String
+  s2        String
+  s3        String
+  s4        String
+  s5        String
+  sets      String
+  result    String
+
+  @@map("match")
 }

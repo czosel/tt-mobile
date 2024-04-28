@@ -78,11 +78,11 @@ const asChunks = (games) => {
   return chunks;
 };
 
+const getLeagueId = (href) => href && Number(parse(href, true).query.group);
 const getClubId = (href) => href && Number(parse(href, true).query.club);
-
 const getTeamId = (href) => href && Number(parse(href, true).query.teamtable);
-
 const getGameId = (href) => href && Number(parse(href, true).query.meeting);
+const getPlayerId = (href) => href && Number(parse(href, true).query.person);
 
 const parsePromotion = (promotion) => {
   return {
@@ -149,6 +149,10 @@ const findBreadcrumbs = (osmosis) =>
 const extractBreadcrumbs = ({ breadcrumbs }) =>
   toArray(breadcrumbs).map(simplifyLinks).slice(2);
 
+function findTeamByName(teams, search) {
+  return teams.find(({ name }) => name === search);
+}
+
 function league({ url }) {
   return new Promise((res, rej) => {
     osmosis
@@ -159,7 +163,7 @@ function league({ url }) {
       .find("#content")
       .set({
         title: "#content-col1 h1",
-        clubs: osmosis
+        teams: osmosis
           .find(
             'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)'
           )
@@ -218,35 +222,54 @@ function league({ url }) {
             };
           });
 
-        function findClubByName(clubs, search) {
-          return clubs.find(({ name }) => name === search);
-        }
-
-        const clubs = toArray(data.clubs)
-          .map((club) => ({
-            ...club,
-            score: club.score.startsWith("zurückgezogen") ? "-:-" : club.score,
-            promotion: parsePromotion(club.promotion),
-            games: club.games || "",
-            balance: club.balance || "",
+        const teams = toArray(data.teams)
+          .map((team) => ({
+            ...team,
+            score: team.score.startsWith("zurückgezogen") ? "-:-" : team.score,
+            promotion: parsePromotion(team.promotion),
+            games: team.games || "",
+            balance: team.balance || "",
           }))
           .map(simplifyLinks);
 
+        const league = titleParts[1];
         res({
           assoc: titleParts[0],
-          league: titleParts[1],
+          league,
           title: data.title,
           breadcrumbs: extractBreadcrumbs(data),
           chunks: asChunks(games),
-          clubs,
+          teams,
+          clubs: teams, // legacy, use "teams" instead
         });
 
-        Promise.allSettled(
+        const leagueId = getLeagueId(url);
+        await prisma.league.upsert({
+          where: { id: leagueId },
+          update: { name: league },
+          create: { id: leagueId, name: league },
+        });
+
+        await Promise.all(
+          teams.map(async (team) => {
+            const id = getTeamId(team.href);
+            const data = {
+              shortName: team.name,
+              leagueId,
+            };
+            await prisma.team.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
+
+        await Promise.allSettled(
           games.map(async (game) => {
             const id = getGameId(game.href);
-            debugger;
-            const homeId = getTeamId(findClubByName(clubs, game.home).href);
-            const guestId = getTeamId(findClubByName(clubs, game.guest).href);
+            const homeId = getTeamId(findTeamByName(teams, game.home).href);
+            const guestId = getTeamId(findTeamByName(teams, game.guest).href);
             const data = {
               homeId,
               guestId,
@@ -366,6 +389,16 @@ function clubTeams(id) {
   });
 }
 
+async function getTeamByShortName(shortName, leagueId) {
+  const team = await prisma.team.findFirst({
+    where: {
+      shortName,
+      leagueId,
+    },
+  });
+  return team.id;
+}
+
 function team({ url, format }, expressRes) {
   return new Promise((res, rej) => {
     osmosis
@@ -447,19 +480,40 @@ function team({ url, format }, expressRes) {
             isHome: !game.guest.includes(data.club),
           }));
 
-        const id = getTeamId(url);
+        const teamId = getTeamId(url);
         const name = splitTitle(data.title)[2];
         const clubId = getClubId(data.clubHref);
+        const leagueId = getLeagueId(url);
 
         try {
           await prisma.team.upsert({
-            where: { id },
-            update: { name, clubId },
-            create: { id, name, clubId },
+            where: { id: teamId },
+            update: { name, clubId, leagueId },
+            create: { id: teamId, name, clubId, leagueId },
           });
         } catch (e) {
+          console.log(e);
           console.log("club", clubId, "doesn't exist yet...");
         }
+
+        await Promise.all(
+          games.map(async (game) => {
+            const id = getGameId(game.href);
+            const homeId = await getTeamByShortName(game.home, leagueId);
+            const guestId = await getTeamByShortName(game.home, leagueId);
+            const data = {
+              homeId,
+              guestId,
+              result: game.result,
+              date: new Date(),
+            };
+            await prisma.game.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
 
         res({
           ...data,
@@ -506,6 +560,7 @@ function game({ url }) {
         matches: osmosis
           .find("table.result-set tr:has(td:nth-child(2) a)")
           .set({
+            id: "td:nth-child(1)",
             player1: "td:nth-child(2)",
             player1href: "td:nth-child(2) a@href",
             player1class: "td:nth-child(3)",
@@ -527,24 +582,51 @@ function game({ url }) {
         }),
       })
       .error(error("scraping error in /game, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         const split = data.title.split("<br>").map((i) => i.trim());
         const lastParts = splitTitle(split[2]);
+        const home = lastParts[0];
+        const guest = lastParts[1];
+        const matches = toArray(data.matches).map((match) => ({
+          ...match,
+          player1href: simplify(match.player1href),
+          player2href: simplify(match.player2href),
+        }));
         res({
           ...data,
           breadcrumbs: extractBreadcrumbs(data),
           assoc: split[0],
           league: split[1],
-          home: lastParts[0],
-          guest: lastParts[1],
+          home,
+          guest,
           date: lastParts[2]?.split(",")[1],
           time: lastParts[3],
-          matches: toArray(data.matches).map((match) => ({
-            ...match,
-            player1href: simplify(match.player1href),
-            player2href: simplify(match.player2href),
-          })),
+          matches,
         });
+
+        await Promise.all(
+          matches.map(async (match) => {
+            const gameId = getGameId(url);
+            const id = [gameId, match.id].join(":");
+            const data = {
+              gameId,
+              player1Id: getPlayerId(match.player1href),
+              player2Id: getPlayerId(match.player2href),
+              s1: match.s1,
+              s2: match.s2,
+              s3: match.s3,
+              s4: match.s4,
+              s5: match.s5,
+              sets: match.sets,
+              result: match.game,
+            };
+            await prisma.match.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
       });
   });
 }
