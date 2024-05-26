@@ -19,35 +19,34 @@ model Club {
 }
 
 model League {
-  id      Int      @id
-  name    String
-  teams   Team[]
+  id    Int    @id
+  name  String
+  teams Team[]
 
   @@map("league")
 }
 
 model Team {
-  id         Int    @id
+  id         Int     @id
   name       String?
   shortName  String?
   clubId     Int?
   club       Club?   @relation(fields: [clubId], references: [id])
-  leagueId    Int
-  league      League   @relation(fields: [leagueId], references: [id])
-  homeGames  Game[] @relation("HomeGames")
-  guestGames Game[] @relation("GuestGames")
+  leagueId   Int
+  league     League  @relation(fields: [leagueId], references: [id])
+  homeGames  Game[]  @relation("HomeGames")
+  guestGames Game[]  @relation("GuestGames")
 
   @@map("team")
 }
 
 model Player {
-  id           Int     @id
-  firstName    String
-  lastName     String
-  clubId       Int?
-  club         Club?   @relation(fields: [clubId], references: [id])
-  homeMatches  Match[] @relation("HomeMatches")
-  guestMatches Match[] @relation("GuestMatches")
+  id        Int             @id
+  firstName String
+  lastName  String
+  clubId    Int?
+  club      Club?           @relation(fields: [clubId], references: [id])
+  matches   PlayerInMatch[]
 
   @@map("player")
 }
@@ -57,7 +56,7 @@ model Game {
   homeId  Int
   guestId Int
   result  String
-  date    DateTime @db.Date
+  date    DateTime? @db.Date
   home    Team     @relation("HomeGames", fields: [homeId], references: [id])
   guest   Team     @relation("GuestGames", fields: [guestId], references: [id])
   matches Match[]
@@ -65,21 +64,40 @@ model Game {
   @@map("game")
 }
 
+enum MatchType {
+  SINGLE
+  DOUBLE
+}
+
+enum TeamType {
+  HOME
+  GUEST
+}
+
+model PlayerInMatch {
+  id        String       @id
+  matchType MatchType @default(SINGLE)
+  teamType  TeamType
+  matchId   String
+  match     Match     @relation(fields: [matchId], references: [id])
+  playerId  Int
+  player    Player    @relation(fields: [playerId], references: [id])
+
+  @@map("player_in_match")
+}
+
 model Match {
-  id        String @id
-  gameId    Int
-  game      Game @relation(fields: [gameId], references: [id])
-  player1Id Int
-  player2Id Int
-  player1   Player @relation("HomeMatches", fields: [player1Id], references: [id])
-  player2   Player @relation("GuestMatches", fields: [player2Id], references: [id])
-  s1        String
-  s2        String
-  s3        String
-  s4        String
-  s5        String
-  sets      String
-  result    String
+  id      String          @id
+  gameId  Int
+  game    Game            @relation(fields: [gameId], references: [id])
+  players PlayerInMatch[]
+  s1      String
+  s2      String
+  s3      String
+  s4      String
+  s5      String
+  sets    String
+  result  String
 
   @@map("match")
 }

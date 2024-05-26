@@ -4,6 +4,7 @@ const R = require("ramda");
 const ical = require("ical-generator");
 const moment = require("moment");
 const { PrismaClient } = require("@prisma/client");
+const { parse: parseDate } = require("date-fns");
 const models = require("./models");
 
 const osmosis = require("osmosis");
@@ -51,6 +52,14 @@ const formatTime = (obj) => ({
   ...obj,
   time: obj.time.split(" ")[0],
 });
+const parseDateFromStrings = (dateString, timeString) => {
+  const date = parseDate(
+    `${dateString} ${timeString}`,
+    "dd.LL.y HH:mm",
+    new Date()
+  );
+  return date.valueOf() ? date : null;
+};
 
 // strip "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/" from URL
 const simplify = (href) => (href ? href.substring(href.lastIndexOf("/")) : "");
@@ -497,27 +506,29 @@ function team({ url, format }, expressRes) {
           players,
         });
 
-        try {
-          await prisma.team.upsert({
-            where: { id: teamId },
-            update: { name, clubId, leagueId },
-            create: { id: teamId, name, clubId, leagueId },
-          });
-        } catch (e) {
-          console.log(e);
-          console.log("club", clubId, "doesn't exist yet...");
-        }
+        const clubData = { name: data.club };
+        await prisma.club.upsert({
+          where: { id: clubId },
+          update: clubData,
+          create: { id: clubId, ...clubData },
+        });
+
+        await prisma.team.upsert({
+          where: { id: teamId },
+          update: { name, clubId, leagueId },
+          create: { id: teamId, name, clubId, leagueId },
+        });
 
         await Promise.all(
           games.map(async (game) => {
             const id = getGameId(game.href);
             const homeId = await getTeamByShortName(game.home, leagueId);
-            const guestId = await getTeamByShortName(game.home, leagueId);
+            const guestId = await getTeamByShortName(game.guest, leagueId);
             const data = {
               homeId,
               guestId,
               result: game.result,
-              date: new Date(),
+              date: parseDateFromStrings(game.date, game.time),
             };
             await prisma.game.upsert({
               where: { id },
@@ -608,24 +619,15 @@ function game({ url }) {
         const lastParts = splitTitle(split[2]);
         const home = lastParts[0];
         const guest = lastParts[1];
+        const dateString = lastParts[2]?.split(",")[1].trim();
+        const timeString = lastParts[3];
+        const date = parseDateFromStrings(dateString, timeString);
+
         const matches = toArray(data.matches).map((match) => ({
           ...match,
           player1href: simplify(match.player1href),
           player2href: simplify(match.player2href),
         }));
-
-        res({
-          ...data,
-          breadcrumbs: extractBreadcrumbs(data),
-          assoc: split[0],
-          league: split[1],
-          home,
-          guest,
-          date: lastParts[2]?.split(",")[1],
-          time: lastParts[3],
-          matches,
-        });
-
         const allPlayers = matches.flatMap((match) => [
           { id: getPlayerId(match.player1href), name: match.player1 },
           { id: getPlayerId(match.player2href), name: match.player2 },
@@ -633,6 +635,33 @@ function game({ url }) {
         const distinctPlayers = [
           ...new Map(allPlayers.map((player) => [player.id, player])).values(),
         ];
+        res({
+          ...data,
+          breadcrumbs: extractBreadcrumbs(data),
+          assoc: split[0],
+          league: split[1],
+          home,
+          guest,
+          date: dateString,
+          time: timeString,
+          matches,
+        });
+
+        const id = getGameId(url);
+        const leagueId = getLeagueId(url);
+        const homeId = await getTeamByShortName(home, leagueId);
+        const guestId = await getTeamByShortName(guest, leagueId);
+        const gameData = {
+          homeId,
+          guestId,
+          result: data.summary.game,
+          date,
+        };
+        await prisma.game.upsert({
+          where: { id },
+          update: gameData,
+          create: { id, ...gameData },
+        });
 
         await Promise.all(
           distinctPlayers.map(async ({ id, name }) => {
@@ -654,11 +683,9 @@ function game({ url }) {
         await Promise.all(
           matches.map(async (match) => {
             const gameId = getGameId(url);
-            const id = [gameId, match.id].join(":");
+            const matchId = [gameId, match.id].join(":");
             const data = {
               gameId,
-              player1Id: getPlayerId(match.player1href),
-              player2Id: getPlayerId(match.player2href),
               s1: match.s1,
               s2: match.s2,
               s3: match.s3,
@@ -668,10 +695,65 @@ function game({ url }) {
               result: match.game,
             };
             await prisma.match.upsert({
-              where: { id },
+              where: { id: matchId },
               update: data,
-              create: { id, ...data },
+              create: { id: matchId, ...data },
             });
+
+            let players = [
+              {
+                playerId: getPlayerId(match.player1href),
+                matchType: "SINGLE",
+                teamType: "HOME",
+              },
+              {
+                playerId: getPlayerId(match.player2href),
+                matchType: "SINGLE",
+                teamType: "GUEST",
+              },
+            ];
+
+            if (match.id === "Doppel") {
+              const findDoublePlayersByNames = (names) => {
+                return names
+                  .split("\n")
+                  .map((s) => s.trim())
+                  .filter(Boolean)
+                  .map((fullName) =>
+                    distinctPlayers.find(({ name }) => fullName === name)
+                  );
+              };
+              const homePlayers = findDoublePlayersByNames(match.player1);
+              const guestPlayers = findDoublePlayersByNames(match.player2);
+              players = [
+                ...homePlayers.map((player) => ({
+                  playerId: player.id,
+                  matchType: "DOUBLE",
+                  teamType: "HOME",
+                })),
+                ...guestPlayers.map((player) => ({
+                  playerId: player.id,
+                  matchType: "DOUBLE",
+                  teamType: "GUEST",
+                })),
+              ];
+            }
+            await Promise.all(
+              players.map(async ({ playerId, matchType, teamType }) => {
+                const id = `${matchId}-${playerId}`;
+                const data = {
+                  matchId,
+                  playerId,
+                  matchType,
+                  teamType,
+                };
+                await prisma.playerInMatch.upsert({
+                  where: { id },
+                  update: data,
+                  create: { id, ...data },
+                });
+              })
+            );
           })
         );
       });
