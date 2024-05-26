@@ -484,6 +484,18 @@ function team({ url, format }, expressRes) {
         const name = splitTitle(data.title)[2];
         const clubId = getClubId(data.clubHref);
         const leagueId = getLeagueId(url);
+        const players = toArray(data.players).map(simplifyLinks);
+
+        res({
+          ...data,
+          games,
+          locations: extractLocations(data.locations),
+          league: splitTitle(data.title)[1],
+          breadcrumbs: extractBreadcrumbs(data),
+          name,
+          clubId,
+          players,
+        });
 
         try {
           await prisma.team.upsert({
@@ -515,16 +527,25 @@ function team({ url, format }, expressRes) {
           })
         );
 
-        res({
-          ...data,
-          games,
-          locations: extractLocations(data.locations),
-          league: splitTitle(data.title)[1],
-          breadcrumbs: extractBreadcrumbs(data),
-          name,
-          clubId,
-          players: toArray(data.players).map(simplifyLinks),
-        });
+        await Promise.all(
+          players.map(async (player) => {
+            const id = getPlayerId(player.href);
+            const [lastName, firstName] = player.name
+              .split(",")
+              .map((n) => n.trim());
+            const data = {
+              firstName,
+              lastName,
+              clubId,
+              // classification: player.classification,
+            };
+            await prisma.player.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
       });
   });
 }
@@ -592,6 +613,7 @@ function game({ url }) {
           player1href: simplify(match.player1href),
           player2href: simplify(match.player2href),
         }));
+
         res({
           ...data,
           breadcrumbs: extractBreadcrumbs(data),
@@ -603,6 +625,31 @@ function game({ url }) {
           time: lastParts[3],
           matches,
         });
+
+        const allPlayers = matches.flatMap((match) => [
+          { id: getPlayerId(match.player1href), name: match.player1 },
+          { id: getPlayerId(match.player2href), name: match.player2 },
+        ]);
+        const distinctPlayers = [
+          ...new Map(allPlayers.map((player) => [player.id, player])).values(),
+        ];
+
+        await Promise.all(
+          distinctPlayers.map(async ({ id, name }) => {
+            const [lastName, firstName] = name.split(",").map((n) => n.trim());
+            const data = {
+              firstName,
+              lastName,
+              // clubId,
+              // classification: player.classification,
+            };
+            await prisma.player.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
 
         await Promise.all(
           matches.map(async (match) => {
