@@ -34,7 +34,9 @@ export default function model() {
         return fetch(`${API_ORIGIN}/assocHistory?step=${step}`).then(asJson);
       },
       assoc(id) {
-        return fetch(`${API_ORIGIN}/assoc/${id}`).then(asJson);
+        return fetch(
+          `${API_ORIGIN}/api/league?associationId=eq.${id}&order=name`
+        ).then(asJson);
       },
       club(id) {
         return fetch(`${API_ORIGIN}/club/${id}`).then(asJson);

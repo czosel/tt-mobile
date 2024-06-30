@@ -17,7 +17,8 @@ class Assoc extends Component {
   render({ pending, rejected, back, data }) {
     if (pending) return <LoadingPage back={back} />;
     if (rejected) return <ErrorPage info={rejected} />;
-    const { title, leagues } = data;
+    const leagues = data;
+    const title = "TODO";
     return (
       <div class={style.home}>
         <Helmet title={title} />

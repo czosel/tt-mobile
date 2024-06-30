@@ -85,12 +85,8 @@ endpoints.forEach((path) => {
 
 app.use("/api", async (req, res, next) => {
   if (req.method === "GET") {
-    const endpoint = endpoints.find((endpoint) => req.path.includes(endpoint));
-
-    if (endpoint) {
-      console.log("scraping... ");
-      await scraper[endpoint](enrichQuery(req.query));
-      console.log("done!");
+    if (req.path == "/league") {
+      await scraper.assoc(req.query.associationId.replace("eq.", ""));
     }
   }
   next();
@@ -98,14 +94,6 @@ app.use("/api", async (req, res, next) => {
 
 const proxyMiddleware = createProxyMiddleware({
   target: "http://localhost:3000",
-  on: {
-    proxyReq: async (proxyReq, req, res) => {
-      const baseUrl = `${proxyReq.protocol}//${proxyReq.host}`;
-      const url = new URL(proxyReq.path, baseUrl);
-      url.searchParams.delete("url");
-      proxyReq.path = url.pathname + url.search;
-    },
-  },
 });
 
 app.use("/api", proxyMiddleware);
