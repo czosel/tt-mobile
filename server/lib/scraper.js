@@ -128,7 +128,8 @@ function assocHistory({ step }) {
   });
 }
 
-function assoc({ url }) {
+function assoc(id) {
+  const url = `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/leaguePage?championship=${id}`;
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -141,10 +142,31 @@ function assoc({ url }) {
         }),
       })
       .error(R.pipe(error("assoc"), rej))
-      .data(({ title, leagues }) => {
+      .data(async (data) => {
+        const title = splitTitle(data.title)[0];
+        await prisma.association.upsert({
+          where: { id },
+          update: { name: title },
+          create: { id, name: title },
+        });
+
+        await Promise.all(
+          data.leagues.map(async (league) => {
+            const leagueId = getLeagueId(league.href);
+            const data = {
+              name: league.name,
+              associationId: id,
+            };
+            await prisma.league.upsert({
+              where: { id: leagueId },
+              update: data,
+              create: { id: leagueId, ...data },
+            });
+          })
+        );
         res({
           title: splitTitle(title)[0],
-          leagues: toArray(leagues).map(simplifyLinks),
+          leagues: toArray(data.leagues).map(simplifyLinks),
         });
       });
   });
@@ -242,16 +264,6 @@ function league({ url }) {
           .map(simplifyLinks);
 
         const league = titleParts[1];
-        res({
-          assoc: titleParts[0],
-          league,
-          title: data.title,
-          breadcrumbs: extractBreadcrumbs(data),
-          chunks: asChunks(games),
-          teams,
-          clubs: teams, // legacy, use "teams" instead
-        });
-
         const leagueId = getLeagueId(url);
         await prisma.league.upsert({
           where: { id: leagueId },
@@ -292,6 +304,16 @@ function league({ url }) {
             });
           })
         );
+
+        res({
+          assoc: titleParts[0],
+          league,
+          title: data.title,
+          breadcrumbs: extractBreadcrumbs(data),
+          chunks: asChunks(games),
+          teams,
+          clubs: teams, // legacy, use "teams" instead
+        });
       });
   });
 }

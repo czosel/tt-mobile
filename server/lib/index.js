@@ -12,6 +12,7 @@ const jdenticon = require("jdenticon");
 const sharp = require("sharp");
 const fs = require("fs");
 const { PrismaClient } = require("@prisma/client");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const prisma = new PrismaClient();
 
@@ -52,7 +53,6 @@ app.use(
 
 const endpoints = [
   "assocHistory",
-  "assoc",
   "league",
   "team",
   "club",

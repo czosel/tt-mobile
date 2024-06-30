@@ -73,7 +73,7 @@ export default class App extends Component {
           <Router onChange={this.handleRoute}>
             <Home path="/" />
             <Search path="/search" back={this.goBack} />
-            <Assoc path="/assoc/:href" back={this.goBack} />
+            <Assoc path="/assoc/:id" back={this.goBack} />
             <AssocHistory path="/assocHistory/:step" />
             <League path="/league/:href/:tab?" back={this.goBack} />
             <Team path="/team/:href" back={this.goBack} />

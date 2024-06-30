@@ -12,7 +12,7 @@ import Table from "../../components/table";
 import LinkRow from "../../components/link-row";
 
 export default
-@wire("model", { data: ["api.assoc", "href"] })
+@wire("model", { data: ["api.assoc", "id"] })
 class Assoc extends Component {
   render({ pending, rejected, back, data }) {
     if (pending) return <LoadingPage back={back} />;

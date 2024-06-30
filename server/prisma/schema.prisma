@@ -18,10 +18,21 @@ model Club {
   @@map("club")
 }
 
+model Association {
+  id  String @id
+  name  String
+  leagues League[]
+
+  @@map("association")
+}
+
 model League {
   id    Int    @id
   name  String
   teams Team[]
+
+  associationId     String?
+  association       Association?   @relation(fields: [associationId], references: [id])
 
   @@map("league")
 }
