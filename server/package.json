@@ -33,6 +33,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
+    "http-proxy-middleware": "^3.0.0",
     "ical-generator": "^3.1.0",
     "jdenticon": "^3.1.1",
     "knex": "^0.95.14",

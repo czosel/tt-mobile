@@ -63,14 +63,16 @@ const endpoints = [
   "me",
 ];
 
+function enrichQuery(query) {
+  return {
+    ...query,
+    url: query.url && join("/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/", query.url),
+  };
+}
+
 endpoints.forEach((path) => {
   app.get(`/${path}`, async (req, res, next) => {
-    const query = {
-      ...req.query,
-      url:
-        req.query.url &&
-        join("/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/", req.query.url),
-    };
+    const query = enrichQuery(req.query);
     try {
       query.format === "ics"
         ? scraper[path](query, res)
@@ -79,6 +81,41 @@ endpoints.forEach((path) => {
       next(e);
     }
   });
+});
+
+app.use("/api", async (req, res, next) => {
+  if (req.method === "GET") {
+    const endpoint = endpoints.find((endpoint) => req.path.includes(endpoint));
+
+    if (endpoint) {
+      console.log("scraping... ");
+      await scraper[endpoint](enrichQuery(req.query));
+      console.log("done!");
+    }
+  }
+  next();
+});
+
+const proxyMiddleware = createProxyMiddleware({
+  target: "http://localhost:3000",
+  on: {
+    proxyReq: async (proxyReq, req, res) => {
+      const baseUrl = `${proxyReq.protocol}//${proxyReq.host}`;
+      const url = new URL(proxyReq.path, baseUrl);
+      url.searchParams.delete("url");
+      proxyReq.path = url.pathname + url.search;
+    },
+  },
+});
+
+app.use("/api", proxyMiddleware);
+
+app.get("/assoc/:id", async ({ params }, res) => {
+  try {
+    res.json(await scraper.assoc(params.id));
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 app.get("/club/:id", async ({ params }, res) => {
