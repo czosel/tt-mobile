@@ -60,12 +60,18 @@ const trophyNames = [
   "MTTV Cup",
 ];
 
-const addLinks = (name) => ({
+const assocs = assocNames.map((name) => {
+  const key = `${spaceToPlus(name)}+23%2F24`;
+  return {
+    name,
+    href: `/assoc/${encodeURIComponent(key)}`,
+  };
+});
+console.log(assocs);
+const trophies = trophyNames.map((name) => ({
   name,
   href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+23%2F24`),
-});
-const assocs = assocNames.map(addLinks);
-const trophies = trophyNames.map(addLinks);
+}));
 
 export default
 @wire("model", { data: ["api.me"], me: ["me"] })

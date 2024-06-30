@@ -11,6 +11,10 @@ const models = require("./models");
 const jdenticon = require("jdenticon");
 const sharp = require("sharp");
 const fs = require("fs");
+const { PrismaClient } = require("@prisma/client");
+const { createProxyMiddleware } = require("http-proxy-middleware");
+
+const prisma = new PrismaClient();
 
 const scraper = require("./scraper");
 
@@ -49,7 +53,6 @@ app.use(
 
 const endpoints = [
   "assocHistory",
-  "assoc",
   "league",
   "team",
   "club",
@@ -60,14 +63,16 @@ const endpoints = [
   "me",
 ];
 
+function enrichQuery(query) {
+  return {
+    ...query,
+    url: query.url && join("/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/", query.url),
+  };
+}
+
 endpoints.forEach((path) => {
   app.get(`/${path}`, async (req, res, next) => {
-    const query = {
-      ...req.query,
-      url:
-        req.query.url &&
-        join("/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/", req.query.url),
-    };
+    const query = enrichQuery(req.query);
     try {
       query.format === "ics"
         ? scraper[path](query, res)
@@ -76,6 +81,29 @@ endpoints.forEach((path) => {
       next(e);
     }
   });
+});
+
+app.use("/api", async (req, res, next) => {
+  if (req.method === "GET") {
+    if (req.path == "/league") {
+      await scraper.assoc(req.query.associationId.replace("eq.", ""));
+    }
+  }
+  next();
+});
+
+const proxyMiddleware = createProxyMiddleware({
+  target: "http://localhost:3000",
+});
+
+app.use("/api", proxyMiddleware);
+
+app.get("/assoc/:id", async ({ params }, res) => {
+  try {
+    res.json(await scraper.assoc(params.id));
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 app.get("/club/:id", async ({ params }, res) => {
@@ -88,7 +116,7 @@ app.get("/club/:id", async ({ params }, res) => {
 
 app.get("/club-teams/:id", async ({ params }, res) => {
   try {
-    res.json(await scraper.clubTeams(params.id));
+    res.json(await scraper.clubTeams(parseInt(params.id)));
   } catch (e) {
     console.error(e);
   }
@@ -133,7 +161,8 @@ app.get("/logo/:id?", async ({ params, query }, res) => {
 });
 
 app.post("/upload", upload.single("logo"), async function (req, res, next) {
-  const { password, id, name } = req.body;
+  let { password, id } = req.body;
+  id = parseInt(id);
   if (password != process.env.UPLOAD_PASSWORD) {
     res.sendStatus(401);
     return;
@@ -152,7 +181,12 @@ app.post("/upload", upload.single("logo"), async function (req, res, next) {
   sharp(buffer).toFile(`logos/${id}.png`);
   fs.unlinkSync(req.file.path);
 
-  await models.Club.forge({ id, name, logo: `${id}.png` }).save();
+  const logo = `${id}.png`;
+  await models.Club.forge({ id, logo }).save();
+  await prisma.club.update({
+    where: { id },
+    data: { logo },
+  });
 
   res.sendStatus(200);
 });

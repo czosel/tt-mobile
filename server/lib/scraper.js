@@ -3,9 +3,13 @@ const { parse, resolve } = require("url");
 const R = require("ramda");
 const ical = require("ical-generator");
 const moment = require("moment");
+const { PrismaClient } = require("@prisma/client");
+const { parse: parseDate } = require("date-fns");
 const models = require("./models");
 
 const osmosis = require("osmosis");
+
+const prisma = new PrismaClient();
 
 const host = "https://click-tt.ch";
 
@@ -48,6 +52,14 @@ const formatTime = (obj) => ({
   ...obj,
   time: obj.time.split(" ")[0],
 });
+const parseDateFromStrings = (dateString, timeString) => {
+  const date = parseDate(
+    `${dateString} ${timeString}`,
+    "dd.LL.y HH:mm",
+    new Date()
+  );
+  return date.valueOf() ? date : null;
+};
 
 // strip "/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/" from URL
 const simplify = (href) => (href ? href.substring(href.lastIndexOf("/")) : "");
@@ -75,8 +87,11 @@ const asChunks = (games) => {
   return chunks;
 };
 
-const getClubId = (clubHref) =>
-  clubHref && Number(parse(clubHref, true).query.club);
+const getLeagueId = (href) => href && Number(parse(href, true).query.group);
+const getClubId = (href) => href && Number(parse(href, true).query.club);
+const getTeamId = (href) => href && Number(parse(href, true).query.teamtable);
+const getGameId = (href) => href && Number(parse(href, true).query.meeting);
+const getPlayerId = (href) => href && Number(parse(href, true).query.person);
 
 const parsePromotion = (promotion) => {
   return {
@@ -113,7 +128,8 @@ function assocHistory({ step }) {
   });
 }
 
-function assoc({ url }) {
+function assoc(id) {
+  const url = `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/leaguePage?championship=${id}`;
   return new Promise((res, rej) => {
     osmosis
       .get(resolve(host, url))
@@ -126,10 +142,31 @@ function assoc({ url }) {
         }),
       })
       .error(R.pipe(error("assoc"), rej))
-      .data(({ title, leagues }) => {
+      .data(async (data) => {
+        const title = splitTitle(data.title)[0];
+        await prisma.association.upsert({
+          where: { id },
+          update: { name: title },
+          create: { id, name: title },
+        });
+
+        await Promise.all(
+          data.leagues.map(async (league) => {
+            const leagueId = getLeagueId(league.href);
+            const data = {
+              name: league.name,
+              associationId: id,
+            };
+            await prisma.league.upsert({
+              where: { id: leagueId },
+              update: data,
+              create: { id: leagueId, ...data },
+            });
+          })
+        );
         res({
           title: splitTitle(title)[0],
-          leagues: toArray(leagues).map(simplifyLinks),
+          leagues: toArray(data.leagues).map(simplifyLinks),
         });
       });
   });
@@ -143,6 +180,10 @@ const findBreadcrumbs = (osmosis) =>
 const extractBreadcrumbs = ({ breadcrumbs }) =>
   toArray(breadcrumbs).map(simplifyLinks).slice(2);
 
+function findTeamByName(teams, search) {
+  return teams.find(({ name }) => name === search);
+}
+
 function league({ url }) {
   return new Promise((res, rej) => {
     osmosis
@@ -153,7 +194,7 @@ function league({ url }) {
       .find("#content")
       .set({
         title: "#content-col1 h1",
-        clubs: osmosis
+        teams: osmosis
           .find(
             'h2:contains("Tabelle"):last ~ table.result-set:first tr:not(:first-child)'
           )
@@ -185,7 +226,7 @@ function league({ url }) {
           }),
       })
       .error(error("scraping error in /league, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         const titleParts = splitTitle(data.title);
         const games = toArray(data.games)
           .map(simplifyLinks)
@@ -212,23 +253,66 @@ function league({ url }) {
             };
           });
 
+        const teams = toArray(data.teams)
+          .map((team) => ({
+            ...team,
+            score: team.score.startsWith("zurückgezogen") ? "-:-" : team.score,
+            promotion: parsePromotion(team.promotion),
+            games: team.games || "",
+            balance: team.balance || "",
+          }))
+          .map(simplifyLinks);
+
+        const league = titleParts[1];
+        const leagueId = getLeagueId(url);
+        await prisma.league.upsert({
+          where: { id: leagueId },
+          update: { name: league },
+          create: { id: leagueId, name: league },
+        });
+
+        await Promise.all(
+          teams.map(async (team) => {
+            const id = getTeamId(team.href);
+            const data = {
+              shortName: team.name,
+              leagueId,
+            };
+            await prisma.team.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
+
+        await Promise.allSettled(
+          games.map(async (game) => {
+            const id = getGameId(game.href);
+            const homeId = getTeamId(findTeamByName(teams, game.home).href);
+            const guestId = getTeamId(findTeamByName(teams, game.guest).href);
+            const data = {
+              homeId,
+              guestId,
+              result: game.result,
+              date: new Date(),
+            };
+            await prisma.game.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
+
         res({
           assoc: titleParts[0],
-          league: titleParts[1],
+          league,
           title: data.title,
           breadcrumbs: extractBreadcrumbs(data),
           chunks: asChunks(games),
-          clubs: toArray(data.clubs)
-            .map((club) => ({
-              ...club,
-              score: club.score.startsWith("zurückgezogen")
-                ? "-:-"
-                : club.score,
-              promotion: parsePromotion(club.promotion),
-              games: club.games || "",
-              balance: club.balance || "",
-            }))
-            .map(simplifyLinks),
+          teams,
+          clubs: teams, // legacy, use "teams" instead
         });
       });
   });
@@ -315,13 +399,18 @@ function clubTeams(id) {
           }),
       })
       .error(error("scraping error in /clubTeams, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         const name = splitTitle(data.title)[0];
         models.Club.forge({ id })
           .save({ name })
           .catch(() => {
             models.Club.forge().save({ id, name });
           });
+        await prisma.club.upsert({
+          where: { id },
+          update: { name },
+          create: { id, name },
+        });
 
         res({
           name,
@@ -329,6 +418,16 @@ function clubTeams(id) {
         });
       });
   });
+}
+
+async function getTeamByShortName(shortName, leagueId) {
+  const team = await prisma.team.findFirst({
+    where: {
+      shortName,
+      leagueId,
+    },
+  });
+  return team.id;
 }
 
 function team({ url, format }, expressRes) {
@@ -375,7 +474,7 @@ function team({ url, format }, expressRes) {
         })
       )
       .error(error("scraping error in /team, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         if (format === "ics") {
           const cal = ical({ domain: "tt-mobile.ch", name: data.club });
           const league = `(${extractBreadcrumbs(data)[1]?.name || ""})`;
@@ -411,16 +510,75 @@ function team({ url, format }, expressRes) {
             opponent: game.guest.includes(data.club) ? game.home : game.guest,
             isHome: !game.guest.includes(data.club),
           }));
+
+        const teamId = getTeamId(url);
+        const name = splitTitle(data.title)[2];
+        const clubId = getClubId(data.clubHref);
+        const leagueId = getLeagueId(url);
+        const players = toArray(data.players).map(simplifyLinks);
+
         res({
           ...data,
           games,
           locations: extractLocations(data.locations),
           league: splitTitle(data.title)[1],
           breadcrumbs: extractBreadcrumbs(data),
-          name: splitTitle(data.title)[2],
-          clubId: getClubId(data.clubHref),
-          players: toArray(data.players).map(simplifyLinks),
+          name,
+          clubId,
+          players,
         });
+
+        const clubData = { name: data.club };
+        await prisma.club.upsert({
+          where: { id: clubId },
+          update: clubData,
+          create: { id: clubId, ...clubData },
+        });
+
+        await prisma.team.upsert({
+          where: { id: teamId },
+          update: { name, clubId, leagueId },
+          create: { id: teamId, name, clubId, leagueId },
+        });
+
+        await Promise.all(
+          games.map(async (game) => {
+            const id = getGameId(game.href);
+            const homeId = await getTeamByShortName(game.home, leagueId);
+            const guestId = await getTeamByShortName(game.guest, leagueId);
+            const data = {
+              homeId,
+              guestId,
+              result: game.result,
+              date: parseDateFromStrings(game.date, game.time),
+            };
+            await prisma.game.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
+
+        await Promise.all(
+          players.map(async (player) => {
+            const id = getPlayerId(player.href);
+            const [lastName, firstName] = player.name
+              .split(",")
+              .map((n) => n.trim());
+            const data = {
+              firstName,
+              lastName,
+              clubId,
+              // classification: player.classification,
+            };
+            await prisma.player.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
       });
   });
 }
@@ -456,6 +614,7 @@ function game({ url }) {
         matches: osmosis
           .find("table.result-set tr:has(td:nth-child(2) a)")
           .set({
+            id: "td:nth-child(1)",
             player1: "td:nth-child(2)",
             player1href: "td:nth-child(2) a@href",
             player1class: "td:nth-child(3)",
@@ -477,24 +636,148 @@ function game({ url }) {
         }),
       })
       .error(error("scraping error in /game, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
         const split = data.title.split("<br>").map((i) => i.trim());
         const lastParts = splitTitle(split[2]);
+        const home = lastParts[0];
+        const guest = lastParts[1];
+        const dateString = lastParts[2]?.split(",")[1].trim();
+        const timeString = lastParts[3];
+        const date = parseDateFromStrings(dateString, timeString);
+
+        const matches = toArray(data.matches).map((match) => ({
+          ...match,
+          player1href: simplify(match.player1href),
+          player2href: simplify(match.player2href),
+        }));
+        const allPlayers = matches.flatMap((match) => [
+          { id: getPlayerId(match.player1href), name: match.player1 },
+          { id: getPlayerId(match.player2href), name: match.player2 },
+        ]);
+        const distinctPlayers = [
+          ...new Map(allPlayers.map((player) => [player.id, player])).values(),
+        ];
         res({
           ...data,
           breadcrumbs: extractBreadcrumbs(data),
           assoc: split[0],
           league: split[1],
-          home: lastParts[0],
-          guest: lastParts[1],
-          date: lastParts[2]?.split(",")[1],
-          time: lastParts[3],
-          matches: toArray(data.matches).map((match) => ({
-            ...match,
-            player1href: simplify(match.player1href),
-            player2href: simplify(match.player2href),
-          })),
+          home,
+          guest,
+          date: dateString,
+          time: timeString,
+          matches,
         });
+
+        const id = getGameId(url);
+        const leagueId = getLeagueId(url);
+        const homeId = await getTeamByShortName(home, leagueId);
+        const guestId = await getTeamByShortName(guest, leagueId);
+        const gameData = {
+          homeId,
+          guestId,
+          result: data.summary.game,
+          date,
+        };
+        await prisma.game.upsert({
+          where: { id },
+          update: gameData,
+          create: { id, ...gameData },
+        });
+
+        await Promise.all(
+          distinctPlayers.map(async ({ id, name }) => {
+            const [lastName, firstName] = name.split(",").map((n) => n.trim());
+            const data = {
+              firstName,
+              lastName,
+              // clubId,
+              // classification: player.classification,
+            };
+            await prisma.player.upsert({
+              where: { id },
+              update: data,
+              create: { id, ...data },
+            });
+          })
+        );
+
+        await Promise.all(
+          matches.map(async (match) => {
+            const gameId = getGameId(url);
+            const matchId = [gameId, match.id].join(":");
+            const data = {
+              gameId,
+              s1: match.s1,
+              s2: match.s2,
+              s3: match.s3,
+              s4: match.s4,
+              s5: match.s5,
+              sets: match.sets,
+              result: match.game,
+            };
+            await prisma.match.upsert({
+              where: { id: matchId },
+              update: data,
+              create: { id: matchId, ...data },
+            });
+
+            let players = [
+              {
+                playerId: getPlayerId(match.player1href),
+                matchType: "SINGLE",
+                teamType: "HOME",
+              },
+              {
+                playerId: getPlayerId(match.player2href),
+                matchType: "SINGLE",
+                teamType: "GUEST",
+              },
+            ];
+
+            if (match.id === "Doppel") {
+              const findDoublePlayersByNames = (names) => {
+                return names
+                  .split("\n")
+                  .map((s) => s.trim())
+                  .filter(Boolean)
+                  .map((fullName) =>
+                    distinctPlayers.find(({ name }) => fullName === name)
+                  );
+              };
+              const homePlayers = findDoublePlayersByNames(match.player1);
+              const guestPlayers = findDoublePlayersByNames(match.player2);
+              players = [
+                ...homePlayers.map((player) => ({
+                  playerId: player.id,
+                  matchType: "DOUBLE",
+                  teamType: "HOME",
+                })),
+                ...guestPlayers.map((player) => ({
+                  playerId: player.id,
+                  matchType: "DOUBLE",
+                  teamType: "GUEST",
+                })),
+              ];
+            }
+            await Promise.all(
+              players.map(async ({ playerId, matchType, teamType }) => {
+                const id = `${matchId}-${playerId}`;
+                const data = {
+                  matchId,
+                  playerId,
+                  matchType,
+                  teamType,
+                };
+                await prisma.playerInMatch.upsert({
+                  where: { id },
+                  update: data,
+                  create: { id, ...data },
+                });
+              })
+            );
+          })
+        );
       });
   });
 }
@@ -557,11 +840,27 @@ function player({ url }) {
         eloHref: "ul.content-tabs > li:first-child a@href",
       })
       .error(error("scraping error in /player, continuing anyway"))
-      .data((data) => {
+      .data(async (data) => {
+        const id = Number(parse(url, true).query.person);
+        const name = splitTitle(data.title)[1];
+        const [firstName, lastName] = name.split(",").map((s) => s.trim());
+        const clubId = getClubId(data.clubHref);
+
+        await prisma.club.upsert({
+          where: { id: clubId },
+          update: { name: data.club },
+          create: { id: clubId, name: data.club },
+        });
+        await prisma.player.upsert({
+          where: { id },
+          update: { firstName, lastName, clubId },
+          create: { id, firstName, lastName, clubId },
+        });
+
         res({
           ...data,
-          name: splitTitle(data.title)[1],
-          clubId: getClubId(data.clubHref),
+          name,
+          clubId,
           breadcrumbs: extractBreadcrumbs(data),
           seasons: arrayify(data.seasons).map(simplifyLinks),
           teams: arrayify(data.teams)

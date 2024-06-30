@@ -16,3 +16,11 @@ dump:
 .PHONY: load
 load:
 	cat dump.sql | docker exec -i tt-mobile_db_1 mysql --password=$(DB_PASSWORD) db
+
+.PHONY: dbshell-mysql
+dbshell-mysql:
+	docker-compose exec db mysql -u ttmobile --password=$(DB_PASSWORD) db
+
+.PHONY: dbshell
+dbshell: ## Start an interactive psql shell
+	@docker compose exec postgres psql -Uadmin postgres

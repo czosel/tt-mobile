@@ -21,7 +21,6 @@ export default function model() {
   return {
     me,
     api: {
-      assoc: get("assoc"),
       league: get("league"),
       team: get("team"),
       player: get("player"),
@@ -33,6 +32,11 @@ export default function model() {
       game: get("game"),
       assocHistory(step) {
         return fetch(`${API_ORIGIN}/assocHistory?step=${step}`).then(asJson);
+      },
+      assoc(id) {
+        return fetch(
+          `${API_ORIGIN}/api/league?associationId=eq.${id}&order=name`
+        ).then(asJson);
       },
       club(id) {
         return fetch(`${API_ORIGIN}/club/${id}`).then(asJson);
