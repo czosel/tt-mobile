@@ -40,7 +40,7 @@
     "sharp": "^0.31.3"
   },
   "resolutions": {
-    "libxmljs-dom": "czosel/libxmljs-dom#92b8c64153a12dd31aee07fa7ea109c70028799e",
+    "libxmljs-dom": "czosel/libxmljs-dom#7a15c26db8972cfcb6cd267e9bd1ac90ca9eca5c",
     "needle": "^2.9.0"
   }
 }
