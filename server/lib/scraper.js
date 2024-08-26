@@ -706,7 +706,7 @@ function _searchBy(prop, term) {
         [prop]: term,
         WOSubmitAction: "eloFilter",
         federation: "STT",
-        rankingDate: "10.07.2023",
+        rankingDate: "10.07.2024",
       })
       .set({
         [prop]: osmosis.find("table.result-set > tbody > tr").set({

@@ -17,6 +17,7 @@ import Table from "../../components/table";
 const spaceToPlus = (str) => str.replace(" ", "+");
 
 const seasons = [
+  "23/24",
   "22/23",
   "21/22",
   "20/21",
@@ -62,7 +63,7 @@ const trophyNames = [
 
 const addLinks = (name) => ({
   name,
-  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+23%2F24`),
+  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+24%2F25`),
 });
 const assocs = assocNames.map(addLinks);
 const trophies = trophyNames.map(addLinks);
