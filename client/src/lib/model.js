@@ -15,7 +15,10 @@ export const get = (endpoint) => async (href) => {
 };
 
 export const icalHref = (href) =>
-  `${API_ORIGIN}/team?format=ics&url=${encodeURIComponent(href)}`;
+  `${API_ORIGIN.replace(
+    /https?/,
+    "webcal"
+  )}/team?format=ics&url=${encodeURIComponent(href)}`;
 
 export default function model() {
   return {
