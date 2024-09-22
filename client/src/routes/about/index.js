@@ -39,6 +39,13 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.11 (22.09.2024)
+            <ul>
+              <li>
+                &quot;Zum Kalender hinzufügen&ldquo;-Funktion für iOS-Geräte
+                verbessert
+              </li>
+            </ul>
             v1.1.10 (26.08.2024)
             <ul>
               <li>App für neue Spielsaison angepasst</li>
@@ -47,8 +54,8 @@ export default class Home extends Component {
             <ul>
               <li>App für neue Spielsaison angepasst</li>
               <li>
-                Einbetten-Funktion für Vereinsspielplan: Option "Fallback"
-                ergänzt
+                Einbetten-Funktion für Vereinsspielplan: Option
+                &quot;Fallback&ldquo; ergänzt
               </li>
             </ul>
             v1.1.8 (28.01.2023)
