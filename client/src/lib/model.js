@@ -3,6 +3,10 @@ const asJson = (r) => r.json();
 
 const isBrowser = () => typeof window !== "undefined";
 const me = () => isBrowser() && localStorage.getItem("me");
+const isIOS =
+  isBrowser() &&
+  /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+  !window.MSStream;
 
 export const get = (endpoint) => async (href) => {
   const response = await fetch(
@@ -14,11 +18,14 @@ export const get = (endpoint) => async (href) => {
   throw new Error(await response.text());
 };
 
-export const icalHref = (href) =>
-  `${API_ORIGIN.replace(
-    /https?/,
-    "webcal"
-  )}/team?format=ics&url=${encodeURIComponent(href)}`;
+export const icalHref = (href) => {
+  const origin = API_ORIGIN;
+  // webcal is not supported on Android devices
+  if (isIOS) {
+    origin.replace(/https?/, "webcal");
+  }
+  return `${origin}/team?format=ics&url=${encodeURIComponent(href)}`;
+};
 
 export default function model() {
   return {
