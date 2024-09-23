@@ -19,16 +19,6 @@ export default class Home extends Component {
               E-Mail{" "}
               <a href="mailto:feedback@tt-mobile.ch">feedback@tt-mobile.ch</a>
               <br />
-              Twitter{" "}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://twitter.com/TTmobileCH"
-              >
-                @TTmobileCH
-              </a>
-            </p>
-            <p>
               Code{" "}
               <a
                 target="_blank"
