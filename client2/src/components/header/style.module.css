@@ -1,0 +1,23 @@
+.fixed {
+  position: fixed !important;
+  width: 100%;
+  z-index: 2;
+}
+
+.truncate a:first-child {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+  flex-shrink: 1;
+  line-height: 2rem;
+}
+
+.burger {
+  background-color: transparent;
+  border: none;
+}
+
+.burger span {
+  color: #fff;
+}

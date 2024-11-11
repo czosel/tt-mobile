@@ -1,0 +1,35 @@
+import { h, Component } from "preact";
+import wire from "wiretie";
+
+import clientHref from "../../lib/link";
+
+import Header from "../../components/header";
+import Footer from "../../components/footer";
+import Container from "../../components/container";
+import CardList from "../../components/card-list";
+import LoadingPage from "../../components/loading-page";
+import ErrorPage from "../../components/error-page";
+
+const hrefify = (e) => ({ ...e, href: clientHref(e.href) });
+
+class AssocHistory extends Component {
+  render({ pending, rejected, data }) {
+    if (pending) return <LoadingPage />;
+    if (rejected) return <ErrorPage info={rejected} />;
+    const { regular, trophy } = data;
+    return (
+      <div>
+        <Header />
+        <Container>
+          <CardList name="Punktspiele" content={regular.map(hrefify)} />
+          <br />
+          <CardList name="Pokalspiele" content={trophy.map(hrefify)} />
+        </Container>
+        <Footer />
+      </div>
+    );
+  }
+}
+export default wire("model", { data: ["api.assocHistory", "step"] })(
+  AssocHistory
+);
