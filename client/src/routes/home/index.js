@@ -1,4 +1,5 @@
 import { Component } from "preact";
+import Obfuscate from 'react-obfuscate';
 import wire from "wiretie";
 import style from "./style";
 
@@ -15,6 +16,7 @@ import ErrorPage from "../../components/error-page";
 import Table from "../../components/table";
 
 const spaceToPlus = (str) => str.replace(" ", "+");
+const CONTACT = process.env.PREACT_APP_CONTACT;
 
 const seasons = [
   "23/24",
@@ -89,7 +91,7 @@ class Home extends Component {
           <Card name="Neu: Clublogos">
             TT-Mobile unterstützt neu Clublogos! Falls das Logo deines Vereins
             noch fehlt, sende es bitte per Mail an{" "}
-            <a href="mailto:feedback@tt-mobile.ch">feedback@tt-mobile.ch</a>.
+            <Obfuscate email={CONTACT} />.
             <br />
           </Card>
           <br />

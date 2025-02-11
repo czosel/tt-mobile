@@ -37,6 +37,7 @@
     "preact-render-to-string": "^5.1.2",
     "preact-router": "^4.1.0",
     "rambda": "^7.4.0",
+    "react-obfuscate": "^3.7.0",
     "react-spinners": "^0.13.6",
     "wiretie": "^1.1.0"
   },

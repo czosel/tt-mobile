@@ -1,9 +1,12 @@
 import { h, Component } from "preact";
+import Obfuscate from 'react-obfuscate';
 import style from "./style";
 
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import Container from "../../components/container";
+
+const CONTACT = process.env.PREACT_APP_CONTACT;
 
 export default class Home extends Component {
   render({ back }) {
@@ -17,7 +20,7 @@ export default class Home extends Component {
             <p>von Christian Zosel</p>
             <p>
               E-Mail{" "}
-              <a href="mailto:feedback@tt-mobile.ch">feedback@tt-mobile.ch</a>
+              <Obfuscate email={CONTACT} />
               <br />
               Code{" "}
               <a
