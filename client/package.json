@@ -23,10 +23,10 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "if-env": "^1.0.4",
-    "node-sass": "^8.0.0",
     "preact-cli": "^3.3.2",
     "preact-cli-plugin-env-vars": "^1.2.1",
     "prettier": "^2.5.1",
+    "sass": "^1.84.0",
     "sass-loader": "^10.2.0"
   },
   "dependencies": {
@@ -43,7 +43,6 @@
   },
   "//": [
     "sass-loader v11 requires webpack v5",
-    "copy-webpack-plugin v7 requires webpack v5",
-    "node-sass v7 requires node v5"
+    "copy-webpack-plugin v7 requires webpack v5"
   ]
 }
