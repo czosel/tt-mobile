@@ -6,7 +6,7 @@
       <pre
         v-highlightjs
         class="content"
-      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.4.4/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+      ><code class="html">&lt;script src="https://cdn.jsdelivr.net/npm/tt-mobile-widgets@1.5.1/tt-mobile.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 
       <h2 class="subtitle">Tabelle</h2>
       <div class="columns is-desktop">
@@ -70,6 +70,18 @@
               <input class="input" v-model="teamUrl" />
             </div>
           </div>
+          <div class="field">
+            <label class="label">Spieler und Bilanzen</label>
+            <div class="control">
+              <input type="checkbox" v-model="showPlayers" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Spielplan</label>
+            <div class="control">
+              <input type="checkbox" v-model="showSchedule" />
+            </div>
+          </div>
           <label class="label">Code</label>
           <pre
             v-highlightjs="teamCode"
@@ -81,7 +93,12 @@
           </p>
         </div>
         <div class="column">
-          <TtTeam class="box" :url="teamUrl" />
+          <TtTeam
+            class="box"
+            :url="teamUrl"
+            :showPlayers="showPlayers"
+            :showSchedule="showSchedule"
+          />
         </div>
       </div>
 
@@ -108,6 +125,18 @@
             <label class="label">Max. Anzahl Spieltage Vorschau</label>
             <div class="control">
               <input class="input" type="number" v-model="limitNext" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Liga anzeigen</label>
+            <div class="control">
+              <input type="checkbox" v-model="showLeague" />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Zeit anzeigen (nur in Desktop-Ansicht)</label>
+            <div class="control">
+              <input type="checkbox" v-model="showTime" />
             </div>
           </div>
           <div class="field">
@@ -147,6 +176,8 @@
             :limitPrevious="limitPrevious ? parseInt(limitPrevious) : undefined"
             :limitNext="limitNext ? parseInt(limitNext) : undefined"
             :variant="variant"
+            :showLeague="showLeague"
+            :showTime="showTime"
             :breakpoint="breakpoint"
             :fallback="fallback"
           />
@@ -181,7 +212,7 @@ export default {
     this.tableHighlight = params.get("table-highlight") || "";
     this.teamUrl =
       params.get("team-url") ||
-      "/teamPortrait?teamtable=1663137&championship=STT+19%2F20&group=205604";
+      "/teamPortrait?teamtable=1708058&championship=STT+24%2F25&group=214685";
     this.clubId = params.get("club-id") || "33101";
     this.limitPrevious = params.get("limitPrevious") || "";
     this.limitNext = params.get("limitNext") || "";
@@ -194,10 +225,14 @@ export default {
     tableHighlight: "",
     tableLogoSize: "",
     teamUrl: "",
+    showPlayers: true,
+    showSchedule: false,
     clubId: "",
     limitPrevious: undefined,
     limitNext: undefined,
     variant: "",
+    showLeague: true,
+    showTime: true,
     breakpoint: "",
     fallback: "",
   }),
@@ -221,8 +256,17 @@ export default {
     },
     teamCode() {
       /* eslint-disable no-useless-escape */
+      const showPlayersOption = !this.showPlayers && `showPlayers: false`;
+      const showScheduleOption = this.showSchedule && `showSchedule: true`;
+      const options =
+        (showPlayersOption || showScheduleOption) &&
+        `, { ${[showPlayersOption, showScheduleOption]
+          .filter(Boolean)
+          .join(", ")}}`;
       return `<table class="myteam"></table>
-<script>TTmobile.team("${this.teamUrl}", document.querySelector(".myteam"));<\/script>`;
+<script>TTmobile.team("${this.teamUrl}", document.querySelector(".myteam")${
+        options || ""
+      });<\/script>`;
     },
     scheduleCode() {
       /* eslint-disable no-useless-escape */
@@ -234,6 +278,8 @@ export default {
         this.variant &&
         this.variant !== "responsive" &&
         `variant: "${this.variant}"`;
+      const showLeagueOption = !this.showLeague && `showLeague: false`;
+      const showTimeOption = !this.showTime && `showTime: false`;
       const breakpointOption =
         this.breakpoint &&
         this.breakpoint !== "500px" &&
@@ -246,11 +292,15 @@ export default {
         (limitPreviousOption ||
           limitNextOption ||
           variantOption ||
+          showLeagueOption ||
+          showTimeOption ||
           breakpointOption) &&
         `, { ${[
           limitPreviousOption,
           limitNextOption,
           variantOption,
+          showLeagueOption,
+          showTimeOption,
           breakpointOption,
           fallbackOption,
         ]
@@ -266,10 +316,14 @@ export default {
     tableHighlight: syncQueryParam("table-highlight"),
     tableUrl: syncQueryParam("table-url"),
     teamUrl: syncQueryParam("team-url"),
+    showPlayers: syncQueryParam("showPlayers"),
+    showSchedule: syncQueryParam("showSchedule"),
     clubId: syncQueryParam("club-id"),
     limitPrevious: syncQueryParam("limitPrevious"),
     limitNext: syncQueryParam("limitNext"),
     variant: syncQueryParam("variant"),
+    showLeague: syncQueryParam("showLeague"),
+    showTime: syncQueryParam("showTime"),
     breakpoint: syncQueryParam("breakpoint"),
   },
 };

@@ -27,14 +27,14 @@ var TTmobile = (function (exports) {
     return `
       <tr>
         <td>${row.rank}</td>
-          <td>
-            <img class="tt-mobile-logo"
-              style="max-width: ${logoSize}; max-height: ${logoSize}; border-radius: 5px;"
-              src="${host}logo/?name=${clubName(row.name)}" />
+        <td>
+          <img class="tt-mobile-logo"
+            style="max-width: ${logoSize}; max-height: ${logoSize}; border-radius: 5px;"
+            src="${host}logo/?name=${clubName(row.name)}" />
         </td>
         <td>
           <a target="_blank" href="https://tt-mobile.ch/team/${encodeURIComponent(
-            row.href
+            row.href,
           )}">
             ${match ? highlight(row.name) : row.name}
           </a>
@@ -62,12 +62,47 @@ var TTmobile = (function (exports) {
     </tr>`;
   }
 
-  function renderTeam(clubs, element, options) {
-    const html = `
-      <tbody>
-        ${clubs.map((row) => renderTeamRow(row, options)).join("")}
-      </tbody>`;
-    element.innerHTML = html;
+  function renderTeam(data, element, options) {
+    const showPlayers = options.showPlayers !== false;
+    const teamHtml = showPlayers
+      ? `
+      <table class="tt-team-players">
+        <tbody>
+          ${data.players.map((row) => renderTeamRow(row, options)).join("")}
+        </tbody>
+      </table>`
+      : "";
+    const divider =
+      showPlayers && options.showSchedule ? "<hr class='tt-team-divider'>" : "";
+    const teamScheduleHtml = options.showSchedule
+      ? `
+      <table class="tt-team-schedule">
+        <tbody>
+          ${data.games
+            .map((game) => renderTeamScheduleRow(game, options))
+            .join("")}
+        </tbody>
+      </table>
+    `
+      : "";
+    element.innerHTML = teamHtml + divider + teamScheduleHtml;
+  }
+
+  function renderTeamScheduleRow(row, options) {
+    const logoSize = options.logoSize || "50px";
+    return `
+      <tr>
+        <td>${row.date}, ${row.time}</td>
+        <td>${row.isHome ? "Zuhause" : "Auswärts"}</td>
+        <td>
+          <img class="tt-mobile-logo"
+            style="max-width: ${logoSize}; max-height: ${logoSize}; border-radius: 5px;"
+            src="${host}logo/?name=${clubName(row.opponent)}" />
+        </td>
+        <td>${row.opponent}</td>
+        <td>${wrapResult(row.href, row.result)}</td>
+      </tr>
+    `;
   }
 
   function renderTeamRow(row, options) {
@@ -75,7 +110,7 @@ var TTmobile = (function (exports) {
       <tr>
         <td>
           <a target="_blank" href="https://tt-mobile.ch/player/${encodeURIComponent(
-            row.href
+            row.href,
           )}">${row.name}</a>
         </td>
         <td>${row.classification}</td>
@@ -192,7 +227,7 @@ var TTmobile = (function (exports) {
     fetch(`${host}team?url=${encodeURIComponent(url)}`)
       .then((response) => response.json())
       .then((data) => {
-        renderTeam(data.players, element, options);
+        renderTeam(data, element, options);
       });
   }
 
@@ -228,13 +263,15 @@ var TTmobile = (function (exports) {
     return parts.join(" ");
   }
 
+  function wrapResult(href, content) {
+    return `<a target="_blank" href="https://tt-mobile.ch/game/${encodeURIComponent(
+      href,
+    )}">${content}</a>`;
+  }
+
   function renderScheduleRow(row, options) {
     const scoreHome = row.result ? row.result.split(":")[0] : "-";
     const scoreGuest = row.result ? row.result.split(":")[1] : "-";
-    const wrapResult = (href, content) =>
-      `<a target="_blank" href="https://tt-mobile.ch/game/${encodeURIComponent(
-        href
-      )}">${content}</a>`;
     const result = row.result
       ? `<div class="tt-result">
           ${wrapResult(row.href, row.result)}
@@ -267,7 +304,7 @@ var TTmobile = (function (exports) {
       ${
         options.showLogos !== false
           ? `<div class="tt-logo tt-logo-home"><img src="${host}logo/?name=${clubName(
-              row.home
+              row.home,
             )}"></div>`
           : ""
       }
@@ -275,7 +312,7 @@ var TTmobile = (function (exports) {
       ${
         options.showLogos !== false
           ? `<div class="tt-logo tt-logo-guest"><img src="${host}logo/?name=${clubName(
-              row.guest
+              row.guest,
             )}"></div>`
           : ""
       }

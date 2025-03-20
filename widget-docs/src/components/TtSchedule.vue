@@ -3,6 +3,26 @@
 </template>
 
 <script>
+function rerender(instance, overrides) {
+  instance.clubId &&
+    TTmobile.schedule(
+      instance.clubId,
+      instance.$el,
+      Object.assign(
+        {
+          limitPrevious: instance.limitPrevious,
+          limitNext: instance.limitNext,
+          variant: instance.variant,
+          showLeague: instance.showLeague,
+          showTime: instance.showTime,
+          breakpoint: instance.breakpoint,
+          fallback: instance.fallback,
+        },
+        overrides,
+      ),
+    );
+}
+
 export default {
   name: "TtSchedule",
   props: {
@@ -10,74 +30,38 @@ export default {
     limitPrevious: Number,
     limitNext: Number,
     variant: String,
+    showLeague: Boolean,
+    showTime: Boolean,
     breakpoint: String,
     fallback: String,
   },
   mounted() {
-    this.clubId &&
-      TTmobile.schedule(this.clubId, this.$el, {
-        limitPrevious: this.limitPrevious,
-        limitNext: this.limitNext,
-        variant: this.variant,
-        breakpoint: this.breakpoint,
-        fallback: this.fallback,
-      });
+    rerender(this);
   },
   watch: {
     clubId(clubId) {
-      clubId &&
-        TTmobile.schedule(clubId, this.$el, {
-          limitPrevious: this.limitPrevious,
-          limitNext: this.limitNext,
-          variant: this.variant,
-          breakpoint: this.breakpoint,
-          fallback: this.fallback,
-        });
+      rerender(this, { clubId });
     },
     limitPrevious(limitPrevious) {
-      TTmobile.schedule(this.clubId, this.$el, {
-        limitPrevious,
-        limitNext: this.limitNext,
-        variant: this.variant,
-        breakpoint: this.breakpoint,
-        fallback: this.fallback,
-      });
+      rerender(this, { limitPrevious });
     },
     limitNext(limitNext) {
-      TTmobile.schedule(this.clubId, this.$el, {
-        limitNext,
-        limitPrevious: this.limitPrevious,
-        variant: this.variant,
-        breakpoint: this.breakpoint,
-        fallback: this.fallback,
-      });
+      rerender(this, { limitNext });
     },
     variant(variant) {
-      TTmobile.schedule(this.clubId, this.$el, {
-        limitNext: this.limitNext,
-        limitPrevious: this.limitPrevious,
-        variant,
-        breakpoint: this.breakpoint,
-        fallback: this.fallback,
-      });
+      rerender(this, { variant });
     },
     breakpoint(breakpoint) {
-      TTmobile.schedule(this.clubId, this.$el, {
-        limitNext: this.limitNext,
-        limitPrevious: this.limitPrevious,
-        variant: this.variant,
-        breakpoint,
-        fallback: this.fallback,
-      });
+      rerender(this, { breakpoint });
     },
     fallback(fallback) {
-      TTmobile.schedule(this.clubId, this.$el, {
-        limitNext: this.limitNext,
-        limitPrevious: this.limitPrevious,
-        variant: this.variant,
-        breakpoint: this.breakpoint,
-        fallback,
-      });
+      rerender(this, { fallback });
+    },
+    showLeague(showLeague) {
+      rerender(this, { showLeague });
+    },
+    showTime(showTime) {
+      rerender(this, { showTime });
     },
   },
 };
