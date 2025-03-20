@@ -1,14 +1,14 @@
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>TT-Ergebnisse</title>
   </head>
   <body>
     <h2>Tabelle</h2>
     <table class="table"></table>
 
-    <h2>Bilanzen</h2>
-    <table class="club"></table>
+    <h2>Bilanzen und Teamspielplan</h2>
+    <div class="club"></div>
 
     <h2>Spielplan</h2>
     <div class="schedule"></div>
@@ -17,16 +17,16 @@
     <script>
       TTmobile.table(
         "groupPage?championship=MTTV+19%2F20&group=205726",
-        document.querySelector(".table")
+        document.querySelector(".table"),
       );
       TTmobile.team(
-        "teamPortrait?teamtable=1663530&championship=MTTV+19%2F20&group=205664",
-        document.querySelector(".club")
+        "teamPortrait?teamtable=1708708&championship=MTTV+24%2F25&group=214705",
+        document.querySelector(".club"),
+        { showSchedule: true },
       );
-      TTmobile.schedule(
-        "33127",
-        document.querySelector(".schedule")
-      );
+      TTmobile.schedule("33127", document.querySelector(".schedule"), {
+        variant: "desktop",
+      });
     </script>
   </body>
 </html>
