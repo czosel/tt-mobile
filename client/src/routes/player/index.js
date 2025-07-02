@@ -38,7 +38,7 @@ export default class Player extends Component {
           this.setState({
             pending: false,
             rejected: { data: error },
-          })
+          }),
         );
     } else {
       get("elo")(href)
@@ -53,7 +53,7 @@ export default class Player extends Component {
           this.setState({
             pending: false,
             rejected: { data: error },
-          })
+          }),
         );
     }
   }
@@ -90,6 +90,7 @@ export default class Player extends Component {
       clubId,
       teams,
       name,
+      gender,
     } = data;
 
     const content =
@@ -105,6 +106,7 @@ export default class Player extends Component {
             me,
             href,
             elo,
+            gender,
           }}
         />
       ) : tab === "single" ? (

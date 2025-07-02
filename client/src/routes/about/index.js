@@ -31,10 +31,14 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
-            v1.1.12 (26.08.2024)
+            v1.1.12 (02.07.2025)
             <ul>
               <li>App für neue Spielsaison angepasst</li>
               <li>Neue Elo-Skala hinterlegt (B, C, D)</li>
+              <li>
+                Spielerseite: "Klassierung (aktuell)" zeigt neu auch
+                Damen-Klassierung
+              </li>
             </ul>
             v1.1.11 (22.09.2024)
             <ul>

@@ -564,6 +564,10 @@ function player({ url }) {
       })
       .error(error("scraping error in /player, continuing anyway"))
       .data((data) => {
+        let gender;
+        if (data.classification) {
+          gender = data.classification.includes("/") ? "f" : "m";
+        }
         res({
           ...data,
           name: splitTitle(data.title)[1],
@@ -588,6 +592,7 @@ function player({ url }) {
           singles: toArray(data.singles).map(simplifyLinks),
           doubles: toArray(data.doubles).map(simplifyObject("partnerHref")),
           eloHref: simplify(data.eloHref),
+          gender,
         });
       });
   });

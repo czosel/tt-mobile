@@ -15,7 +15,7 @@ const getStyle = (value) => {
   };
 };
 
-export default function EloScore({ value }) {
+export default function EloScore({ value, gender }) {
   if (value === undefined || value === "-") {
     return;
   }
@@ -26,7 +26,7 @@ export default function EloScore({ value }) {
         .filter((v) => !!v)
         .map((val, index) => (
           <span key={index} class="tag" style={getStyle(val)}>
-            {getClass(val)}
+            {getClass(val, gender)}
           </span>
         ))}
     </span>

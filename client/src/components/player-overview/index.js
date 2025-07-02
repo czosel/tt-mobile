@@ -16,6 +16,7 @@ export default function PlayerOverview({
   clubId,
   teams,
   elo,
+  gender,
 }) {
   const latestElo = elo && Math.round(elo.data[elo.data.length - 1]);
   return (
@@ -38,7 +39,7 @@ export default function PlayerOverview({
           <td>Klassierung (aktuell)</td>
           {latestElo ? (
             <td>
-              <EloScore value={latestElo} /> ({latestElo})
+              <EloScore value={latestElo} gender={gender} /> ({latestElo})
             </td>
           ) : (
             <td>lädt...</td>
