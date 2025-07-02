@@ -1,5 +1,5 @@
 import { Component } from "preact";
-import Obfuscate from 'react-obfuscate';
+import Obfuscate from "react-obfuscate";
 import wire from "wiretie";
 import style from "./style";
 
@@ -19,6 +19,7 @@ const spaceToPlus = (str) => str.replace(" ", "+");
 const CONTACT = process.env.PREACT_APP_CONTACT;
 
 const seasons = [
+  "24/25",
   "23/24",
   "22/23",
   "21/22",
@@ -65,7 +66,7 @@ const trophyNames = [
 
 const addLinks = (name) => ({
   name,
-  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+24%2F25`),
+  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+25%2F26`),
 });
 const assocs = assocNames.map(addLinks);
 const trophies = trophyNames.map(addLinks);
@@ -90,8 +91,8 @@ class Home extends Component {
         <Container>
           <Card name="Neu: Clublogos">
             TT-Mobile unterstützt neu Clublogos! Falls das Logo deines Vereins
-            noch fehlt, sende es bitte per Mail an{" "}
-            <Obfuscate email={CONTACT} />.
+            noch fehlt, sende es bitte per Mail an <Obfuscate email={CONTACT} />
+            .
             <br />
           </Card>
           <br />

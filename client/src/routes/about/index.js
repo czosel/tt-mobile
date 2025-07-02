@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import Obfuscate from 'react-obfuscate';
+import Obfuscate from "react-obfuscate";
 import style from "./style";
 
 import Header from "../../components/header";
@@ -19,8 +19,7 @@ export default class Home extends Component {
             <h2>TT-mobile</h2>
             <p>von Christian Zosel</p>
             <p>
-              E-Mail{" "}
-              <Obfuscate email={CONTACT} />
+              E-Mail <Obfuscate email={CONTACT} />
               <br />
               Code{" "}
               <a
@@ -32,6 +31,11 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.12 (26.08.2024)
+            <ul>
+              <li>App für neue Spielsaison angepasst</li>
+              <li>Neue Elo-Skala hinterlegt (B, C, D)</li>
+            </ul>
             v1.1.11 (22.09.2024)
             <ul>
               <li>
