@@ -738,7 +738,7 @@ function termToNames(term) {
     return { lastName: parts[0].trim(), firstName: parts[1].trim()}
   }
   if (term.includes(" ")) {
-    [lastName, ...firstNames] = term.split(" ").reverse()
+    const [lastName, ...firstNames] = term.split(" ").reverse()
     return {
       lastName: lastName.trim(),
       firstName: firstNames.join(" ").trim()
@@ -748,7 +748,7 @@ function termToNames(term) {
 }
 
 async function search(term) {
-  parts = termToNames(term);
+  const parts = termToNames(term);
 
   if (parts) {
     const results = await _search({
