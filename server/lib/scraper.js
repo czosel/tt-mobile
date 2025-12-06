@@ -710,17 +710,17 @@ function me({ url }) {
   });
 }
 
-function _searchBy(prop, term) {
+function _search(filters) {
   return new Promise((res, rej) => {
     osmosis
       .post(resolve(host, `/cgi-bin/WebObjects/nuLigaTTCH.woa/wa/eloFilter`), {
-        [prop]: term,
+        ...filters,
         WOSubmitAction: "eloFilter",
         federation: "STT",
         rankingDate: "03.06.2025",
       })
       .set({
-        [prop]: osmosis.find("table.result-set > tbody > tr").set({
+        name: osmosis.find("table.result-set > tbody > tr").set({
           name: "td:first-child a",
           href: "td:first-child a@href",
           club: "td:nth-child(3)",
@@ -728,22 +728,49 @@ function _searchBy(prop, term) {
         }),
       })
       .error(R.pipe(error("search"), rej))
-      .data((data) =>
-        res({
-          [prop]: arrayify(data[prop]).filter(Boolean).map(simplifyLinks),
-        }),
-      );
+      .data((data) => res(arrayify(data.name).filter(Boolean).map(simplifyLinks)));
   });
 }
 
-function search(term) {
-  return Promise.all([
-    _searchBy("lastname", term),
-    _searchBy("firstname", term),
-  ]).then((values) => ({
-    ...values[0],
-    ...values[1],
-  }));
+function termToNames(term) {
+  if (term.includes(",")) {
+    const parts = term.split(",")
+    return { lastName: parts[0].trim(), firstName: parts[1].trim()}
+  }
+  if (term.includes(" ")) {
+    [lastName, ...firstNames] = term.split(" ").reverse()
+    return {
+      lastName: lastName.trim(),
+      firstName: firstNames.join(" ").trim()
+    }
+  }
+  return null;
+}
+
+async function search(term) {
+  parts = termToNames(term);
+
+  if (parts) {
+    const results = await _search({
+      firstname: parts.firstName,
+      lastname: parts.lastName
+    });
+    if (!results.length) {
+      // no results? try the other way around
+      return await _search({
+        firstname: parts.lastName,
+        lastname: parts.firstName
+      });
+    }
+    return results;
+  }
+
+  const values = await Promise.all([
+    _search({lastname: term}),
+    _search({firstname: term}),
+  ]);
+
+  return [...values?.[0], ...values?.[1]];
 }
 
 function regionSchedule({ championship, date }) {
