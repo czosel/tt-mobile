@@ -96,7 +96,7 @@ app.get("/club-teams/:id", async ({ params }, res) => {
 
 app.get("/search/:term", async ({ params }, res) => {
   try {
-    res.json(await scraper.search(params.term));
+    res.json({data: await scraper.search(params.term)});
   } catch (e) {
     console.error(e);
   }
