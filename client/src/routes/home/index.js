@@ -19,6 +19,7 @@ const spaceToPlus = (str) => str.replace(" ", "+");
 const CONTACT = process.env.PREACT_APP_CONTACT;
 
 const seasons = [
+  "25/26",
   "24/25",
   "23/24",
   "22/23",
@@ -66,7 +67,7 @@ const trophyNames = [
 
 const addLinks = (name) => ({
   name,
-  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+25%2F26`),
+  href: clientHref(`/leaguePage?championship=${spaceToPlus(name)}+26%2F27`),
 });
 const assocs = assocNames.map(addLinks);
 const trophies = trophyNames.map(addLinks);

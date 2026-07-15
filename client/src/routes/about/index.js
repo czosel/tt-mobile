@@ -31,6 +31,10 @@ export default class Home extends Component {
               </a>
             </p>
             <h3>Letzte Änderungen</h3>
+            v1.1.14 (15.07.2026)
+            <ul>
+              <li>App für neue Spielsaison angepasst</li>
+            </ul>
             v1.1.13 (06.12.2025)
             <ul>
               <li>Spielersuche verbessert</li>

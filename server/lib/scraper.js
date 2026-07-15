@@ -717,7 +717,7 @@ function _search(filters) {
         ...filters,
         WOSubmitAction: "eloFilter",
         federation: "STT",
-        rankingDate: "10.11.2025",
+        rankingDate: "10.07.2026",
       })
       .set({
         name: osmosis.find("table.result-set > tbody > tr").set({
