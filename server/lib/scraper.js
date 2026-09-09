@@ -361,8 +361,7 @@ function team({ url, format }, expressRes) {
         osmosis.set({
           games: osmosis
             .find(
-              `#content-row2 table.result-set:nth(1) tr:not(:first-child),
-             #content-row2 table.result-set:nth(0) tr:not(:first-child)`,
+              "//table[@class='result-set'][count(preceding-sibling::*[1][self::h2][contains(.,'Spieltermine')]) > 0]//tr[position() != 1]",
             )
             .set({
               date: "td:nth-child(2)",
